@@ -18,10 +18,11 @@ export function AuthorProfileHeader({ author, stats }: AuthorProfileHeaderProps)
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-8 text-center md:text-left">
                     {/* Avatar */}
                     <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0">
-                        <img
+                        <Image
                             src={author.avatar}
                             alt={author.name}
-                            className="w-full h-full rounded-full object-cover border-4 border-white dark:border-gray-950 shadow-lg"
+                            fill
+                            className="rounded-full object-cover border-4 border-white dark:border-gray-950 shadow-lg"
                         />
                         {/* Optional: Verified Badge */}
                         <div className="absolute bottom-1 right-1 bg-blue-500 text-white p-1.5 rounded-full border-4 border-white dark:border-gray-950">

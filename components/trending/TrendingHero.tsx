@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Article } from "@/types";
 import { TrendingUp, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -63,10 +64,11 @@ function TrendingCard({ article, rank, isLarge = false }: { article: Article; ra
                 isLarge ? "aspect-[4/5] md:aspect-[3/4]" : "aspect-[3/4]"
             )}>
                 {/* Image */}
-                <img
+                <Image
                     src={article.coverImage}
                     alt={article.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
                 {/* Gradient Overlay */}

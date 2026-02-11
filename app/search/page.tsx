@@ -2,7 +2,6 @@ import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
-import { ArticleCard } from "@/components/article/ArticleCard";
 import { mockArticles } from "@/lib/mock-data";
 import { Search } from "lucide-react";
 
@@ -56,7 +55,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         </div>
                         <h2 className="text-xl font-semibold mb-2">No results found</h2>
                         <p className="text-gray-500 max-w-md mx-auto mb-8">
-                            We used "exact match" searching. Try searching for "Tech", "AI", or "Guide".
+                            We used &quot;exact match&quot; searching. Try searching for &quot;Tech&quot;, &quot;AI&quot;, or &quot;Guide&quot;.
                         </p>
                     </div>
                 )}
