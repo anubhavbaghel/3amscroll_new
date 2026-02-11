@@ -12,8 +12,15 @@ export const mockArticles: Article[] = [
         author: {
             id: "author-1",
             name: "Sarah Chen",
+            role: "Senior Tech Editor",
             avatar: "https://i.pravatar.cc/150?img=1",
-            bio: "Tech journalist covering AI and emerging technologies",
+            bio: "Tech journalist covering AI and emerging technologies. Formerly at Wired and TechCrunch.",
+            location: "San Francisco, CA",
+            social: {
+                twitter: "https://twitter.com/sarahchen",
+                linkedin: "https://linkedin.com/in/sarahchen",
+                website: "https://sarahchen.com"
+            }
         },
         publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
         readTime: 5,
@@ -225,4 +232,13 @@ export const categories = [
 
 export function getCategory(slug: string) {
     return categories.find((c) => c.slug.toLowerCase() === slug.toLowerCase());
+}
+
+export function getAuthor(id: string) {
+    const article = mockArticles.find(a => a.author.id === id);
+    return article?.author;
+}
+
+export function getAuthorArticles(authorId: string) {
+    return mockArticles.filter(a => a.author.id === authorId);
 }

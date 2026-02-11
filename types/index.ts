@@ -21,10 +21,14 @@ export interface Author {
     id: string;
     name: string;
     avatar: string;
+    role?: string;
     bio: string;
+    location?: string;
     social?: {
         twitter?: string;
         instagram?: string;
+        linkedin?: string;
+        website?: string;
     };
 }
 
