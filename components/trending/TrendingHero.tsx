@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Article } from "@/types";
-import { Clock, TrendingUp, Eye } from "lucide-react";
+import { TrendingUp, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TrendingHeroProps {

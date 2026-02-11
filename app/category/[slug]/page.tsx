@@ -3,7 +3,6 @@ import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
-import { ArticleCard } from "@/components/article/ArticleCard";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
 import { mockArticles, getCategory } from "@/lib/mock-data";
 
@@ -54,7 +53,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                             <div className="text-center py-20 bg-gray-50 dark:bg-gray-900 rounded-2xl">
                                 <h3 className="text-xl font-semibold mb-2">No articles found</h3>
                                 <p className="text-gray-500">
-                                    We haven't published any articles in this category yet.
+                                    We haven&apos;t published any articles in this category yet.
                                 </p>
                             </div>
                         )}
