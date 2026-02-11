@@ -170,3 +170,59 @@ export const mockArticles: Article[] = [
         tags: ["Tech", "News", "Quick Read"],
     },
 ];
+
+export const categories = [
+    {
+        id: "tech",
+        name: "Tech",
+        slug: "tech",
+        description: "The latest in technology, AI, and gadgets making waves in the industry.",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "gaming",
+        name: "Gaming",
+        slug: "gaming",
+        description: "Game reviews, esports news, and deep dives into gaming culture.",
+        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "career",
+        name: "Career",
+        slug: "career",
+        description: "Advice on side hustles, remote work, and navigating the modern workplace.",
+        image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "entertainment",
+        name: "Entertainment",
+        slug: "entertainment",
+        description: "Movies, TV shows, music, and pop culture analysis.",
+        image: "https://images.unsplash.com/photo-1603739903239-8b6e64c3b185?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "world",
+        name: "World",
+        slug: "world",
+        description: "Global news, climate action, and social movements affecting our generation.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "creativity",
+        name: "Creativity",
+        slug: "creativity",
+        description: "Inspiration for artists, designers, and creators.",
+        image: "https://images.unsplash.com/photo-1499750310159-5254f412d2f1?w=1200&h=600&fit=crop",
+    },
+    {
+        id: "lifestyle",
+        name: "Lifestyle",
+        slug: "lifestyle",
+        description: "Wellness, mental health, and tips for living your best life.",
+        image: "https://images.unsplash.com/photo-1545205566-3da8dcc7766b?w=1200&h=600&fit=crop",
+    },
+];
+
+export function getCategory(slug: string) {
+    return categories.find((c) => c.slug.toLowerCase() === slug.toLowerCase());
+}
