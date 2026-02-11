@@ -58,8 +58,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <div className="sticky top-24 space-y-6">
                             {/* Author Card */}
                             <AuthorCard
-                                author={article.author}
-                                bio="Passionate writer covering the latest in technology and innovation."
+                                author={article.author.name}
+                                bio={article.author.bio}
                                 articlesCount={12}
                             />
 

@@ -10,6 +10,7 @@ export interface Article {
     author: Author;
     publishedAt: string;
     readTime: number;
+    views: number;
     likes: number;
     comments: number;
     tags: string[];

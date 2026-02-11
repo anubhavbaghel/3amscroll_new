@@ -17,6 +17,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
         readTime: 5,
+        views: 1542,
         likes: 1234,
         comments: 89,
         tags: ["AI", "Technology", "Future"],
@@ -37,6 +38,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), // 5 hours ago
         readTime: 8,
+        views: 2891,
         likes: 2456,
         comments: 234,
         tags: ["Gaming", "Reviews", "2026"],
@@ -57,6 +59,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
         readTime: 6,
+        views: 6543,
         likes: 5678,
         comments: 456,
         tags: ["Career", "Money", "Side Hustle"],
@@ -77,6 +80,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
         readTime: 4,
+        views: 4321,
         likes: 3421,
         comments: 178,
         tags: ["Netflix", "TV Shows", "Entertainment"],
@@ -97,6 +101,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), // 3 hours ago
         readTime: 7,
+        views: 5678,
         likes: 4567,
         comments: 312,
         tags: ["Climate", "Activism", "Environment"],
@@ -117,6 +122,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), // 12 hours ago
         readTime: 5,
+        views: 1542,
         likes: 2890,
         comments: 145,
         tags: ["Art", "NFT", "Digital"],
@@ -137,6 +143,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), // 8 hours ago
         readTime: 4,
+        views: 4321,
         likes: 6789,
         comments: 523,
         tags: ["Mental Health", "Wellness", "Self Care"],
@@ -157,6 +164,7 @@ export const mockArticles: Article[] = [
         },
         publishedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 minutes ago
         readTime: 2,
+        views: 890,
         likes: 1567,
         comments: 67,
         tags: ["Tech", "News", "Quick Read"],

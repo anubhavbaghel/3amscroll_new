@@ -21,7 +21,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
                     <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800" />
                         <div>
-                            <div className="font-medium text-gray-900 dark:text-gray-100">{article.author}</div>
+                            <div className="font-medium text-gray-900 dark:text-gray-100">{article.author.name}</div>
                             <div className="text-xs">{formatDate(article.publishedAt)}</div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
                 </p>
 
                 <blockquote>
-                    "This is an important quote that highlights a key point in the article. It stands out from the regular text."
+                    &quot;This is an important quote that highlights a key point in the article. It stands out from the regular text.&quot;
                 </blockquote>
 
                 <h3>Key Takeaways</h3>

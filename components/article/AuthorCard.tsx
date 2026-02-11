@@ -7,7 +7,7 @@ interface AuthorCardProps {
     articlesCount?: number;
 }
 
-export function AuthorCard({ author, avatar, bio, articlesCount = 0 }: AuthorCardProps) {
+export function AuthorCard({ author, bio, articlesCount = 0 }: AuthorCardProps) {
     return (
         <div className="bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
