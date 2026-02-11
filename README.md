@@ -1,52 +1,29 @@
 # 3AM SCROLL
 
-A Gen Z-focused articles, blog, and news platform built with Next.js.
+3AM SCROLL is a modern, Gen Z-focused article platform built with Next.js, Tailwind CSS, and TypeScript.
 
-## Getting Started
+## Features
 
-### Installation
-
-```bash
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-### Build
-
-```bash
-npm run build
-npm start
-```
+- **Dynamic Article Pages**: Rich content rendering with custom typography.
+- **Interactive Engagement**: Like, comment, save, and share functionality.
+- **Responsive Design**: Mobile-first approach with smooth navigation.
+- **Dark Mode Support**: Built-in support for light and dark themes.
+- **Secure**: Implemented enterprise-grade security headers.
 
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **Database**: Supabase (PostgreSQL)
+- **Language**: TypeScript
+- **Deployment**: Vercel
 
-## Project Structure
+## Getting Started
 
-See `docs/` folder for detailed documentation on:
-- Design specifications
-- Development guidelines
-- Content strategy
-- System architecture
+1. Clone the repository
+2. Run `npm install`
+3. Run `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000)
 
-## Team Organization
+## Deployment
 
-- **Branding & UI/UX**: Design, wireframes, mockups
-- **Development**: Frontend & backend implementation
-- **Content & SEO**: Article publishing and optimization
-- **System Design**: Architecture and infrastructure
-
-## License
-
-Private - All rights reserved
+The project is deployed on Vercel. Push to the `main` branch to trigger a new deployment.
