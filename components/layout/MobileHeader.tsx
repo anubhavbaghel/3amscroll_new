@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
+import { SearchBar } from "@/components/search/SearchBar";
 
 export function MobileHeader() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -75,12 +76,7 @@ export function MobileHeader() {
                 {/* Search Bar (Expanded) */}
                 {isSearchOpen && (
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-                        <input
-                            type="search"
-                            placeholder="Search articles..."
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            autoFocus
-                        />
+                        <SearchBar autoFocus />
                     </div>
                 )}
 
