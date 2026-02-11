@@ -38,7 +38,7 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                                     {article.excerpt}
                                 </p>
                                 <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
-                                    <span>{article.author}</span>
+                                    <span>{article.author.name}</span>
                                     <span>•</span>
                                     <span>{article.readTime} min read</span>
                                 </div>
