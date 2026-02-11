@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     <div>
                         <h1 className="text-3xl font-bold">Search Results</h1>
                         <p className="text-gray-500 dark:text-gray-400">
-                            Found {results.length} results for "{query}"
+                            Found {results.length} results for &quot;{query}&quot;
                         </p>
                     </div>
                 </div>
