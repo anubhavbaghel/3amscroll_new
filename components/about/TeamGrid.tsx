@@ -14,7 +14,7 @@ export function TeamGrid() {
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <h2 className="text-3xl font-bold mb-4">Meet the Team</h2>
                     <p className="text-gray-600 dark:text-gray-400">
-                        The voices behind the scroll. We're a diverse group of creators, techies, and culture enthusiasts.
+                        The voices behind the scroll. We&apos;re a diverse group of creators, techies, and culture enthusiasts.
                     </p>
                 </div>
 

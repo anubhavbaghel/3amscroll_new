@@ -26,7 +26,7 @@ export function ContactForm() {
                 </div>
                 <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    Thanks for reaching out. We'll get back to you within 24 hours.
+                    Thanks for reaching out. We&apos;ll get back to you within 24 hours.
                 </p>
                 <button
                     onClick={() => setIsSuccess(false)}
@@ -83,7 +83,7 @@ export function ContactForm() {
                     required
                     rows={5}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
-                    placeholder="Tell us what's on your mind..."
+                    placeholder="Tell us what&apos;s on your mind..."
                 />
             </div>
 

@@ -16,7 +16,7 @@ export default function AboutPage() {
                         We are <span className="text-blue-600 dark:text-blue-500">3AM SCROLL</span>.
                     </h1>
                     <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                        A digital sanctuary for the sleepless generation. We curate the internet's noise into signals that matter.
+                        A digital sanctuary for the sleepless generation. We curate the internet&apos;s noise into signals that matter.
                     </p>
                 </section>
 
@@ -33,13 +33,13 @@ export default function AboutPage() {
                             <div>
                                 <h3 className="text-2xl font-bold mb-4">Future-Focused</h3>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    From AI to climate tech, we're obsessed with what's next and how it shapes our reality.
+                                    From AI to climate tech, we&apos;re obsessed with what&apos;s next and how it shapes our reality.
                                 </p>
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold mb-4">Community-Driven</h3>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    We're not just a platform; we're a collective. Your voice shapes what we cover.
+                                    We&apos;re not just a platform; we&apos;re a collective. Your voice shapes what we cover.
                                 </p>
                             </div>
                         </div>

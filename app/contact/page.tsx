@@ -16,7 +16,7 @@ export default function ContactPage() {
                     <div>
                         <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display">Get in Touch</h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
-                            Have a story to pitch? Found a bug? Or just want to say hi? We'd love to hear from you.
+                            Have a story to pitch? Found a bug? Or just want to say hi? We&apos;d love to hear from you.
                         </p>
 
                         <div className="space-y-8">
