@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
+import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
 
 export function DesktopHeader() {
@@ -66,7 +67,9 @@ export function DesktopHeader() {
                         {/* Right Actions */}
                         <div className="flex items-center justify-end gap-3">
                             {/* Search */}
-                            <SearchBar className="w-48 xl:w-64" />
+                            <Suspense fallback={<div className="w-48 xl:w-64 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />}>
+                                <SearchBar className="w-48 xl:w-64" />
+                            </Suspense>
 
                             {/* User Menu */}
                             <Link

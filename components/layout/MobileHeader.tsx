@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
+import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
 
 export function MobileHeader() {
@@ -76,7 +77,9 @@ export function MobileHeader() {
                 {/* Search Bar (Expanded) */}
                 {isSearchOpen && (
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-                        <SearchBar autoFocus />
+                        <Suspense fallback={<div className="w-full h-10 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />}>
+                            <SearchBar autoFocus />
+                        </Suspense>
                     </div>
                 )}
 
