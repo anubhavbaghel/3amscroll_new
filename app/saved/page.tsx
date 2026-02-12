@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getSavedArticleIds, getArticles } from "@/lib/data";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop"; // Reuse desktop card
 import { ArticleCard } from "@/components/article/ArticleCard"; // Reuse mobile card
@@ -29,8 +30,8 @@ export default async function SavedPage() {
 
                 {savedArticles.length === 0 ? (
                     <div className="text-center py-20">
-                        <p className="text-gray-500 mb-4">You haven't saved any articles yet.</p>
-                        <a href="/" className="text-blue-600 hover:underline">Explore stories</a>
+                        <p className="text-gray-500 mb-4">You haven&apos;t saved any articles yet.</p>
+                        <Link href="/" className="text-blue-600 hover:underline">Explore stories</Link>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
