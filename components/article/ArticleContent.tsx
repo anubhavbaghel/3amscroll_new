@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { Article } from "@/types";
+import { routes } from "@/config/routes";
+import Image from "next/image";
 
 interface ArticleContentProps {
     article: Article;
@@ -18,13 +21,15 @@ export function ArticleContent({ article }: ArticleContentProps) {
                     {article.title}
                 </h1>
                 <div className="flex items-center gap-4 text-gray-600 dark:text-gray-400 text-sm">
-                    <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800" />
+                    <Link href={routes.author(article.author.id)} className="flex items-center gap-2 group hover:text-blue-600 transition-colors">
+                        <div className="relative w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
+                            <Image src={article.author.avatar} alt={article.author.name} fill className="object-cover" />
+                        </div>
                         <div>
-                            <div className="font-medium text-gray-900 dark:text-gray-100">{article.author.name}</div>
+                            <div className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition-colors">{article.author.name}</div>
                             <div className="text-xs">{formatDate(article.publishedAt)}</div>
                         </div>
-                    </div>
+                    </Link>
                     <span>•</span>
                     <span>{article.readTime} min read</span>
                     <span>•</span>

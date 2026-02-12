@@ -11,17 +11,21 @@ interface ArticleHeroProps {
 
 export function ArticleHero({ article }: ArticleHeroProps) {
     return (
-        <Link
-            href={routes.article(article.slug)}
-            className="block relative h-screen lg:h-full w-full overflow-hidden group"
-        >
+        <div className="block relative h-screen lg:h-full w-full overflow-hidden group">
+            {/* Main Article Link (Overlay) */}
+            <Link
+                href={routes.article(article.slug)}
+                className="absolute inset-0 z-10"
+                aria-label={`Read ${article.title}`}
+            />
+
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
                     src={article.coverImage}
                     alt={article.title}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                     priority
                 />
                 {/* Gradient Overlay */}
@@ -29,7 +33,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
             </div>
 
             {/* Content */}
-            <div className="relative h-full flex flex-col justify-end p-6 lg:p-8 pb-32 lg:pb-12 text-white">
+            <div className="relative z-20 h-full flex flex-col justify-end p-6 lg:p-8 pb-32 lg:pb-12 text-white pointer-events-none">
                 {/* Category Badge */}
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold mb-4 w-fit">
                     <span className="uppercase">{article.category}</span>
@@ -45,9 +49,12 @@ export function ArticleHero({ article }: ArticleHeroProps) {
                     {article.excerpt}
                 </p>
 
-                {/* Meta Info */}
-                <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white">
+                {/* Author Link - Interactive */}
+                <Link
+                    href={routes.author(article.author.id)}
+                    className="flex items-center gap-3 group/author pointer-events-auto w-fit"
+                >
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white group-hover/author:border-blue-400 transition-colors">
                         <Image
                             src={article.author.avatar}
                             alt={article.author.name}
@@ -56,16 +63,16 @@ export function ArticleHero({ article }: ArticleHeroProps) {
                         />
                     </div>
                     <div>
-                        <p className="font-semibold">{article.author.name}</p>
+                        <p className="font-semibold group-hover/author:text-blue-400 transition-colors">{article.author.name}</p>
                         <p className="text-sm text-gray-300">
                             {formatTimeAgo(article.publishedAt)} · {article.readTime} min read
                         </p>
                     </div>
-                </div>
+                </Link>
             </div>
 
             {/* Scroll Indicator - Mobile Only */}
-            <div className="lg:hidden absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <div className="lg:hidden absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10 pointer-events-none">
                 <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -80,7 +87,7 @@ export function ArticleHero({ article }: ArticleHeroProps) {
                     />
                 </svg>
             </div>
-        </Link>
+        </div>
     );
 }
 

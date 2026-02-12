@@ -12,11 +12,15 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article, priority = false }: ArticleCardProps) {
     return (
-        <Link
-            href={routes.article(article.slug)}
-            className="block bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors"
-        >
-            <article className="p-4">
+        <div className="block relative bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors group">
+            {/* Main Link Overlay */}
+            <Link
+                href={routes.article(article.slug)}
+                className="absolute inset-0 z-0"
+                aria-label={`Read ${article.title}`}
+            />
+
+            <article className="p-4 relative z-10 pointer-events-none">
                 {/* Cover Image */}
                 <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden mb-3">
                     <Image
@@ -48,8 +52,9 @@ export function ArticleCard({ article, priority = false }: ArticleCardProps) {
                 </p>
 
                 {/* Author & Engagement */}
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between pointer-events-auto">
+                    {/* Author Link */}
+                    <Link href={routes.author(article.author.id)} className="flex items-center gap-2 hover:opacity-80 transition-opacity relative z-20">
                         <div className="relative w-6 h-6 rounded-full overflow-hidden">
                             <Image
                                 src={article.author.avatar}
@@ -61,9 +66,7 @@ export function ArticleCard({ article, priority = false }: ArticleCardProps) {
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                             {article.author.name}
                         </span>
-                        <span className="text-sm text-gray-500">·</span>
-                        <span className="text-sm text-gray-500">{formatTimeAgo(article.publishedAt)}</span>
-                    </div>
+                    </Link>
 
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
@@ -83,7 +86,7 @@ export function ArticleCard({ article, priority = false }: ArticleCardProps) {
                                 e.preventDefault();
                                 // Handle bookmark
                             }}
-                            className="hover:text-blue-600 transition-colors"
+                            className="hover:text-blue-600 transition-colors relative z-20 pointer-events-auto"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -92,7 +95,7 @@ export function ArticleCard({ article, priority = false }: ArticleCardProps) {
                     </div>
                 </div>
             </article>
-        </Link>
+        </div>
     );
 }
 

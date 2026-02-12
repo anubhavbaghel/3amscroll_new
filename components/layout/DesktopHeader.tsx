@@ -1,12 +1,16 @@
-"use client";
-
+import { AuthButton } from "@/components/auth/AuthButton";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
+import { User } from "@supabase/supabase-js";
 
-export function DesktopHeader() {
+interface DesktopHeaderProps {
+    user?: User | null;
+}
+
+export function DesktopHeader({ user = null }: DesktopHeaderProps) {
     return (
         <header className="hidden lg:block sticky top-0 z-50 bg-white dark:bg-black shadow-sm">
             {/* Main Header */}
@@ -72,20 +76,7 @@ export function DesktopHeader() {
                             </Suspense>
 
                             {/* User Menu */}
-                            <Link
-                                href={routes.profile}
-                                className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
-                                aria-label="Profile"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                </svg>
-                            </Link>
+                            <AuthButton user={user} />
                         </div>
                     </div>
                 </div>

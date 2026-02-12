@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { AuthorCard } from "@/components/article/AuthorCard";
@@ -32,10 +30,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     return (
         <div className="min-h-screen bg-white dark:bg-black">
             {/* Mobile Header */}
-            <MobileHeader />
-
-            {/* Desktop Header */}
-            <DesktopHeader />
 
             {/* Hero Image */}
             <div className="relative h-[300px] md:h-[500px] bg-gray-200 dark:bg-gray-800 mt-16 lg:mt-0">
@@ -59,6 +53,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {/* Author Card */}
                             <AuthorCard
                                 author={article.author.name}
+                                authorId={article.author.id}
+                                avatar={article.author.avatar}
                                 bio={article.author.bio}
                                 articlesCount={12}
                             />

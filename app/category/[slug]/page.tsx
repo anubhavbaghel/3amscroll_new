@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
@@ -34,8 +32,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <MobileHeader />
-            <DesktopHeader />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
                 <CategoryHeader category={category} stats={stats} />

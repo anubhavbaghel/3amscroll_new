@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
 import { AuthorProfileHeader } from "@/components/author/AuthorProfileHeader";
@@ -30,8 +28,6 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <MobileHeader />
-            <DesktopHeader />
 
             <main>
                 <AuthorProfileHeader author={author} stats={stats} />

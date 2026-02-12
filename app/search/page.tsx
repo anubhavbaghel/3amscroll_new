@@ -1,5 +1,3 @@
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
 import { mockArticles } from "@/lib/mock-data";
@@ -23,8 +21,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <MobileHeader />
-            <DesktopHeader />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
                 <div className="flex items-center gap-3 mb-8">

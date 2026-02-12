@@ -1,5 +1,3 @@
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { TrendingHero } from "@/components/trending/TrendingHero";
 import { TrendingList } from "@/components/trending/TrendingList";
@@ -17,8 +15,6 @@ export default function TrendingPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <MobileHeader />
-            <DesktopHeader />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
                 <TrendingHero articles={topArticles} />

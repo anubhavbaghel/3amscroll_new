@@ -6,8 +6,6 @@ import { TeamGrid } from "@/components/about/TeamGrid";
 export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <MobileHeader />
-            <DesktopHeader />
 
             <main>
                 {/* Hero Section */}

@@ -12,10 +12,14 @@ interface ArticleCardDesktopProps {
 
 export function ArticleCardDesktop({ article, priority = false }: ArticleCardDesktopProps) {
     return (
-        <Link
-            href={routes.article(article.slug)}
-            className="block bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-500 dark:hover:border-blue-500 transition-all group"
-        >
+        <div className="block relative bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-500 dark:hover:border-blue-500 transition-all group">
+            {/* Main Link Overlay */}
+            <Link
+                href={routes.article(article.slug)}
+                className="absolute inset-0 z-0"
+                aria-label={`Read ${article.title}`}
+            />
+
             {/* Cover Image */}
             <div className="relative w-full aspect-[16/9] overflow-hidden">
                 <Image
@@ -28,7 +32,7 @@ export function ArticleCardDesktop({ article, priority = false }: ArticleCardDes
             </div>
 
             {/* Content */}
-            <div className="p-5">
+            <div className="p-5 relative z-10 pointer-events-none">
                 {/* Category Badge */}
                 <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase">
@@ -49,8 +53,9 @@ export function ArticleCardDesktop({ article, priority = false }: ArticleCardDes
                 </p>
 
                 {/* Author & Engagement */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
-                    <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800 pointer-events-auto">
+                    {/* Author Link */}
+                    <Link href={routes.author(article.author.id)} className="flex items-center gap-2 hover:opacity-80 transition-opacity relative z-20">
                         <div className="relative w-6 h-6 rounded-full overflow-hidden">
                             <Image
                                 src={article.author.avatar}
@@ -62,7 +67,7 @@ export function ArticleCardDesktop({ article, priority = false }: ArticleCardDes
                         <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                             {article.author.name}
                         </span>
-                    </div>
+                    </Link>
 
                     <div className="flex items-center gap-3 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
@@ -80,7 +85,7 @@ export function ArticleCardDesktop({ article, priority = false }: ArticleCardDes
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 }
 

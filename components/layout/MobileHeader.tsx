@@ -7,7 +7,14 @@ import { routes } from "@/config/routes";
 import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
 
-export function MobileHeader() {
+import { User } from "@supabase/supabase-js";
+import { AuthButton } from "@/components/auth/AuthButton";
+
+interface MobileHeaderProps {
+    user?: User | null;
+}
+
+export function MobileHeader({ user = null }: MobileHeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -16,6 +23,7 @@ export function MobileHeader() {
             {/* Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black shadow-sm">
                 <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-800">
+                    {/* Logo */}
                     {/* Logo */}
                     <Link href={routes.home} className="font-bold text-xl tracking-tight">
                         3AM SCROLL
@@ -42,6 +50,11 @@ export function MobileHeader() {
                                 />
                             </svg>
                         </button>
+
+                        {/* Auth Button (Visible on Mobile Header) */}
+                        <div className="flex items-center">
+                            <AuthButton user={user} />
+                        </div>
 
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -73,6 +86,8 @@ export function MobileHeader() {
                         </button>
                     </div>
                 </div>
+
+                {/* ... (Search Bar & Categories remain same) ... */}
 
                 {/* Search Bar (Expanded) */}
                 {isSearchOpen && (
@@ -175,29 +190,32 @@ export function MobileHeader() {
                                 ))}
                             </div>
 
-                            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-1">
-                                <Link
-                                    href={routes.saved}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    <span className="font-medium">Saved</span>
-                                </Link>
-                                <Link
-                                    href={routes.profile}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    <span className="font-medium">Profile</span>
-                                </Link>
-                                <Link
-                                    href={routes.settings}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    <span className="font-medium">Settings</span>
-                                </Link>
-                            </div>
+                            {/* Conditional Auth Menu Items */}
+                            {user && (
+                                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 space-y-1">
+                                    <Link
+                                        href={routes.saved}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <span className="font-medium">Saved Articles</span>
+                                    </Link>
+                                    <Link
+                                        href={routes.profile}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <span className="font-medium">Profile</span>
+                                    </Link>
+                                    <Link
+                                        href={routes.settings}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <span className="font-medium">Settings</span>
+                                    </Link>
+                                </div>
+                            )}
                         </nav>
                     </div>
                 </div>

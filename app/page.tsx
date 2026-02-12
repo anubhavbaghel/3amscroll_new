@@ -1,23 +1,19 @@
-import { MobileHeader } from "@/components/layout/MobileHeader";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
-import { mockArticles } from "@/lib/mock-data";
+import { getArticles, getTrendingArticles } from "@/lib/data";
 
-export default function HomePage() {
-    const [heroArticle, ...feedArticles] = mockArticles;
-    const trendingArticles = [...mockArticles].sort((a, b) => b.likes - a.likes);
+export default async function HomePage() {
+    const allArticles = await getArticles();
+    const trendingArticles = await getTrendingArticles();
+
+    const [heroArticle, ...feedArticles] = allArticles;
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
             {/* Mobile Header */}
-            <MobileHeader />
-
-            {/* Desktop Header */}
-            <DesktopHeader />
 
             {/* Main Content */}
             <main>
