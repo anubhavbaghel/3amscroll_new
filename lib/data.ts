@@ -134,3 +134,18 @@ export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
 
     return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
+
+export async function getLikedArticleIds(userId: string): Promise<Set<string>> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("likes")
+        .select("article_id")
+        .eq("user_id", userId);
+
+    if (error) {
+        return new Set();
+    }
+
+    return new Set(data.map((item: { article_id: string }) => item.article_id));
+}

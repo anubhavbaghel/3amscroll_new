@@ -5,18 +5,67 @@ import { AuthorCard } from "@/components/article/AuthorCard";
 import { EngagementBar } from "@/components/article/EngagementBar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { mockArticles } from "@/lib/mock-data";
+import { ArticleHero } from "@/components/article/ArticleHero";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { getArticleBySlug, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+import { createClient } from "@/lib/supabase/server";
+import { Metadata } from "next";
 
 interface ArticlePageProps {
-    params: Promise<{
+    params: {
         slug: string;
-    }>;
+    };
+}
+
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+    const article = await getArticleBySlug(params.slug);
+
+    if (!article) {
+        return {
+            title: "Article Not Found | 3AM SCROLL",
+        };
+    }
+
+    return {
+        title: `${article.title} | 3AM SCROLL`,
+        description: article.excerpt,
+        openGraph: {
+            title: article.title,
+            description: article.excerpt,
+            url: `https://3amscroll.com/article/${article.slug}`, // Replace with env var in prod
+            siteName: '3AM SCROLL',
+            images: [
+                {
+                    url: article.coverImage,
+                    width: 1200,
+                    height: 630,
+                    alt: article.title,
+                },
+            ],
+            locale: 'en_US',
+            type: 'article',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: article.title,
+            description: article.excerpt,
+            images: [article.coverImage],
+        },
+    };
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-    const { slug } = await params;
+    const { slug } = params;
 
-    // Find the article by slug
-    const article = mockArticles.find((a) => a.slug === slug);
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const [article, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
+        getArticleBySlug(params.slug),
+        getTrendingArticles(),
+        user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
+        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
+    ]);
 
     if (!article) {
         notFound();
@@ -31,9 +80,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="min-h-screen bg-white dark:bg-black">
             {/* Mobile Header */}
 
-            {/* Hero Image */}
-            <div className="relative h-[300px] md:h-[500px] bg-gray-200 dark:bg-gray-800 mt-16 lg:mt-0">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            {/* Hero Section */}
+            <div className="h-[60vh] lg:h-[70vh]">
+                <ArticleHero
+                    article={article}
+                    isSaved={savedArticleIds.has(article.id)}
+                    isLiked={likedArticleIds.has(article.id)}
+                />
             </div>
 
             {/* Main Content */}

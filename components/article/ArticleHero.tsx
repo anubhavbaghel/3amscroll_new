@@ -6,13 +6,15 @@ import { Article } from "@/types";
 import { routes } from "@/config/routes";
 
 import { BookmarkButton } from "@/components/article/BookmarkButton";
+import { LikeButton } from "@/components/article/LikeButton";
 
 interface ArticleHeroProps {
     article: Article;
     isSaved?: boolean;
+    isLiked?: boolean;
 }
 
-export function ArticleHero({ article, isSaved = false }: ArticleHeroProps) {
+export function ArticleHero({ article, isSaved = false, isLiked = false }: ArticleHeroProps) {
     return (
         <div className="block relative h-screen lg:h-full w-full overflow-hidden group">
             {/* Main Article Link (Overlay) */}
@@ -36,11 +38,17 @@ export function ArticleHero({ article, isSaved = false }: ArticleHeroProps) {
             </div>
 
             {/* Bookmark Button */}
-            <div className="absolute top-6 right-6 z-30">
+            <div className="absolute top-6 right-6 z-30 flex flex-col gap-3">
                 <BookmarkButton
                     articleId={article.id}
                     initialIsBookmarked={isSaved}
                     className="text-white hover:text-blue-400 bg-black/20 backdrop-blur-md p-2 rounded-full"
+                />
+                <LikeButton
+                    articleId={article.id}
+                    initialLikes={article.likes}
+                    initialIsLiked={isLiked}
+                    className="text-white hover:text-red-500 bg-black/20 backdrop-blur-md p-2 rounded-full"
                 />
             </div>
 

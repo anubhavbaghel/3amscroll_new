@@ -3,17 +3,19 @@ import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
-import { getArticles, getTrendingArticles, getSavedArticleIds } from "@/lib/data";
+import { getArticles, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    const allArticles = await getArticles();
-    const trendingArticles = await getTrendingArticles();
-    const savedArticleIds = user ? await getSavedArticleIds(user.id) : new Set<string>();
-
+    const [allArticles, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
+        getArticles(),
+        getTrendingArticles(),
+        user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
+        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
+    ]);
     const [heroArticle, ...feedArticles] = allArticles;
 
     return (
@@ -25,7 +27,11 @@ export default async function HomePage() {
                 {/* Hero Article - Full Screen on Mobile, Contained on Desktop */}
                 <div className="lg:hidden">
                     <div className="pt-[140px]">
-                        <ArticleHero article={heroArticle} isSaved={savedArticleIds.has(heroArticle.id)} />
+                        <ArticleHero
+                            article={heroArticle}
+                            isSaved={savedArticleIds.has(heroArticle.id)}
+                            isLiked={likedArticleIds.has(heroArticle.id)}
+                        />
                     </div>
                 </div>
 
@@ -37,7 +43,11 @@ export default async function HomePage() {
                             {/* Desktop Hero - Smaller, Contained */}
                             <div className="hidden lg:block mb-8">
                                 <div className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
-                                    <ArticleHero article={heroArticle} isSaved={savedArticleIds.has(heroArticle.id)} />
+                                    <ArticleHero
+                                        article={heroArticle}
+                                        isSaved={savedArticleIds.has(heroArticle.id)}
+                                        isLiked={likedArticleIds.has(heroArticle.id)}
+                                    />
                                 </div>
                             </div>
 
@@ -53,6 +63,7 @@ export default async function HomePage() {
                                             article={article}
                                             priority={index < 3}
                                             isSaved={savedArticleIds.has(article.id)}
+                                            isLiked={likedArticleIds.has(article.id)}
                                         />
                                     ))}
                                 </div>
@@ -65,6 +76,7 @@ export default async function HomePage() {
                                             article={article}
                                             priority={index < 4}
                                             isSaved={savedArticleIds.has(article.id)}
+                                            isLiked={likedArticleIds.has(article.id)}
                                         />
                                     ))}
                                 </div>
