@@ -5,12 +5,15 @@ import Image from "next/image";
 import { Article } from "@/types";
 import { routes } from "@/config/routes";
 
+import { BookmarkButton } from "@/components/article/BookmarkButton";
+
 interface ArticleCardProps {
     article: Article;
     priority?: boolean;
+    isSaved?: boolean;
 }
 
-export function ArticleCard({ article, priority = false }: ArticleCardProps) {
+export function ArticleCard({ article, priority = false, isSaved = false }: ArticleCardProps) {
     return (
         <div className="block relative bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors group">
             {/* Main Link Overlay */}
@@ -81,17 +84,10 @@ export function ArticleCard({ article, priority = false }: ArticleCardProps) {
                             </svg>
                             {formatNumber(article.comments)}
                         </span>
-                        <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                // Handle bookmark
-                            }}
-                            className="hover:text-blue-600 transition-colors relative z-20 pointer-events-auto"
-                        >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                            </svg>
-                        </button>
+                        <BookmarkButton
+                            articleId={article.id}
+                            initialIsBookmarked={isSaved}
+                        />
                     </div>
                 </div>
             </article>

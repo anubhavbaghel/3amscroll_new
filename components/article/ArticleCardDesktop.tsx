@@ -5,12 +5,15 @@ import Image from "next/image";
 import { Article } from "@/types";
 import { routes } from "@/config/routes";
 
+import { BookmarkButton } from "@/components/article/BookmarkButton";
+
 interface ArticleCardDesktopProps {
     article: Article;
     priority?: boolean;
+    isSaved?: boolean;
 }
 
-export function ArticleCardDesktop({ article, priority = false }: ArticleCardDesktopProps) {
+export function ArticleCardDesktop({ article, priority = false, isSaved = false }: ArticleCardDesktopProps) {
     return (
         <div className="block relative bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-500 dark:hover:border-blue-500 transition-all group">
             {/* Main Link Overlay */}
@@ -82,6 +85,11 @@ export function ArticleCardDesktop({ article, priority = false }: ArticleCardDes
                             </svg>
                             {formatNumber(article.comments)}
                         </span>
+                        <BookmarkButton
+                            articleId={article.id}
+                            initialIsBookmarked={isSaved}
+                            className="pointer-events-auto"
+                        />
                     </div>
                 </div>
             </div>

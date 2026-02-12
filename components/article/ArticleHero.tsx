@@ -5,11 +5,14 @@ import Image from "next/image";
 import { Article } from "@/types";
 import { routes } from "@/config/routes";
 
+import { BookmarkButton } from "@/components/article/BookmarkButton";
+
 interface ArticleHeroProps {
     article: Article;
+    isSaved?: boolean;
 }
 
-export function ArticleHero({ article }: ArticleHeroProps) {
+export function ArticleHero({ article, isSaved = false }: ArticleHeroProps) {
     return (
         <div className="block relative h-screen lg:h-full w-full overflow-hidden group">
             {/* Main Article Link (Overlay) */}
@@ -30,6 +33,15 @@ export function ArticleHero({ article }: ArticleHeroProps) {
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            </div>
+
+            {/* Bookmark Button */}
+            <div className="absolute top-6 right-6 z-30">
+                <BookmarkButton
+                    articleId={article.id}
+                    initialIsBookmarked={isSaved}
+                    className="text-white hover:text-blue-400 bg-black/20 backdrop-blur-md p-2 rounded-full"
+                />
             </div>
 
             {/* Content */}

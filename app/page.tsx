@@ -3,11 +3,16 @@ import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
-import { getArticles, getTrendingArticles } from "@/lib/data";
+import { getArticles, getTrendingArticles, getSavedArticleIds } from "@/lib/data";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
     const allArticles = await getArticles();
     const trendingArticles = await getTrendingArticles();
+    const savedArticleIds = user ? await getSavedArticleIds(user.id) : new Set<string>();
 
     const [heroArticle, ...feedArticles] = allArticles;
 
@@ -20,7 +25,7 @@ export default async function HomePage() {
                 {/* Hero Article - Full Screen on Mobile, Contained on Desktop */}
                 <div className="lg:hidden">
                     <div className="pt-[140px]">
-                        <ArticleHero article={heroArticle} />
+                        <ArticleHero article={heroArticle} isSaved={savedArticleIds.has(heroArticle.id)} />
                     </div>
                 </div>
 
@@ -32,7 +37,7 @@ export default async function HomePage() {
                             {/* Desktop Hero - Smaller, Contained */}
                             <div className="hidden lg:block mb-8">
                                 <div className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
-                                    <ArticleHero article={heroArticle} />
+                                    <ArticleHero article={heroArticle} isSaved={savedArticleIds.has(heroArticle.id)} />
                                 </div>
                             </div>
 
@@ -43,14 +48,24 @@ export default async function HomePage() {
                                 {/* Mobile: Vertical List */}
                                 <div className="lg:hidden pt-[140px]">
                                     {feedArticles.map((article, index) => (
-                                        <ArticleCard key={article.id} article={article} priority={index < 3} />
+                                        <ArticleCard
+                                            key={article.id}
+                                            article={article}
+                                            priority={index < 3}
+                                            isSaved={savedArticleIds.has(article.id)}
+                                        />
                                     ))}
                                 </div>
 
                                 {/* Desktop: 2-Column Grid */}
                                 <div className="hidden lg:grid lg:grid-cols-2 gap-6">
                                     {feedArticles.map((article, index) => (
-                                        <ArticleCardDesktop key={article.id} article={article} priority={index < 4} />
+                                        <ArticleCardDesktop
+                                            key={article.id}
+                                            article={article}
+                                            priority={index < 4}
+                                            isSaved={savedArticleIds.has(article.id)}
+                                        />
                                     ))}
                                 </div>
                             </div>
