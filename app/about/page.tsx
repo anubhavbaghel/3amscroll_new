@@ -1,5 +1,3 @@
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { TeamGrid } from "@/components/about/TeamGrid";
 

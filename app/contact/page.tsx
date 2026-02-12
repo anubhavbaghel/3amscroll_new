@@ -1,5 +1,3 @@
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { Footer } from "@/components/layout/Footer";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Mail, MapPin, MessageCircle } from "lucide-react";

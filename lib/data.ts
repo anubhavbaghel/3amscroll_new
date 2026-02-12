@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Article, Author } from "@/types";
 
 // Helper to map DB result to our App Type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
     id: dbArticle.id,
     slug: dbArticle.slug,
@@ -131,5 +132,5 @@ export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
         return new Set();
     }
 
-    return new Set(data.map((item: any) => item.article_id));
+    return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
