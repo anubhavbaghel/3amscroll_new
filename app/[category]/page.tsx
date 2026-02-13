@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
+// import { DesktopHeader } from "@/components/layout/DesktopHeader";
+// import { MobileHeader } from "@/components/layout/MobileHeader";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { getArticles } from "@/lib/data";
-import { createClient } from "@/lib/supabase/server";
+// import { createClient } from "@/lib/supabase/server";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -49,8 +49,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     const categoryName = formatCategory(category);
 
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    // const supabase = await createClient();
+    // const { data: { user } } = await supabase.auth.getUser();
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black">

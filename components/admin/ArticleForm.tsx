@@ -24,7 +24,7 @@ interface ArticleFormProps {
 }
 
 export function ArticleForm({ initialData, mode }: ArticleFormProps) {
-    const router = useRouter();
+    // const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const [title, setTitle] = useState(initialData?.title || "");

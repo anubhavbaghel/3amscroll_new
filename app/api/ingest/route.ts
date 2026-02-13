@@ -66,7 +66,7 @@ export async function GET() {
 
             if (!existing) {
                 // Insert as Draft using BOT ID
-                const { data, error } = await supabase.from("articles").insert({
+                const { error } = await supabase.from("articles").insert({
                     title: item.title,
                     slug: item.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") + "-" + Math.floor(Math.random() * 1000),
                     excerpt: item.description,

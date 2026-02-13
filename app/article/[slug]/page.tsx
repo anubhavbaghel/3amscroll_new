@@ -6,8 +6,8 @@ import { EngagementBar } from "@/components/article/EngagementBar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { mockArticles } from "@/lib/mock-data";
 import { ArticleHero } from "@/components/article/ArticleHero";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { getArticleBySlug, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+// import { Sidebar } from "@/components/layout/Sidebar";
+import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 
@@ -61,9 +61,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    const [article, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
+    const [article, savedArticleIds, likedArticleIds] = await Promise.all([
         getArticleBySlug(slug),
-        getTrendingArticles(),
+        // getTrendingArticles(),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
         user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
     ]);
