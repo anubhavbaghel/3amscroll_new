@@ -15,22 +15,29 @@ export async function createArticle(formData: FormData) {
     }
 
     const title = formData.get("title") as string;
-    const slug = formData.get("slug") as string;
+    const slugRaw = formData.get("slug") as string;
     const category = formData.get("category") as string;
     const excerpt = formData.get("excerpt") as string;
     const content = formData.get("content") as string;
     const cover_image = formData.get("cover_image") as string;
     const status = formData.get("status") as string;
 
+    const formattedSlug = slugRaw.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+    const authorName = user.user_metadata.full_name || user.email?.split("@")[0] || "Anonymous";
+    const authorAvatar = user.user_metadata.avatar_url || "";
+
     const { error } = await supabase.from("articles").insert({
         title,
-        slug,
+        slug: formattedSlug,
         category,
         excerpt,
         content,
         cover_image,
         status,
         author_id: user.id,
+        author_name: authorName,
+        author_avatar: authorAvatar,
         published_at: status === 'published' ? new Date().toISOString() : null
     });
 

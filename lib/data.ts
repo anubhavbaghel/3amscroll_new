@@ -13,7 +13,7 @@ const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
     category: dbArticle.category,
     author: {
         id: dbArticle.author_id,
-        name: dbArticle.author_name,
+        name: dbArticle.author_name || "Unknown Author",
         avatar: dbArticle.author_avatar,
         bio: "", // Placeholder until we have real profiles
     },
