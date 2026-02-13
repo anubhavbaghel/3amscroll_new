@@ -100,3 +100,27 @@ export async function updateArticle(formData: FormData) {
     revalidatePath(`/article/${slug}`);
     redirect("/admin");
 }
+
+export async function deleteArticle(id: string) {
+    const supabase = await createClient();
+
+    // Auth check
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        throw new Error("Unauthorized");
+    }
+
+    const { error } = await supabase
+        .from("articles")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error("Error deleting article:", error);
+        throw new Error("Failed to delete article");
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    redirect("/admin");
+}

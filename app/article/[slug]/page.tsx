@@ -10,6 +10,7 @@ import { ArticleHero } from "@/components/article/ArticleHero";
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
+import { baseUrl } from "@/app/sitemap";
 
 interface ArticlePageProps {
     params: Promise<{
@@ -77,9 +78,29 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         .filter((a) => a.category === article.category && a.id !== article.id)
         .slice(0, 3);
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": article.title,
+        "image": [article.coverImage],
+        "datePublished": article.publishedAt,
+        "dateModified": article.publishedAt, // Simplified
+        "author": [{
+            "@type": "Person",
+            "name": article.author.name,
+            "url": `${baseUrl}/author/${article.author.id}` // Placeholder URL
+        }]
+    };
+
     return (
         <div className="min-h-screen bg-white dark:bg-black">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+
             {/* Mobile Header */}
+            {/* ... rest of the component ... */}
 
             {/* Hero Section */}
             <div className="h-[60vh] lg:h-[70vh]">
@@ -89,7 +110,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     isLiked={likedArticleIds.has(article.id)}
                 />
             </div>
-
+            {/* ... */}
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex gap-8">
