@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function RootLayout({
                 <MobileHeader user={user} />
                 <DesktopHeader user={user} />
                 {children}
+                <Toaster position="top-right" richColors />
             </body>
         </html >
     );
