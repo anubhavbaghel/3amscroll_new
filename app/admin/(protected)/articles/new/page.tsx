@@ -1,4 +1,4 @@
-import { createArticle } from "../../actions";
+import { createArticle } from "../../../actions";
 
 export default function NewArticlePage({ searchParams }: { searchParams?: Promise<{ error?: string }> }) {
     // Await searchParams correctly for Next.js 15
