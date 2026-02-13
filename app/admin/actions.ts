@@ -17,7 +17,7 @@ export async function createArticle(formData: FormData) {
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
     const category = formData.get("category") as string;
-    const summary = formData.get("summary") as string;
+    const excerpt = formData.get("excerpt") as string;
     const content = formData.get("content") as string;
     const cover_image = formData.get("cover_image") as string;
     const status = formData.get("status") as string;
@@ -26,7 +26,7 @@ export async function createArticle(formData: FormData) {
         title,
         slug,
         category,
-        summary,
+        excerpt,
         content,
         cover_image,
         status,
@@ -63,7 +63,7 @@ export async function updateArticle(formData: FormData) {
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
     const category = formData.get("category") as string;
-    const summary = formData.get("summary") as string;
+    const excerpt = formData.get("excerpt") as string;
     const cover_image = formData.get("cover_image") as string;
     const content = formData.get("content") as string;
     const status = formData.get("status") as string;
@@ -74,7 +74,7 @@ export async function updateArticle(formData: FormData) {
             title,
             slug,
             category,
-            summary,
+            excerpt,
             cover_image,
             content,
             status,
