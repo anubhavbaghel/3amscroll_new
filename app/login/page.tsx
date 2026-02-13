@@ -1,6 +1,8 @@
 import { login, signup } from "../auth/actions";
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+    const { error } = await searchParams;
+
     return (
         <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-50 dark:bg-black">
             <div className="w-full max-w-md space-y-8 px-4">
@@ -12,6 +14,12 @@ export default function LoginPage() {
                         Sign in to your account
                     </p>
                 </div>
+
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-md text-sm text-center">
+                        {error}
+                    </div>
+                )}
 
                 <form className="mt-8 space-y-6">
                     <div className="-space-y-px rounded-md shadow-sm">

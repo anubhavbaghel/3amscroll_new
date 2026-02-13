@@ -15,7 +15,7 @@ export async function login(formData: FormData) {
     const { error } = await supabase.auth.signInWithPassword(data);
 
     if (error) {
-        redirect("/error");
+        return redirect("/login?error=Invalid login credentials");
     }
 
     revalidatePath("/", "layout");
@@ -28,12 +28,18 @@ export async function signup(formData: FormData) {
     const data = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
+        options: {
+            data: {
+                full_name: formData.get("fullName") as string,
+            }
+        }
     };
 
     const { error } = await supabase.auth.signUp(data);
 
     if (error) {
-        redirect("/error");
+        console.error("Signup error:", error);
+        return redirect("/signup?error=Could not create user");
     }
 
     revalidatePath("/", "layout");

@@ -127,7 +127,7 @@ VALUES
     'Sustainable Living Trends for 2025',
     'From zero-waste kitchens to renewable energy tech, here are the most impactful ways to reduce your carbon footprint this year.',
     '<p>Sustainability is not just a trend...</p>',
-    'https://images.unsplash.com/photo-1542601906990-b4d3fb7d5afa',
+    'https://images.unsplash.com/photo-1518005052304-a32d180425f5',
     'Lifestyle',
     'author-4', 'Alex Morgan', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
     NOW() - INTERVAL '3 days',
