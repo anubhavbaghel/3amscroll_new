@@ -12,13 +12,14 @@ import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 
 interface ArticlePageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-    const article = await getArticleBySlug(params.slug);
+    const { slug } = await params;
+    const article = await getArticleBySlug(slug);
 
     if (!article) {
         return {
@@ -55,13 +56,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-    const { slug } = params;
+    const { slug } = await params;
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     const [article, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
-        getArticleBySlug(params.slug),
+        getArticleBySlug(slug),
         getTrendingArticles(),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
         user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
