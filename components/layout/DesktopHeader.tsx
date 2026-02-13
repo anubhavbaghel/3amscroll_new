@@ -12,13 +12,13 @@ interface DesktopHeaderProps {
 
 export function DesktopHeader({ user = null }: DesktopHeaderProps) {
     return (
-        <header className="hidden lg:block sticky top-0 z-50 bg-white dark:bg-black shadow-sm">
+        <header className="hidden lg:block sticky top-0 z-50 bg-white dark:bg-dark-bg/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-dark-border transition-colors">
             {/* Main Header */}
-            <div className="border-b border-gray-200 dark:border-gray-800">
+            <div className="relative z-20">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-3 items-center h-16">
+                    <div className="grid grid-cols-3 items-center h-20">
                         {/* Logo */}
-                        <Link href={routes.home} className="font-bold text-2xl tracking-tight hover:text-blue-600 transition-colors">
+                        <Link href={routes.home} className="font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-display">
                             3AM SCROLL
                         </Link>
 
@@ -26,20 +26,20 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                         <nav className="flex items-center justify-center gap-1">
                             <Link
                                 href={routes.home}
-                                className="px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 font-medium transition-colors text-sm"
+                                className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors text-sm text-gray-700 dark:text-gray-300 hover:text-brand"
                             >
                                 Home
                             </Link>
                             <Link
                                 href={routes.trending}
-                                className="px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 font-medium transition-colors text-sm"
+                                className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors text-sm text-gray-700 dark:text-gray-300 hover:text-brand"
                             >
                                 Trending
                             </Link>
 
                             {/* Categories Dropdown */}
                             <div className="relative group">
-                                <button className="px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 font-medium transition-colors flex items-center gap-1.5 text-sm">
+                                <button className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300 hover:text-brand">
                                     Categories
                                     <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -47,19 +47,19 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                                 </button>
 
                                 {/* Dropdown Menu */}
-                                <div className="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 bg-white dark:bg-dark-surface backdrop-blur-xl border border-gray-100 dark:border-dark-border rounded-2xl shadow-2xl shadow-black/20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top overflow-hidden z-50">
                                     <div className="p-2">
                                         {siteConfig.categories.map((category) => (
                                             <Link
                                                 key={category.id}
                                                 href={routes.category(category.slug)}
-                                                className="flex items-start gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors group/item"
+                                                className="flex items-start gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group/item"
                                             >
                                                 <div className="flex-1">
-                                                    <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400 transition-colors">
+                                                    <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover/item:text-brand dark:group-hover/item:text-brand-glow transition-colors">
                                                         {category.name}
                                                     </div>
-                                                    <div className="text-xs text-gray-500 mt-0.5">{category.description}</div>
+                                                    <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">{category.description}</div>
                                                 </div>
                                             </Link>
                                         ))}
@@ -71,7 +71,7 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                         {/* Right Actions */}
                         <div className="flex items-center justify-end gap-3">
                             {/* Search */}
-                            <Suspense fallback={<div className="w-48 xl:w-64 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse" />}>
+                            <Suspense fallback={<div className="w-48 xl:w-64 h-10 bg-gray-100 dark:bg-dark-surface rounded-full animate-pulse" />}>
                                 <SearchBar className="w-48 xl:w-64" />
                             </Suspense>
 
@@ -83,32 +83,31 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
             </div>
 
             {/* Category Pills Bar */}
-            <div className="bg-gray-50 dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+            <div className="relative z-10 bg-white/50 dark:bg-dark-bg/50 backdrop-blur-md border-b border-gray-100 dark:border-dark-border py-3">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="overflow-x-auto scrollbar-hide">
-                        <div className="flex gap-2 py-3 min-w-max">
+                    <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-1 -mx-6 px-6 mask-linear-fade">
+                        <Link
+                            href={routes.home}
+                            className="px-4 py-1.5 rounded-full bg-brand text-white text-sm font-semibold whitespace-nowrap shadow-md shadow-brand/20 hover:bg-brand-dark transition-colors flex-shrink-0"
+                        >
+                            For You
+                        </Link>
+                        <Link
+                            href={routes.trending}
+                            className="px-4 py-1.5 rounded-full bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-brand dark:hover:border-brand hover:text-brand transition-all hover:-translate-y-0.5 flex-shrink-0"
+                        >
+                            Trending
+                        </Link>
+                        <div className="w-px h-6 bg-gray-200 dark:bg-dark-border mx-1 flex-shrink-0" />
+                        {siteConfig.categories.map((category) => (
                             <Link
-                                href={routes.home}
-                                className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium whitespace-nowrap hover:bg-blue-700 transition-colors shadow-sm"
+                                key={category.id}
+                                href={routes.category(category.slug)}
+                                className="px-4 py-1.5 rounded-full bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-brand dark:hover:border-brand hover:text-brand transition-all hover:-translate-y-0.5 flex-shrink-0"
                             >
-                                For You
+                                {category.name}
                             </Link>
-                            <Link
-                                href={routes.trending}
-                                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-gray-300 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                            >
-                                Trending
-                            </Link>
-                            {siteConfig.categories.map((category) => (
-                                <Link
-                                    key={category.id}
-                                    href={routes.category(category.slug)}
-                                    className="px-4 py-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-gray-300 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                                >
-                                    {category.name}
-                                </Link>
-                            ))}
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>

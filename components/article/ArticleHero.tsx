@@ -55,17 +55,17 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
             {/* Content */}
             <div className="relative z-20 h-full flex flex-col justify-end p-6 lg:p-8 pb-32 lg:pb-12 text-white pointer-events-none">
                 {/* Category Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold mb-4 w-fit">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand/90 backdrop-blur-md border border-white/10 text-sm font-bold tracking-wide mb-4 w-fit shadow-lg shadow-brand/20">
                     <span className="uppercase">{article.category}</span>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-bold mb-4 line-clamp-3 group-hover:text-blue-400 transition-colors">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 line-clamp-3 leading-tight tracking-tight group-hover:text-brand-glow transition-colors font-display">
                     {article.title}
                 </h1>
 
                 {/* Excerpt */}
-                <p className="text-lg text-gray-200 mb-4 line-clamp-2 max-w-2xl">
+                <p className="text-lg md:text-xl text-gray-200 mb-6 line-clamp-2 max-w-2xl font-medium">
                     {article.excerpt}
                 </p>
 

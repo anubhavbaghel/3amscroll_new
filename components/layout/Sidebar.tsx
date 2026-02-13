@@ -14,7 +14,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
         <aside className="hidden lg:block lg:w-80 xl:w-96 shrink-0">
             <div className="sticky top-24 space-y-6">
                 {/* Trending Now */}
-                <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
                     <h2 className="text-xl font-bold mb-4">
                         Trending Now
                     </h2>
@@ -46,7 +46,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                 </div>
 
                 {/* Categories */}
-                <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
                     <h2 className="text-xl font-bold mb-4">Explore Topics</h2>
                     <div className="flex flex-wrap gap-2">
                         {siteConfig.categories.map((category) => (
@@ -62,7 +62,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                 </div>
 
                 {/* Newsletter Signup */}
-                <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white">
+                <div className="bg-gradient-to-br from-brand-dark to-purple-600 rounded-2xl p-6 text-white shadow-lg shadow-brand/20">
                     <h2 className="text-xl font-bold mb-2">Stay Updated</h2>
                     <p className="text-sm text-blue-100 mb-4">
                         Get the latest stories delivered to your inbox every week.
@@ -86,7 +86,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                 </div>
 
                 {/* Quick Links */}
-                <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
                     <h2 className="text-xl font-bold mb-4">Quick Links</h2>
                     <div className="space-y-2">
                         <Link

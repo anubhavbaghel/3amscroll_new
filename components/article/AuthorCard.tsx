@@ -14,18 +14,18 @@ interface AuthorCardProps {
 
 export function AuthorCard({ author, authorId, avatar, bio, articlesCount = 0 }: AuthorCardProps) {
     return (
-        <div className="bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 font-display">
                 About the Author
             </h3>
 
             <div className="flex items-start gap-4 mb-4">
                 <Link href={routes.author(authorId)} className="group flex-shrink-0">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800">
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 border-2 border-transparent group-hover:border-brand transition-colors">
                         {avatar ? (
                             <Image src={avatar} alt={author} fill className="object-cover group-hover:scale-105 transition-transform" />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-600 font-bold text-xl">
+                            <div className="w-full h-full flex items-center justify-center bg-brand/10 text-brand font-bold text-xl">
                                 {author.charAt(0)}
                             </div>
                         )}
@@ -33,7 +33,7 @@ export function AuthorCard({ author, authorId, avatar, bio, articlesCount = 0 }:
                 </Link>
                 <div className="flex-1 min-w-0">
                     <Link href={routes.author(authorId)} className="block">
-                        <h4 className="font-bold text-lg mb-1 hover:text-blue-600 transition-colors">{author}</h4>
+                        <h4 className="font-bold text-lg mb-1 hover:text-brand transition-colors">{author}</h4>
                     </Link>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         {articlesCount} articles published
@@ -42,12 +42,12 @@ export function AuthorCard({ author, authorId, avatar, bio, articlesCount = 0 }:
             </div>
 
             {bio && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
                     {bio}
                 </p>
             )}
 
-            <button className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm">
+            <button className="w-full px-4 py-2 bg-brand text-white font-medium rounded-xl hover:bg-brand-dark transition-colors text-sm shadow-lg shadow-brand/20">
                 Follow
             </button>
         </div>

@@ -17,7 +17,7 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article, priority = false, isSaved = false, isLiked = false }: ArticleCardProps) {
     return (
-        <div className="block relative bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-950 transition-colors group">
+        <div className="block relative bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
             {/* Main Link Overlay */}
             <Link
                 href={routes.article(article.slug)}

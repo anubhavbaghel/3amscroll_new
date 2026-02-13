@@ -19,7 +19,7 @@ export default async function HomePage() {
     const [heroArticle, ...feedArticles] = allArticles;
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black">
+        <div className="min-h-screen bg-white dark:bg-dark-bg">
             {/* Mobile Header */}
 
             {/* Main Content */}

@@ -3,7 +3,14 @@ import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+    subsets: ["latin"],
+    variable: "--font-inter",
+    display: "swap",
+});
 
 export const metadata: Metadata = {
     title: "3AM SCROLL - Your Late-Night Scroll Companion",
@@ -19,11 +26,11 @@ export default async function RootLayout({
     const { data: { user } } = await supabase.auth.getUser();
 
     return (
-        <html lang="en">
+        <html lang="en" className={`${inter.variable}`}>
             <head>
                 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
             </head>
-            <body className="antialiased" suppressHydrationWarning>
+            <body className="antialiased font-sans" suppressHydrationWarning>
                 <MobileHeader user={user} />
                 <DesktopHeader user={user} />
                 {children}

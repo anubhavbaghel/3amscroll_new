@@ -93,7 +93,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     };
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black">
+        <div className="min-h-screen bg-white dark:bg-dark-bg">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -135,7 +135,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             />
 
                             {/* Trending Articles */}
-                            <div className="bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                            <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
                                 <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
                                     Trending Now
                                 </h3>
