@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function login(formData: FormData) {
     const supabase = await createClient();
+    const redirectTo = formData.get("redirectTo") as string || "/";
 
     const data = {
         email: formData.get("email") as string,
@@ -15,11 +16,16 @@ export async function login(formData: FormData) {
     const { error } = await supabase.auth.signInWithPassword(data);
 
     if (error) {
+        // If we came from a specific page (like admin login), we want to return there with the error
+        // simpler way: use the Referer header or just check if redirectTo is /admin
+        if (redirectTo.includes("/admin")) {
+            return redirect("/admin/login?error=Invalid admin credentials");
+        }
         return redirect("/login?error=Invalid login credentials");
     }
 
     revalidatePath("/", "layout");
-    redirect("/");
+    redirect(redirectTo);
 }
 
 export async function signup(formData: FormData) {

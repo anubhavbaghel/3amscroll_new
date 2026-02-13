@@ -8,7 +8,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        redirect("/login");
+        redirect("/admin/login");
     }
 
     const { data: profile } = await supabase
@@ -18,7 +18,12 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         .single();
 
     if (!profile || profile.role !== "admin") {
-        redirect("/");
+        // If logged in but not admin, maybe redirect to logic with error
+        // For now, force them to the admin login (which might show they are logged in as user, 
+        // but since auth is shared, they are technically logged in. 
+        // We probably want to sign them out or show "Access Denied" page.
+        // Simplest for now: Redirect to admin login with error
+        redirect("/admin/login?error=Access Denied: You are not an admin.");
     }
 
     return (

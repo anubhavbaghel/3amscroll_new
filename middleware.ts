@@ -43,3 +43,4 @@ export const config = {
         "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     ],
 };
+// Middleware is untouched for now, I will fix the Layout structure instead.

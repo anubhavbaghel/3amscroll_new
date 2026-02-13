@@ -49,10 +49,18 @@ export default async function AdminPage() {
         <div className="min-h-screen bg-gray-50 dark:bg-black py-8">
             <div className="max-w-7xl mx-auto px-4 lg:px-6">
                 <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Content Dashboard</h1>
-                    <div className="text-sm text-gray-500">
-                        Logged in as: {user.email}
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Content Dashboard</h1>
+                        <div className="text-sm text-gray-500 mt-1">
+                            Logged in as: {user.email}
+                        </div>
                     </div>
+                    <Link
+                        href="/admin/articles/new"
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Create New Article
+                    </Link>
                 </div>
 
                 <div className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
@@ -81,8 +89,8 @@ export default async function AdminPage() {
                                 <tr key={article.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${article.status === 'published'
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                                             }`}>
                                             {article.status || 'published'}
                                         </span>
@@ -117,8 +125,8 @@ export default async function AdminPage() {
                                                 <button
                                                     type="submit"
                                                     className={`text-xs px-3 py-1 rounded border ${article.status === 'published'
-                                                            ? 'border-yellow-500 text-yellow-600 hover:bg-yellow-50'
-                                                            : 'border-green-500 text-green-600 hover:bg-green-50'
+                                                        ? 'border-yellow-500 text-yellow-600 hover:bg-yellow-50'
+                                                        : 'border-green-500 text-green-600 hover:bg-green-50'
                                                         }`}
                                                 >
                                                     {article.status === 'published' ? 'Unpublish' : 'Publish'}
