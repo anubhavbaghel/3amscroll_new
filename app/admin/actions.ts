@@ -43,3 +43,53 @@ export async function createArticle(formData: FormData) {
     revalidatePath("/");
     redirect("/admin");
 }
+
+export async function getArticle(id: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) return null;
+    return data;
+}
+
+export async function updateArticle(formData: FormData) {
+    const supabase = await createClient();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const slug = formData.get("slug") as string;
+    const category = formData.get("category") as string;
+    const summary = formData.get("summary") as string;
+    const cover_image = formData.get("cover_image") as string;
+    const content = formData.get("content") as string;
+    const status = formData.get("status") as string;
+
+    const { error } = await supabase
+        .from("articles")
+        .update({
+            title,
+            slug,
+            category,
+            summary,
+            cover_image,
+            content,
+            status,
+            updated_at: new Date().toISOString(),
+        })
+        .eq("id", id);
+
+    if (error) {
+        // We can't redirect with error parameter easily if we are calling this from a form
+        // But let's assume standard error handling
+        console.error("Error updating article:", error);
+        return;
+    }
+
+    revalidatePath("/admin");
+    revalidatePath(`/article/${slug}`);
+    redirect("/admin");
+}

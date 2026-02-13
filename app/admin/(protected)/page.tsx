@@ -63,7 +63,75 @@ export default async function AdminPage() {
                     </Link>
                 </div>
 
-                <div className="bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
+                {/* Mobile Card View */}
+                <div className="grid grid-cols-1 gap-4 md:hidden">
+                    {articles?.map((article) => (
+                        <div key={article.id} className="bg-white dark:bg-gray-900 shadow rounded-lg p-4 space-y-4">
+                            <div className="flex items-start justify-between">
+                                <div className="flex items-center space-x-3">
+                                    <div className="flex-shrink-0 h-12 w-12 relative rounded overflow-hidden">
+                                        <Image src={article.cover_image} alt="" fill className="object-cover" />
+                                    </div>
+                                    <div>
+                                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100 line-clamp-1" title={article.title}>
+                                            {article.title}
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                            {new Date(article.created_at).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${article.status === 'published'
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                    }`}>
+                                    {article.status || 'published'}
+                                </span>
+                            </div>
+
+                            <div className="text-sm text-gray-500">
+                                <span className="font-medium">Category:</span> {article.category}
+                            </div>
+
+                            <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4">
+                                <div className="flex items-center gap-3">
+                                    <Link href={`/article/${article.slug}`} className="text-indigo-600 hover:text-indigo-900 text-sm" target="_blank">
+                                        View
+                                    </Link>
+                                    <Link href={`/admin/articles/${article.id}/edit`} className="text-blue-600 hover:text-blue-900 text-sm">
+                                        Edit
+                                    </Link>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    <form action={updateStatus}>
+                                        <input type="hidden" name="id" value={article.id} />
+                                        <input type="hidden" name="status" value={article.status === 'published' ? 'draft' : 'published'} />
+                                        <button
+                                            type="submit"
+                                            className={`text-xs px-3 py-1 rounded border ${article.status === 'published'
+                                                ? 'border-yellow-500 text-yellow-600 hover:bg-yellow-50'
+                                                : 'border-green-500 text-green-600 hover:bg-green-50'
+                                                }`}
+                                        >
+                                            {article.status === 'published' ? 'Unpublish' : 'Publish'}
+                                        </button>
+                                    </form>
+
+                                    <form action={deleteArticle}>
+                                        <input type="hidden" name="id" value={article.id} />
+                                        <button type="submit" className="text-red-600 hover:text-red-900 text-sm">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block bg-white dark:bg-gray-900 rounded-lg shadow overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                         <thead className="bg-gray-50 dark:bg-gray-800">
                             <tr>
@@ -136,6 +204,11 @@ export default async function AdminPage() {
                                             {/* Preview Link */}
                                             <Link href={`/article/${article.slug}`} className="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">
                                                 View
+                                            </Link>
+
+                                            {/* Edit Link */}
+                                            <Link href={`/admin/articles/${article.id}/edit`} className="text-blue-600 hover:text-blue-900 px-2">
+                                                Edit
                                             </Link>
 
                                             {/* Delete */}
