@@ -14,7 +14,7 @@ const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
     author: {
         id: dbArticle.author_id,
         name: dbArticle.author_name || "Unknown Author",
-        avatar: dbArticle.author_avatar,
+        avatar: dbArticle.author_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbArticle.author_name || "User")}&background=random`,
         bio: "", // Placeholder until we have real profiles
     },
     publishedAt: dbArticle.published_at,
