@@ -61,7 +61,7 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 line-clamp-3 leading-tight tracking-tight group-hover:text-brand-glow transition-colors font-display">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 line-clamp-3 leading-snug font-display text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-sm">
                     {article.title}
                 </h1>
 

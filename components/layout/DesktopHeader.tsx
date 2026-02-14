@@ -18,7 +18,7 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid grid-cols-3 items-center h-20">
                         {/* Logo */}
-                        <Link href={routes.home} className="font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-display">
+                        <Link href={routes.home} className="font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 drop-shadow-sm">
                             3AM SCROLL
                         </Link>
 

@@ -28,7 +28,7 @@ export default async function RootLayout({
     return (
         <html lang="en" className={`${inter.variable}`}>
             <head>
-                <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+                <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap" rel="stylesheet" />
             </head>
             <body className="antialiased font-sans" suppressHydrationWarning>
                 <MobileHeader user={user} />
