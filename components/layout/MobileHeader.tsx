@@ -9,6 +9,7 @@ import { SearchBar } from "@/components/search/SearchBar";
 
 import { User } from "@supabase/supabase-js";
 import { AuthButton } from "@/components/auth/AuthButton";
+import { WriteArticleButton } from "@/components/write/WriteArticleButton";
 
 interface MobileHeaderProps {
     user?: User | null;
@@ -179,6 +180,14 @@ export function MobileHeader({ user = null }: MobileHeaderProps) {
                                 >
                                     <span className="font-medium">Trending</span>
                                 </Link>
+
+                                <WriteArticleButton
+                                    user={user}
+                                    className="flex w-full items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors text-brand dark:text-brand-glow text-left"
+                                    showIcon={false}
+                                >
+                                    <span className="font-medium">Write Article</span>
+                                </WriteArticleButton>
 
                                 {siteConfig.categories.map((category) => (
                                     <Link

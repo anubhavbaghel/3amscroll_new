@@ -45,8 +45,7 @@ export function LikeButton({ articleId, initialLikes, initialIsLiked = false, cl
     return (
         <button
             onClick={handleToggle}
-            className={`flex items-center gap-1 hover:text-red-500 transition-colors ${isLiked ? "text-red-500" : "text-gray-500"
-                } ${className}`}
+            className={`flex items-center gap-1 transition-colors ${className} ${isLiked ? "text-red-500" : ""}`}
             disabled={isPending}
         >
             <svg

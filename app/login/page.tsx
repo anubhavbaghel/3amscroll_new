@@ -1,4 +1,5 @@
 import { login, signup } from "../auth/actions";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
     const { error } = await searchParams;
@@ -21,7 +22,20 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                     </div>
                 )}
 
-                <form className="mt-8 space-y-6">
+                <div className="mt-8">
+                    <GoogleSignInButton className="w-full" />
+
+                    <div className="relative mt-6">
+                        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div className="w-full border-t border-gray-200 dark:border-gray-800" />
+                        </div>
+                        <div className="relative flex justify-center text-sm font-medium leading-6">
+                            <span className="bg-gray-50 dark:bg-black px-4 text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form className="mt-6 space-y-6">
                     <div className="-space-y-px rounded-md shadow-sm">
                         <div>
                             <label htmlFor="email-address" className="sr-only">

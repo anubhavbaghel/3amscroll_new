@@ -6,7 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Heading1, Heading2, Quote, Undo, Redo, Code, Strikethrough } from "lucide-react";
+import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Heading1, Heading2, Quote, Undo, Redo, Code, Strikethrough, Type } from "lucide-react";
 import { useCallback } from "react";
 
 interface EditorProps {
@@ -16,6 +16,7 @@ interface EditorProps {
 
 export function Editor({ value, onChange }: EditorProps) {
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit,
             Image,
@@ -27,6 +28,8 @@ export function Editor({ value, onChange }: EditorProps) {
             }),
             Placeholder.configure({
                 placeholder: 'Start writing your story...',
+                showOnlyWhenEditable: true,
+                showOnlyCurrent: false,
             }),
         ],
         content: value,
@@ -36,7 +39,13 @@ export function Editor({ value, onChange }: EditorProps) {
             },
         },
         onUpdate: ({ editor }) => {
-            onChange(editor.getHTML());
+            const html = editor.getHTML();
+            // Only save if there's actual content (not just empty paragraph tags)
+            if (html === '<p></p>' || html === '') {
+                onChange('');
+            } else {
+                onChange(html);
+            }
         },
     });
 
@@ -76,13 +85,31 @@ export function Editor({ value, onChange }: EditorProps) {
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800">
                 <ToolbarButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                    onClick={() => editor.chain().focus().setParagraph().run()}
+                    isActive={editor.isActive('paragraph')}
+                >
+                    <Type className="w-4 h-4" />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => {
+                        if (editor.isActive('heading', { level: 2 })) {
+                            editor.chain().focus().setParagraph().run();
+                        } else {
+                            editor.chain().focus().toggleHeading({ level: 2 }).run();
+                        }
+                    }}
                     isActive={editor.isActive('heading', { level: 2 })}
                 >
                     <Heading1 className="w-4 h-4" />
                 </ToolbarButton>
                 <ToolbarButton
-                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    onClick={() => {
+                        if (editor.isActive('heading', { level: 3 })) {
+                            editor.chain().focus().setParagraph().run();
+                        } else {
+                            editor.chain().focus().toggleHeading({ level: 3 }).run();
+                        }
+                    }}
                     isActive={editor.isActive('heading', { level: 3 })}
                 >
                     <Heading2 className="w-4 h-4" />

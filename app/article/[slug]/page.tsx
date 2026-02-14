@@ -28,17 +28,24 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         };
     }
 
+    const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'https://3amscroll.vercel.app'}/api/og`);
+    ogUrl.searchParams.set('title', article.title);
+    ogUrl.searchParams.set('author', article.author.name);
+    ogUrl.searchParams.set('date', new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+    ogUrl.searchParams.set('readTime', article.readTime.toString());
+    ogUrl.searchParams.set('cover', article.coverImage);
+
     return {
         title: `${article.title} | 3AM SCROLL`,
         description: article.excerpt,
         openGraph: {
             title: article.title,
             description: article.excerpt,
-            url: `https://3amscroll.com/article/${article.slug}`, // Replace with env var in prod
+            url: `https://3amscroll.com/article/${article.slug}`,
             siteName: '3AM SCROLL',
             images: [
                 {
-                    url: article.coverImage,
+                    url: ogUrl.toString(),
                     width: 1200,
                     height: 630,
                     alt: article.title,
@@ -51,7 +58,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             card: 'summary_large_image',
             title: article.title,
             description: article.excerpt,
-            images: [article.coverImage],
+            images: [ogUrl.toString()],
         },
     };
 }

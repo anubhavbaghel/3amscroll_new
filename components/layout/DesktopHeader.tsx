@@ -5,6 +5,7 @@ import { routes } from "@/config/routes";
 import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
 import { User } from "@supabase/supabase-js";
+import { WriteArticleButton } from "@/components/write/WriteArticleButton";
 
 interface DesktopHeaderProps {
     user?: User | null;
@@ -74,6 +75,12 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                             <Suspense fallback={<div className="w-48 xl:w-64 h-10 bg-gray-100 dark:bg-dark-surface rounded-full animate-pulse" />}>
                                 <SearchBar className="w-48 xl:w-64" />
                             </Suspense>
+
+                            {/* Write Button */}
+                            <WriteArticleButton
+                                user={user}
+                                className="px-5 py-2.5 rounded-full bg-brand hover:bg-brand-dark text-white font-semibold transition-colors flex items-center gap-2 text-sm"
+                            />
 
                             {/* User Menu */}
                             <AuthButton user={user} />

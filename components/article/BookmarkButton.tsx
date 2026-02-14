@@ -44,8 +44,7 @@ export function BookmarkButton({ articleId, initialIsBookmarked = false, classNa
     return (
         <button
             onClick={handleToggle}
-            className={`transition-colors pointer-events-auto relative z-20 p-1.5 -m-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 ${isBookmarked ? "text-blue-600 dark:text-blue-400" : "text-gray-400 hover:text-blue-600"
-                } ${className}`}
+            className={`transition-colors pointer-events-auto relative z-20 ${className} ${isBookmarked ? "text-blue-600 dark:text-blue-400" : ""}`}
             aria-label={isBookmarked ? "Remove from saved" : "Save article"}
             disabled={isPending}
         >

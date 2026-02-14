@@ -59,3 +59,22 @@ export async function signout() {
     revalidatePath("/", "layout");
     redirect("/");
 }
+
+export async function loginWithState(formData: FormData) {
+    const supabase = await createClient();
+    const redirectTo = formData.get("redirectTo") as string || "/";
+
+    const data = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+    };
+
+    const { error } = await supabase.auth.signInWithPassword(data);
+
+    if (error) {
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath("/", "layout");
+    return { success: true, redirectTo };
+}

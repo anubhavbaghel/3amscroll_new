@@ -20,7 +20,7 @@ const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
         bio: "", // Placeholder until we have real profiles
     },
     publishedAt: dbArticle.published_at,
-    readTime: dbArticle.read_time,
+    readTime: dbArticle.read_time || Math.ceil((dbArticle.content?.split(/\s+/).length || 0) / 200) || 5,
     views: dbArticle.views,
     likes: dbArticle.likes_count || 0,
     comments: 0,

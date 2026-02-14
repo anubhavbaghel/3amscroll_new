@@ -43,13 +43,13 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                 <BookmarkButton
                     articleId={article.id}
                     initialIsBookmarked={isSaved}
-                    className="text-white hover:text-blue-400 bg-black/20 backdrop-blur-md p-2 rounded-full"
+                    className="flex items-center justify-center w-10 h-10 text-white hover:text-blue-400 bg-black/20 backdrop-blur-md rounded-full transition-colors"
                 />
                 <LikeButton
                     articleId={article.id}
                     initialLikes={article.likes}
                     initialIsLiked={isLiked}
-                    className="text-white hover:text-red-500 bg-black/20 backdrop-blur-md p-2 rounded-full"
+                    className="flex items-center justify-center w-10 h-10 text-white hover:text-red-500 bg-black/20 backdrop-blur-md rounded-full transition-colors"
                 />
             </div>
 
@@ -61,7 +61,7 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 line-clamp-3 leading-snug font-display text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-sm">
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-4 pb-2 line-clamp-3 leading-tight font-display text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-sm">
                     {article.title}
                 </h1>
 
