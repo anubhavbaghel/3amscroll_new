@@ -21,12 +21,17 @@ export function GoogleSignInButton({
         // Define the base URL - prefer environment variable for production
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
 
+        // Store the redirect URL in a cookie so we can retrieve it in the callback
+        // This avoids changing the redirect_uri sent to Google, preventing "uri mismatch" errors
+        if (redirectTo) {
+            document.cookie = `auth-redirect=${encodeURIComponent(redirectTo)}; path=/; max-age=300; SameSite=Lax`;
+        }
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                // We append the next param directly to the redirectTo URL
-                // This ensures it persists through the OAuth flow back to our callback
-                redirectTo: `${baseUrl}/auth/callback?next=${encodeURIComponent(redirectTo || '/')}`,
+                // Use a clean URL without query params to match the allow list exactly
+                redirectTo: `${baseUrl}/auth/callback`,
             },
         });
 
