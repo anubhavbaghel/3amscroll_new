@@ -1,4 +1,5 @@
-import { Sidebar } from "@/components/layout/Sidebar";
+import dynamic from "next/dynamic";
+const Sidebar = dynamic(() => import("@/components/layout/Sidebar").then((mod) => mod.Sidebar));
 import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleCard } from "@/components/article/ArticleCard";

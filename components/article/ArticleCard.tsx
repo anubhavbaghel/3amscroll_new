@@ -34,6 +34,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                         fill
                         className="object-cover"
                         priority={priority}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
 

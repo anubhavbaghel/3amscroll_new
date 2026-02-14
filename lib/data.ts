@@ -1,5 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createPublicClient } from "@/lib/supabase/server";
 import { Article, Author } from "@/types";
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 // Helper to map DB result to our App Type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,24 +27,28 @@ const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
     tags: [], // Placeholder
 });
 
-export async function getArticles(): Promise<Article[]> {
-    const supabase = await createClient();
+export const getArticles = unstable_cache(
+    async (): Promise<Article[]> => {
+        const supabase = createPublicClient();
 
-    const { data, error } = await supabase
-        .from("articles")
-        .select("*")
-        .order("published_at", { ascending: false });
+        const { data, error } = await supabase
+            .from("articles")
+            .select("*")
+            .order("published_at", { ascending: false });
 
-    if (error) {
-        console.error("Error fetching articles:", error);
-        return [];
-    }
+        if (error) {
+            console.error("Error fetching articles:", error);
+            return [];
+        }
 
-    return (data || []).map(mapDBArticleToAppArticle);
-}
+        return (data || []).map(mapDBArticleToAppArticle);
+    },
+    ["all-articles"],
+    { revalidate: 60, tags: ["articles"] }
+);
 
-export async function getArticleBySlug(slug: string): Promise<Article | null> {
-    const supabase = await createClient();
+export const getArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
+    const supabase = createPublicClient();
 
     const { data, error } = await supabase
         .from("articles")
@@ -56,31 +62,35 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     }
 
     return mapDBArticleToAppArticle(data);
-}
+});
 
-export async function getTrendingArticles(): Promise<Article[]> {
-    const supabase = await createClient();
+export const getTrendingArticles = unstable_cache(
+    async (): Promise<Article[]> => {
+        const supabase = createPublicClient();
 
-    // Sort by views + likes (simple popularity metric)
-    const { data, error } = await supabase
-        .from("articles")
-        .select("*")
-        .order("views", { ascending: false })
-        .limit(5);
+        // Sort by views + likes (simple popularity metric)
+        const { data, error } = await supabase
+            .from("articles")
+            .select("*")
+            .order("views", { ascending: false })
+            .limit(5);
 
-    if (error) {
-        console.error("Error fetching trending articles:", error);
-        return [];
-    }
+        if (error) {
+            console.error("Error fetching trending articles:", error);
+            return [];
+        }
 
-    return (data || []).map(mapDBArticleToAppArticle);
-}
+        return (data || []).map(mapDBArticleToAppArticle);
+    },
+    ["trending-articles"],
+    { revalidate: 60, tags: ["trending"] }
+);
 
 // TODO: Implement getAuthor(id) properly when we reference real "Profiles" table
 // For now, since articles store author info directly (denormalized in mock migration),
 // we can just fetch articles by author_id to reconstruct the author page.
 export async function getAuthorArticles(authorId: string): Promise<Article[]> {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
 
     const { data, error } = await supabase
         .from("articles")
@@ -100,7 +110,7 @@ export async function getAuthor(authorId: string): Promise<Author | null> {
     // Hack: Since we don't have a populated "Profiles" table for authors yet (only for users),
     // we'll try to find one article by this author and grab their details.
     // In production, authors should have a record in 'profiles'.
-    const supabase = await createClient();
+    const supabase = createPublicClient();
 
     const { data, error } = await supabase
         .from("articles")
