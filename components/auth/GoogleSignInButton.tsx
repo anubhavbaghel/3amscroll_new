@@ -18,10 +18,15 @@ export function GoogleSignInButton({
         setIsLoading(true);
         const supabase = createClient();
 
+        // Define the base URL - prefer environment variable for production
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: redirectTo || `${window.location.origin}/auth/callback`,
+                // We append the next param directly to the redirectTo URL
+                // This ensures it persists through the OAuth flow back to our callback
+                redirectTo: `${baseUrl}/auth/callback?next=${encodeURIComponent(redirectTo || '/')}`,
             },
         });
 
