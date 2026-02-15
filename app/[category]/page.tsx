@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
-// import { DesktopHeader } from "@/components/layout/DesktopHeader";
-// import { MobileHeader } from "@/components/layout/MobileHeader";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { getArticles } from "@/lib/data";
-// import { createClient } from "@/lib/supabase/server";
+import { CategoryHeader } from "@/components/category/CategoryHeader";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -36,34 +34,20 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         article => article.category.toLowerCase() === category.toLowerCase()
     );
 
-    if (categoryArticles.length === 0) {
-        // Option: return notFound() if we want strict 404s
-        // Or just show an empty state. Let's show empty state but keep page.
-        // If it's a completely invalid route (like /jklsdf), maybe 404 is better.
-        // Check if category is one of our known categories?
-        const validCategories = ['tech', 'gaming', 'finance', 'lifestyle', 'travel', 'creative', 'world', 'career', 'entertainment'];
-        if (!validCategories.includes(category.toLowerCase())) {
-            notFound();
-        }
+    const validCategories = ['tech', 'gaming', 'finance', 'lifestyle', 'travel', 'creative', 'world', 'career', 'entertainment'];
+
+    // Allow any category that has articles, OR is in our valid list (even if empty)
+    if (categoryArticles.length === 0 && !validCategories.includes(category.toLowerCase())) {
+        notFound();
     }
 
     const categoryName = formatCategory(category);
 
-    // const supabase = await createClient();
-    // const { data: { user } } = await supabase.auth.getUser();
-
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black">
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                        {categoryName}
-                    </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Explore the latest stories in {categoryName}.
-                    </p>
-                </div>
+            <CategoryHeader category={categoryName} count={categoryArticles.length} />
 
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10 relative z-20">
                 {categoryArticles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {categoryArticles.map((article) => (
@@ -71,8 +55,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-20">
+                    <div className="text-center py-20 bg-white dark:bg-dark-surface rounded-3xl border border-gray-100 dark:border-dark-border shadow-sm">
                         <p className="text-xl text-gray-500">No articles found in this category yet.</p>
+                        <p className="text-sm text-gray-400 mt-2">Check back later for updates.</p>
                     </div>
                 )}
             </main>

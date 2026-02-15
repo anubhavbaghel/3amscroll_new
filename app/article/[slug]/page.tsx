@@ -11,6 +11,7 @@ import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
+import { ReadingProgress } from "@/components/article/ReadingProgress";
 
 interface ArticlePageProps {
     params: Promise<{
@@ -99,6 +100,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }]
     };
 
+
+
+    // ... existing code ...
+
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
             <script
@@ -106,32 +111,36 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
+            <ReadingProgress />
+
             {/* Mobile Header */}
             {/* ... rest of the component ... */}
 
             {/* Hero Section */}
-            <div className="h-[60vh] lg:h-[70vh]">
+            <div className="h-[75vh] lg:h-[85vh]">
                 <ArticleHero
                     article={article}
                     isSaved={savedArticleIds.has(article.id)}
                     isLiked={likedArticleIds.has(article.id)}
                 />
             </div>
-            {/* ... */}
+
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="flex gap-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:-mt-20 relative z-20">
+                <div className="flex gap-12 lg:gap-16">
                     {/* Article Content */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 bg-white dark:bg-dark-surface p-0 lg:p-12 lg:rounded-3xl lg:shadow-xl lg:shadow-black/5">
                         <ArticleContent article={article} />
 
                         {/* Related Articles */}
-                        <RelatedArticles articles={relatedArticles} />
+                        <div className="mt-16 pt-16 border-t border-gray-100 dark:border-gray-800">
+                            <RelatedArticles articles={relatedArticles} />
+                        </div>
                     </div>
 
                     {/* Sidebar - Desktop Only */}
-                    <aside className="hidden lg:block w-80 flex-shrink-0">
-                        <div className="sticky top-24 space-y-6">
+                    <aside className="hidden lg:block w-80 lg:w-96 flex-shrink-0">
+                        <div className="sticky top-24 space-y-8">
                             {/* Author Card */}
                             <AuthorCard
                                 author={article.author.name}

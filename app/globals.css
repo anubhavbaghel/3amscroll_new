@@ -5,6 +5,9 @@
 :root {
     --background: #ffffff;
     --foreground: #0a0a0a;
+    /* Magazine Typography Variables */
+    --font-sans: var(--font-inter);
+    --font-display: 'Clash Display', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,7 +32,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Switzer', sans-serif;
+    font-family: var(--font-display), sans-serif;
     font-weight: 600;
     letter-spacing: -0.02em;
 }
