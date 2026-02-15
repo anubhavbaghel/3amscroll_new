@@ -28,6 +28,7 @@ export async function updateProfile(_prevState: unknown, formData: FormData) {
         return { error: "Not authenticated" };
     }
 
+    const name = formData.get("name") as string;
     const bio = formData.get("bio") as string;
     const website = formData.get("website") as string;
     const location = formData.get("location") as string;
@@ -42,10 +43,10 @@ export async function updateProfile(_prevState: unknown, formData: FormData) {
     };
 
     const updates = {
+        username,
         bio,
         website,
         location,
-        username,
         social_links,
         updated_at: new Date().toISOString(),
     };
@@ -58,6 +59,22 @@ export async function updateProfile(_prevState: unknown, formData: FormData) {
     if (error) {
         console.error("Error updating profile:", error);
         return { error: "Failed to update profile" };
+    }
+
+    // Sync important fields to Auth Metadata (for Header/Session access)
+    const { error: authUpdateError } = await supabase.auth.updateUser({
+        data: {
+            full_name: name || user.user_metadata.full_name, // fallback to existing
+            name: name || user.user_metadata.name,
+            avatar_url: undefined, // specific image upload action handles this usually, but we can add logic if needed
+            // We generally don't sync bio/etc to auth metadata to keep the JWT small, 
+            // but name and avatar are critical for the Header.
+        }
+    });
+
+    if (authUpdateError) {
+        console.error("Error syncing auth metadata:", authUpdateError);
+        // We don't fail the request here as the DB update succeeded
     }
 
     revalidatePath("/profile");
