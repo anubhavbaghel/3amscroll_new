@@ -118,7 +118,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                             {results.length > 0 ? (
                                 <div className="space-y-8">
                                     <p className="text-gray-500">
-                                        Found {results.length} result{results.length !== 1 ? 's' : ''} for <span className="text-gray-900 dark:text-white font-bold">"{query}"</span>
+                                        Found {results.length} result{results.length !== 1 ? 's' : ''} for <span className="text-gray-900 dark:text-white font-bold">&quot;{query}&quot;</span>
                                     </p>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         {results.map((article) => (
@@ -128,7 +128,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                                 </div>
                             ) : (
                                 <div className="text-center py-20">
-                                    <p className="text-xl text-gray-500">No stories found for "{query}"</p>
+                                    <p className="text-xl text-gray-500">No stories found for &quot;{query}&quot;</p>
                                 </div>
                             )}
                         </motion.div>

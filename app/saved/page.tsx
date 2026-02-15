@@ -78,7 +78,6 @@ export default async function SavedPage() {
                                 key={article.id}
                                 article={article}
                                 isSaved={true}
-                            // We can add a "reading progress" prop here in the future
                             />
                         ))}
                     </div>
