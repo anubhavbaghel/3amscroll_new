@@ -5,11 +5,19 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 interface CategoryHeaderProps {
-    category: string;
+    category: {
+        name: string;
+        description?: string;
+    } | string;
     count?: number;
 }
 
 export function CategoryHeader({ category, count }: CategoryHeaderProps) {
+    const categoryName = typeof category === 'string' ? category : category.name;
+    const categoryDescription = typeof category === 'string'
+        ? `Explore the latest stories, deep dives, and trends in ${category}.`
+        : category.description;
+
     // Dynamic gradients based on category (simplified for now, can be expanded)
     const getGradient = (cat: string) => {
         switch (cat.toLowerCase()) {
@@ -24,7 +32,7 @@ export function CategoryHeader({ category, count }: CategoryHeaderProps) {
     return (
         <div className="relative w-full h-[40vh] lg:h-[50vh] overflow-hidden flex flex-col justify-end">
             {/* Animated Background */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${getGradient(category)} opacity-90`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${getGradient(categoryName)} opacity-90`}>
                 <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
                 <div className="absolute -top-[50%] -left-[20%] w-[150%] h-[150%] bg-gradient-radial from-white/10 to-transparent blur-3xl animate-slow-spin"></div>
             </div>
@@ -46,7 +54,7 @@ export function CategoryHeader({ category, count }: CategoryHeaderProps) {
                     transition={{ duration: 0.6, ease: "easeOut" }}
                 >
                     <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 font-display transform -ml-0.5 lg:-ml-2 break-words">
-                        {category}
+                        {categoryName}
                     </h1>
                 </motion.div>
 
@@ -57,7 +65,7 @@ export function CategoryHeader({ category, count }: CategoryHeaderProps) {
                     className="flex items-center justify-between mt-6 border-t border-white/20 pt-6"
                 >
                     <p className="text-lg md:text-xl text-white/80 font-light max-w-xl">
-                        Explore the latest stories, deep dives, and trends in {category}.
+                        {categoryDescription}
                     </p>
                     {count !== undefined && (
                         <div className="hidden md:block text-right">
