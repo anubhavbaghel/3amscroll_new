@@ -26,7 +26,7 @@ export default async function ProfilePage() {
     const user: User = {
         id: profileData.id,
         email: profileData.email,
-        name: profileData.username || profileData.email.split('@')[0], // Fallback name
+        name: authUser.user_metadata.full_name || authUser.user_metadata.name || profileData.username || profileData.email.split('@')[0], // Fallback hierarchy
         username: profileData.username,
         avatar: profileData.avatar_url,
         banner: profileData.banner_url,

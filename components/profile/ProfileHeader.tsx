@@ -39,10 +39,10 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
 
             {/* Avatar & Info */}
             <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-                <div className="absolute -top-16 md:-top-20 flex flex-col md:flex-row items-center md:items-end gap-6 w-full">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-6 w-full">
 
-                    {/* Avatar */}
-                    <div className="relative group">
+                    {/* Avatar - Negative margin to pull up over banner */}
+                    <div className="relative group -mt-16 md:-mt-20 shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-xl">
                             {user.avatar ? (
                                 // eslint-disable-next-line @next/next/no-img-element
@@ -60,7 +60,7 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
                     </div>
 
                     {/* Text Info */}
-                    <div className="flex-1 pb-2 text-center md:text-left pt-16 md:pt-0">
+                    <div className="flex-1 pb-2 text-center md:text-left pt-0 md:pt-4">
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-display">
                             {user.name}
                         </h1>
@@ -92,19 +92,19 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
                                 </span>
                             )}
                         </div>
-                    </div>
 
-                    {/* Actions (Mobile Edit Button) */}
-                    {isOwnProfile && (
-                        <div className="md:hidden w-full mt-4">
-                            <button
-                                onClick={() => setIsEditModalOpen(true)}
-                                className="w-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2 rounded-lg font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
-                            >
-                                Edit Profile
-                            </button>
-                        </div>
-                    )}
+                        {/* Actions (Mobile Edit Button) inside text flow */}
+                        {isOwnProfile && (
+                            <div className="md:hidden w-full mt-6">
+                                <button
+                                    onClick={() => setIsEditModalOpen(true)}
+                                    className="w-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2.5 rounded-xl font-bold text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
+                                >
+                                    Edit Profile
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
