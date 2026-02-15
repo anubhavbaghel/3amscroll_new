@@ -2,8 +2,8 @@ import { login } from "../auth/actions";
 import Link from "next/link";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-    const { error } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
+    const { error, message } = await searchParams;
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-50 dark:bg-black">
@@ -20,6 +20,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                 {error && (
                     <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-md text-sm text-center">
                         {error}
+                    </div>
+                )}
+
+                {message && (
+                    <div className="bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 p-3 rounded-md text-sm text-center">
+                        {message}
                     </div>
                 )}
 

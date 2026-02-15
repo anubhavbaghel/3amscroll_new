@@ -17,11 +17,10 @@ export async function login(formData: FormData) {
 
     if (error) {
         // If we came from a specific page (like admin login), we want to return there with the error
-        // simpler way: use the Referer header or just check if redirectTo is /admin
         if (redirectTo.includes("/admin")) {
-            return redirect("/admin/login?error=Invalid admin credentials");
+            return redirect(`/admin/login?error=${encodeURIComponent(error.message)}`);
         }
-        return redirect("/login?error=Invalid login credentials");
+        return redirect(`/login?error=${encodeURIComponent(error.message)}`);
     }
 
     revalidatePath("/", "layout");
@@ -45,11 +44,11 @@ export async function signup(formData: FormData) {
 
     if (error) {
         console.error("Signup error:", error);
-        return redirect("/signup?error=Could not create user");
+        return redirect(`/signup?error=${encodeURIComponent(error.message)}`);
     }
 
     revalidatePath("/", "layout");
-    redirect("/");
+    redirect("/login?message=Account created successfully. Please sign in.");
 }
 
 export async function signout() {
