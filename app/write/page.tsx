@@ -1,7 +1,5 @@
-import { WriteArticleForm } from "@/components/write/WriteArticleForm";
-import { DesktopHeader } from "@/components/layout/DesktopHeader";
-import { MobileHeader } from "@/components/layout/MobileHeader";
 import { createClient } from "@/lib/supabase/server";
+import { WriteArticleForm } from "@/components/write/WriteArticleForm";
 import { redirect } from "next/navigation";
 
 export default async function WritePage() {

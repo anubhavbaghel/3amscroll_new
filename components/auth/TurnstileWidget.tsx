@@ -7,7 +7,7 @@ export function TurnstileWidget() {
     const [token, setToken] = useState<string>("");
 
     return (
-        <div className="flex justify-center mb-4">
+        <div className="hidden">
             <input type="hidden" name="turnstileToken" value={token} />
             <Turnstile
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
@@ -16,7 +16,7 @@ export function TurnstileWidget() {
                 onExpire={() => setToken("")}
                 options={{
                     theme: "auto",
-                    size: "flexible",
+                    size: "invisible",
                 }}
             />
         </div>

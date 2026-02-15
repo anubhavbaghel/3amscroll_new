@@ -165,18 +165,17 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                         </div>
 
                         {/* Turnstile Captcha */}
-                        <div className="flex justify-center mt-2">
-                            <Turnstile
-                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                                onSuccess={(token) => setToken(token)}
-                                onError={() => setToken("")}
-                                onExpire={() => setToken("")}
-                                options={{
-                                    theme: "auto",
-                                    size: "flexible",
-                                }}
-                            />
-                        </div>
+                        {/* Turnstile Captcha - Invisible */}
+                        <Turnstile
+                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                            onSuccess={(token) => setToken(token)}
+                            onError={() => setToken("")}
+                            onExpire={() => setToken("")}
+                            options={{
+                                theme: "auto",
+                                size: "invisible",
+                            }}
+                        />
 
                         <button
                             type="submit"
