@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
-const nextConfig: NextConfig = {
+const config: NextConfig = {
     images: {
         dangerouslyAllowSVG: true,
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+        formats: ['image/avif', 'image/webp'],
         remotePatterns: [
             {
                 protocol: "https",
@@ -49,5 +51,9 @@ const nextConfig: NextConfig = {
         ];
     },
 };
+
+const nextConfig = withBundleAnalyzer({
+    enabled: process.env.ANALYZE === 'true',
+})(config);
 
 export default nextConfig;

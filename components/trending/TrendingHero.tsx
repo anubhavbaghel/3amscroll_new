@@ -30,7 +30,7 @@ export function TrendingHero({ articles }: TrendingHeroProps) {
 
                 {/* First Place (Center - Prominent) */}
                 <div className="order-1 md:order-2 -mt-8 md:-mt-12 z-10">
-                    <TrendingCard article={first} rank={1} isLarge />
+                    <TrendingCard article={first} rank={1} isLarge priority={true} />
                 </div>
 
                 {/* Third Place (Right) */}
@@ -42,7 +42,7 @@ export function TrendingHero({ articles }: TrendingHeroProps) {
     );
 }
 
-function TrendingCard({ article, rank, isLarge = false }: { article: Article; rank: number; isLarge?: boolean }) {
+function TrendingCard({ article, rank, isLarge = false, priority = false }: { article: Article; rank: number; isLarge?: boolean; priority?: boolean }) {
     const rankColors = {
         1: "bg-yellow-400 text-yellow-950 border-yellow-200", // Gold
         2: "bg-slate-300 text-slate-800 border-slate-200",      // Silver
@@ -69,6 +69,8 @@ function TrendingCard({ article, rank, isLarge = false }: { article: Article; ra
                     alt={article.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority={priority}
+                    sizes={isLarge ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"}
                 />
 
                 {/* Gradient Overlay */}

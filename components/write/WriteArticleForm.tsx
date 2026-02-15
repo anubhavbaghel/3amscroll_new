@@ -2,10 +2,15 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Editor } from "@/components/admin/Editor";
+import dynamic from 'next/dynamic';
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createUserArticle } from "@/app/actions/user-article";
 import { toast } from "sonner";
+
+const Editor = dynamic(() => import("@/components/admin/Editor").then(mod => mod.Editor), {
+    ssr: false,
+    loading: () => <div className="h-[300px] bg-gray-100 dark:bg-gray-800 animate-pulse rounded-md" />
+});
 
 const CATEGORIES = [
     "Technology",
