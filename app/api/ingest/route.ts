@@ -3,8 +3,16 @@ import { NextResponse } from "next/server";
 
 // Simple XML parser helper (regex based for MVP to avoid heavy deps like xml2js)
 // In production, use 'rss-parser' package
+interface RSSItem {
+    title: string;
+    link: string;
+    pubDate?: string;
+    description?: string;
+    image?: string;
+}
+
 function parseRSS(xml: string) {
-    const items = [];
+    const items: RSSItem[] = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
 
