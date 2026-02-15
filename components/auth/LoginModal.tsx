@@ -165,7 +165,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                         </div>
 
                         {/* Turnstile Captcha */}
-                        <div className="flex justify-center mb-4">
+                        <div className="flex justify-center mt-2">
                             <Turnstile
                                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
                                 onSuccess={(token) => setToken(token)}

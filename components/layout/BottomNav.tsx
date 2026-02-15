@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Bookmark, Bell, LogIn, Users } from "lucide-react";
+import { Home, Search, Bookmark, Bell, User as UserIcon, Users } from "lucide-react";
 import { routes } from "@/config/routes";
 import { User } from "@supabase/supabase-js";
 
@@ -74,7 +74,7 @@ export function BottomNav({ user }: BottomNavProps) {
                         className={`p-3 rounded-xl transition-colors ${isActive("/login") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                             }`}
                     >
-                        <LogIn className="w-6 h-6" strokeWidth={isActive("/login") ? 2.5 : 2} />
+                        <UserIcon className="w-6 h-6" strokeWidth={isActive("/login") ? 2.5 : 2} />
                         <span className="sr-only">Login</span>
                     </Link>
                 )}
