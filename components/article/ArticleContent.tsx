@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Article } from "@/types";
 import { routes } from "@/config/routes";
 import Image from "next/image";
+import DOMPurify from "isomorphic-dompurify";
 
 interface ArticleContentProps {
     article: Article;
@@ -48,7 +49,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
             {/* Article Body - Render actual content from database */}
             <div
                 className="article-body"
-                dangerouslySetInnerHTML={{ __html: article.content }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
             />
         </article>
     );

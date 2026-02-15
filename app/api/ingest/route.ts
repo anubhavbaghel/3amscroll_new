@@ -33,7 +33,14 @@ function parseRSS(xml: string) {
     return items.slice(0, 5); // Limit to 5 newest per run
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+    // 0. Security Check
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+
+    if (authHeader !== `Bearer ${cronSecret}` && request.headers.get('x-cron-secret') !== cronSecret) {
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
     // 1. Init Service User (Bypasses RLS)
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
