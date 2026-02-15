@@ -64,6 +64,10 @@ h6 {
     .safe-area-bottom {
         padding-bottom: env(safe-area-inset-bottom);
     }
+
+    .safe-area-bottom-margin {
+        margin-bottom: env(safe-area-inset-bottom);
+    }
 }
 
 /* Gen Z Article Prose Styles */

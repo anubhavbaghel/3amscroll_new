@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DesktopHeader } from "@/components/layout/DesktopHeader";
 import { MobileHeader } from "@/components/layout/MobileHeader";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { FloatingWriteButton } from "@/components/write/FloatingWriteButton";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { Inter } from "next/font/google";
@@ -36,6 +37,7 @@ export default async function RootLayout({
                 <DesktopHeader user={user} />
                 {children}
                 <BottomNav user={user} />
+                <FloatingWriteButton user={user} />
                 <Toaster position="top-right" richColors />
             </body>
         </html >
