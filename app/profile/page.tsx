@@ -2,8 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getProfile } from "@/app/actions/profile";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
+import Link from "next/link";
 import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
-import { User } from "@/types";
+import { User, Article } from "@/types";
 
 export default async function ProfilePage() {
     const supabase = await createClient();
@@ -44,7 +45,7 @@ export default async function ProfilePage() {
     };
 
     // Fetch User Articles
-    const { data: articles, error } = await supabase
+    const { data: articles } = await supabase
         .from("articles")
         .select("*")
         .eq("author_uuid", authUser.id)
@@ -63,21 +64,21 @@ export default async function ProfilePage() {
                 {articles && articles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {articles.map((article) => (
-                            <ArticleCardDesktop key={article.id} article={article as any} />
+                            <ArticleCardDesktop key={article.id} article={article as Article} />
                         ))}
                     </div>
                 ) : (
                     <div className="text-center py-20 bg-gray-50 dark:bg-white/5 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No stories yet</h3>
                         <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
-                            You haven't published any articles yet. Share your thoughts with the world!
+                            You haven&apos;t published any articles yet. Share your thoughts with the world!
                         </p>
-                        <a
+                        <Link
                             href="/write"
                             className="inline-flex items-center justify-center px-6 py-2.5 bg-brand hover:bg-brand-dark text-white rounded-full font-medium transition-all shadow-lg shadow-brand/20"
                         >
                             Write your first story
-                        </a>
+                        </Link>
                     </div>
                 )}
             </div>

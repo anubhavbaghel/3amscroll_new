@@ -20,7 +20,7 @@ export async function getProfile(userId: string) {
     return profile;
 }
 
-export async function updateProfile(prevState: any, formData: FormData) {
+export async function updateProfile(_prevState: unknown, formData: FormData) {
     const supabase = await createClient();
 
     const { data: { user } } = await supabase.auth.getUser();

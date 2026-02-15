@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@/types";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { updateProfile } from "@/app/actions/profile";
 import { toast } from "sonner";
 

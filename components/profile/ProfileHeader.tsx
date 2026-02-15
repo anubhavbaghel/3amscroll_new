@@ -17,6 +17,7 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
             {/* Banner */}
             <div className="h-48 md:h-64 w-full bg-gradient-to-r from-gray-800 to-gray-900 overflow-hidden relative group">
                 {user.banner ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         src={user.banner}
                         alt="Profile Banner"
@@ -44,6 +45,7 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
                     <div className="relative group">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-black bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-xl">
                             {user.avatar ? (
+                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={user.avatar}
                                     alt={user.name}
