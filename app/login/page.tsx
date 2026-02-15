@@ -1,4 +1,5 @@
-import { login, signup } from "../auth/actions";
+import { login } from "../auth/actions";
+import Link from "next/link";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
@@ -74,12 +75,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                         >
                             Sign in
                         </button>
-                        <button
-                            formAction={signup}
-                            className="group relative flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        <Link
+                            href="/signup"
+                            className="group relative flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 text-center"
                         >
-                            Sign up
-                        </button>
+                            Create an account
+                        </Link>
                     </div>
                 </form>
             </div>
