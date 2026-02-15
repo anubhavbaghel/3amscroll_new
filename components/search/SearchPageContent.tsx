@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, TrendingUp, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Search, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { Article } from "@/types";
@@ -19,7 +18,6 @@ interface SearchPageContentProps {
 export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<Article[]>([]);
-    const [isSearching, setIsSearching] = useState(false);
 
     // Simple trending topics
     const trendingTopics = ["Artificial Intelligence", "Crypto", "Gaming", "Startups", "Design", "mental Health"];
@@ -38,11 +36,9 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                 article.category.toLowerCase().includes(query.toLowerCase())
             );
             setResults(filtered);
-            setIsSearching(false);
         };
 
         const timeoutId = setTimeout(() => {
-            if (query) setIsSearching(true);
             searchArticles();
         }, 300);
 
@@ -60,13 +56,13 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                         animate={{ opacity: 1, y: 0 }}
                         className="relative z-20"
                     >
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-8 h-8 text-gray-400" />
+                        <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search stories, topics, or authors..."
+                            placeholder="Search stories..."
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            className="w-full bg-white dark:bg-dark-surface border-2 border-transparent focus:border-brand dark:focus:border-brand-glow outline-none rounded-3xl py-6 pl-20 pr-8 text-2xl md:text-3xl font-bold placeholder:text-gray-300 dark:placeholder:text-gray-700 shadow-xl shadow-gray-200/50 dark:shadow-none transition-all"
+                            className="w-full bg-white dark:bg-dark-surface border-2 border-transparent focus:border-brand dark:focus:border-brand-glow outline-none rounded-3xl py-4 md:py-6 pl-12 md:pl-20 pr-6 md:pr-8 text-lg md:text-3xl font-bold placeholder:text-gray-300 dark:placeholder:text-gray-700 shadow-xl shadow-gray-200/50 dark:shadow-none transition-all"
                             autoFocus
                         />
                     </motion.div>
@@ -85,7 +81,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                                 Trending Topics
                             </h3>
                             <div className="flex flex-wrap gap-3">
-                                {trendingTopics.map((topic, i) => (
+                                {trendingTopics.map((topic) => (
                                     <button
                                         key={topic}
                                         onClick={() => setQuery(topic)}

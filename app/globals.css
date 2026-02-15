@@ -81,9 +81,17 @@ h6 {
 }
 
 .prose h2 {
-    font-size: 2rem;
-    margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .prose h2 {
+        font-size: 2rem;
+        margin-top: 2.5rem;
+        margin-bottom: 1.25rem;
+    }
 }
 
 .prose p {

@@ -45,7 +45,7 @@ export function CategoryHeader({ category, count }: CategoryHeaderProps) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-                    <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 font-display transform -ml-1 lg:-ml-2">
+                    <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black uppercase leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 font-display transform -ml-0.5 lg:-ml-2 break-words">
                         {category}
                     </h1>
                 </motion.div>

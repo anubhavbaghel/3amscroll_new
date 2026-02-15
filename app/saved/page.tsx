@@ -27,25 +27,25 @@ export default async function SavedPage() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black pb-20">
             {/* Header */}
-            <div className="pt-32 pb-12 px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-dark-surface">
+            <div className="pt-24 md:pt-32 pb-8 md:pb-12 px-4 md:px-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-dark-surface">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-center gap-3 text-brand mb-4">
-                        <Bookmark className="w-6 h-6" />
-                        <span className="text-sm font-bold uppercase tracking-widest">My Library</span>
+                        <Bookmark className="w-5 h-5 md:w-6 md:h-6" />
+                        <span className="text-xs md:text-sm font-bold uppercase tracking-widest">My Library</span>
                     </div>
-                    <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white font-display tracking-tight">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white font-display tracking-tight leading-none">
                         Saved Stories
                     </h1>
-                    <p className="mt-4 text-xl text-gray-500 max-w-2xl">
+                    <p className="mt-4 text-lg md:text-xl text-gray-500 max-w-2xl leading-relaxed">
                         Your personal collection of deep dives, quick reads, and inspiration.
                     </p>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+            <div className="max-w-7xl mx-auto px-4 lg:px-8 py-8 md:py-12">
                 {/* Controls (Placeholder for future List/Grid toggle) */}
                 {savedArticles.length > 0 && (
-                    <div className="flex justify-end mb-8 gap-2">
+                    <div className="flex justify-end mb-6 md:mb-8 gap-2">
                         <button className="p-2 rounded-lg bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <LayoutGrid className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
@@ -56,8 +56,8 @@ export default async function SavedPage() {
                 )}
 
                 {savedArticles.length === 0 ? (
-                    <div className="text-center py-32 bg-white dark:bg-dark-surface rounded-3xl border border-gray-100 dark:border-dark-border border-dashed">
-                        <div className="w-16 h-16 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="text-center py-20 md:py-32 bg-white dark:bg-dark-surface rounded-3xl border border-gray-100 dark:border-dark-border border-dashed px-4">
+                        <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Bookmark className="w-8 h-8 text-gray-400" />
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No stories saved yet</h3>

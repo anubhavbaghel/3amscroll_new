@@ -117,7 +117,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* ... rest of the component ... */}
 
             {/* Hero Section */}
-            <div className="h-[75vh] lg:h-[85vh]">
+            <div className="h-[60vh] lg:h-[85vh]">
                 <ArticleHero
                     article={article}
                     isSaved={savedArticleIds.has(article.id)}
