@@ -37,7 +37,18 @@ export interface User {
     id: string;
     email: string;
     name: string;
+    username?: string; // Added username
     avatar?: string;
+    banner?: string; // Added banner
+    bio?: string;   // Added bio
+    website?: string; // Added website
+    location?: string; // Added location
+    social_links?: {  // Added social_links
+        twitter?: string;
+        instagram?: string;
+        linkedin?: string;
+        github?: string;
+    };
     role: "user" | "author" | "admin";
     savedArticles: string[];
     preferences: {
@@ -45,4 +56,5 @@ export interface User {
         notifications: boolean;
         theme: "light" | "dark" | "system";
     };
+    joinedAt?: string; // Added joined date
 }
