@@ -16,7 +16,7 @@ export function BottomNav({ user }: BottomNavProps) {
     const isActive = (path: string) => pathname === path;
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 lg:hidden safe-area-bottom">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 lg:hidden">
             <div className="flex items-center justify-around h-16">
                 {/* 1. Home */}
                 <Link

@@ -60,14 +60,6 @@ h6 {
         mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
         -webkit-mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
     }
-
-    .safe-area-bottom {
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-
-    .safe-area-bottom-margin {
-        margin-bottom: env(safe-area-inset-bottom);
-    }
 }
 
 /* Gen Z Article Prose Styles */
