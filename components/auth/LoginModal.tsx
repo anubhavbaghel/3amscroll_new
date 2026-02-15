@@ -6,6 +6,7 @@ import Link from "next/link";
 import { loginWithState } from "@/app/auth/actions";
 import { GoogleSignInButton } from "./GoogleSignInButton";
 import { useRouter } from "next/navigation";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -17,8 +18,10 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const modalRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+    const [token, setToken] = useState<string>("");
 
     useEffect(() => {
         setIsMounted(true);
@@ -54,6 +57,13 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
 
         // Append redirect URL
         formData.append("redirectTo", redirectTo);
+        formData.append("turnstileToken", token);
+
+        if (!token) {
+            setError("Please complete the captcha.");
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const result = await loginWithState(formData);
@@ -151,6 +161,20 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                                 required
                                 className="block w-full rounded-lg border-0 py-2.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 bg-transparent"
                                 placeholder="Password"
+                            />
+                        </div>
+
+                        {/* Turnstile Captcha */}
+                        <div className="flex justify-center mb-4">
+                            <Turnstile
+                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                                onSuccess={(token) => setToken(token)}
+                                onError={() => setToken("")}
+                                onExpire={() => setToken("")}
+                                options={{
+                                    theme: "auto",
+                                    size: "flexible",
+                                }}
                             />
                         </div>
 

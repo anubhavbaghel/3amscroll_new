@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useState } from "react";
 
 export function Footer() {
+    const [token, setToken] = useState<string>("");
+
     return (
         <footer className="bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -99,15 +103,28 @@ export function Footer() {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                             Get the latest stories delivered to your inbox.
                         </p>
-                        <form className="space-y-2">
+                        <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); if (token) alert("Subscribed!"); else alert("Please solve captcha"); }}>
                             <input
                                 type="email"
                                 placeholder="Your email"
                                 className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                             />
+                            <div className="flex justify-start">
+                                <Turnstile
+                                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                                    onSuccess={(token) => setToken(token)}
+                                    onError={() => setToken("")}
+                                    onExpire={() => setToken("")}
+                                    options={{
+                                        theme: "auto",
+                                        size: "compact",
+                                    }}
+                                />
+                            </div>
                             <button
                                 type="submit"
-                                className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                                disabled={!token}
+                                className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 Subscribe
                             </button>

@@ -1,5 +1,6 @@
 import { signup } from "../auth/actions";
 import Link from "next/link";
+import { TurnstileWidget } from "@/components/auth/TurnstileWidget";
 
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
     const { error } = await searchParams;
@@ -68,6 +69,8 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
                         </div>
                     </div>
 
+                    <TurnstileWidget />
+
                     <div className="flex flex-col gap-4">
                         <button
                             formAction={signup}
@@ -82,6 +85,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
                             </Link>
                         </p>
                     </div>
+
                 </form>
             </div>
         </div>

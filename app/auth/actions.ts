@@ -4,6 +4,35 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+async function validateTurnstile(token: string | null) {
+    if (!token) return false;
+
+    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+    if (!secretKey) {
+        console.error("TURNSTILE_SECRET_KEY is not set");
+        return true; // Fail open if config is missing to avoid blocking users
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('secret', secretKey);
+        formData.append('response', token);
+        // formData.append('remoteip', request.ip); // Optional but recommended if we had access to request IP
+
+        const url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+        const result = await fetch(url, {
+            body: formData,
+            method: 'POST',
+        });
+
+        const outcome = await result.json();
+        return outcome.success;
+    } catch (e) {
+        console.error("Turnstile validation error:", e);
+        return true; // Fail open on network error
+    }
+}
+
 export async function login(formData: FormData) {
     const supabase = await createClient();
     const redirectTo = formData.get("redirectTo") as string || "/";
@@ -12,6 +41,11 @@ export async function login(formData: FormData) {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
     };
+
+    const token = formData.get("turnstileToken") as string;
+    if (!(await validateTurnstile(token))) {
+        return redirect(`/login?error=${encodeURIComponent("Invalid captcha")}`);
+    }
 
     const { error } = await supabase.auth.signInWithPassword(data);
 
@@ -40,6 +74,11 @@ export async function signup(formData: FormData) {
         }
     };
 
+    const token = formData.get("turnstileToken") as string;
+    if (!(await validateTurnstile(token))) {
+        return redirect(`/signup?error=${encodeURIComponent("Invalid captcha")}`);
+    }
+
     const { error } = await supabase.auth.signUp(data);
 
     if (error) {
@@ -67,6 +106,11 @@ export async function loginWithState(formData: FormData) {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
     };
+
+    const token = formData.get("turnstileToken") as string;
+    if (!(await validateTurnstile(token))) {
+        return { success: false, error: "Invalid captcha" };
+    }
 
     const { error } = await supabase.auth.signInWithPassword(data);
 

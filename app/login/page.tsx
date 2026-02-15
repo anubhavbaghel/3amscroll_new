@@ -1,6 +1,7 @@
 import { login } from "../auth/actions";
 import Link from "next/link";
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
+import { TurnstileWidget } from "@/components/auth/TurnstileWidget";
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string; message?: string }> }) {
     const { error, message } = await searchParams;
@@ -74,6 +75,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                         </div>
                     </div>
 
+                    <TurnstileWidget />
+
                     <div className="flex flex-col gap-4">
                         <button
                             formAction={login}
@@ -88,6 +91,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
                             Create an account
                         </Link>
                     </div>
+
                 </form>
             </div>
         </div>

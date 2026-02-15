@@ -1,18 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Send, CheckCircle, Loader2 } from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 
 export function ContactForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
+    const [token, setToken] = useState<string>("");
+    const turnstileRef = useRef<TurnstileInstance>(null);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!token) {
+            alert("Please complete the captcha.");
+            return;
+        }
+
         setIsSubmitting(true);
 
-        // Simulate API call
+        if ((e.target as any)._gotcha.value) {
+            // Honeypot trap
+            setIsSuccess(true);
+            return;
+        }
+
+        // Simulate API call with validation
         await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Reset turnstile after submission
+        if (turnstileRef.current) {
+            turnstileRef.current.reset();
+        }
 
         setIsSubmitting(false);
         setIsSuccess(true);
@@ -84,6 +105,24 @@ export function ContactForm() {
                     rows={5}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
                     placeholder="Tell us what&apos;s on your mind..."
+                />
+            </div>
+
+            {/* Honeypot Field - Hidden from humans */}
+            <input type="text" name="_gotcha" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
+
+            {/* Turnstile Captcha */}
+            <div className="flex justify-start mb-6">
+                <Turnstile
+                    ref={turnstileRef}
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                    onSuccess={(token) => setToken(token)}
+                    onError={() => setToken("")}
+                    onExpire={() => setToken("")}
+                    options={{
+                        theme: "auto",
+                        size: "flexible",
+                    }}
                 />
             </div>
 
