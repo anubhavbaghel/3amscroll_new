@@ -56,6 +56,17 @@ export function MobileHeader({ user = null }: MobileHeaderProps) {
                             <AuthButton user={user} />
                         </div>
 
+                        {/* Write Button (Icon Only on Mobile) */}
+                        <div className="flex items-center">
+                            <WriteArticleButton
+                                user={user}
+                                className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
+                                showIcon={true}
+                            >
+                                <span className="sr-only">Write</span>
+                            </WriteArticleButton>
+                        </div>
+
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className="p-2.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
