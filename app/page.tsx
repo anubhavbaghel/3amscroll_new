@@ -2,8 +2,7 @@ import dynamic from "next/dynamic";
 const Sidebar = dynamic(() => import("@/components/layout/Sidebar").then((mod) => mod.Sidebar));
 import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
-import { ArticleCard } from "@/components/article/ArticleCard";
-import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
+import { ArticleGrid } from "@/components/home/ArticleGrid";
 import { getArticles, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 
@@ -54,43 +53,24 @@ export default async function HomePage() {
 
                             {/* Article Grid */}
                             <div className="space-y-6">
-                                <h2 className="text-2xl font-bold hidden lg:block">Latest Stories</h2>
-
-                                {/* Mobile: Vertical List */}
-                                <div className="lg:hidden pt-[140px]">
-                                    {feedArticles.map((article, index) => (
-                                        <ArticleCard
-                                            key={article.id}
-                                            article={article}
-                                            priority={index < 3}
-                                            isSaved={savedArticleIds.has(article.id)}
-                                            isLiked={likedArticleIds.has(article.id)}
-                                        />
-                                    ))}
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+                                        Latest Stories
+                                    </h2>
                                 </div>
 
-                                {/* Desktop: 2-Column Grid */}
-                                <div className="hidden lg:grid lg:grid-cols-2 gap-6">
-                                    {feedArticles.map((article, index) => (
-                                        <ArticleCardDesktop
-                                            key={article.id}
-                                            article={article}
-                                            priority={index < 4}
-                                            isSaved={savedArticleIds.has(article.id)}
-                                            isLiked={likedArticleIds.has(article.id)}
-                                        />
-                                    ))}
-                                </div>
+                                <ArticleGrid
+                                    articles={feedArticles}
+                                    savedArticleIds={savedArticleIds}
+                                    likedArticleIds={likedArticleIds}
+                                />
                             </div>
 
                             {/* Load More */}
-                            <div className="p-8 text-center">
-                                <div className="inline-flex items-center gap-2 text-gray-500">
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" />
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-75" />
-                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse delay-150" />
-                                </div>
-                                <p className="mt-2 text-sm text-gray-500">Loading more stories...</p>
+                            <div className="py-12 flex justify-center">
+                                <button className="px-6 py-2.5 rounded-full border border-gray-200 dark:border-gray-800 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                                    Load more stories
+                                </button>
                             </div>
                         </div>
 
