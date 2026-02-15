@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     // Check for cookie-based redirect first, then query param, then default
     const cookieStore = await cookies();
     const redirectCookie = cookieStore.get("auth-redirect");
-    let next = redirectCookie?.value ? decodeURIComponent(redirectCookie.value) : (searchParams.get("next") ?? "/");
+    const next = redirectCookie?.value ? decodeURIComponent(redirectCookie.value) : (searchParams.get("next") ?? "/");
 
     // Clean up the cookie
     if (redirectCookie) {
