@@ -18,7 +18,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+
     const modalRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const [token, setToken] = useState<string>("");
