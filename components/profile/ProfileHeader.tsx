@@ -39,7 +39,7 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
 
             {/* Avatar & Info */}
             <div className="max-w-5xl mx-auto px-4 sm:px-6 relative">
-                <div className="absolute -top-16 md:-top-20 flex flex-col md:flex-row items-end md:items-end gap-6 w-full">
+                <div className="absolute -top-16 md:-top-20 flex flex-col md:flex-row items-center md:items-end gap-6 w-full">
 
                     {/* Avatar */}
                     <div className="relative group">
