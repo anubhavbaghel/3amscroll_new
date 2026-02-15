@@ -4,11 +4,9 @@ import { deleteArticle } from "@/app/admin/actions";
 import { Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 export function DeleteArticleButton({ id }: { id: string }) {
     const [isPending, startTransition] = useTransition();
-    const router = useRouter();
 
     const handleDelete = () => {
         if (confirm("Are you sure you want to delete this article? This action cannot be undone.")) {

@@ -77,7 +77,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                 router.push(result.redirectTo);
                 router.refresh(); // Ensure auth state updates
             }
-        } catch (e) {
+        } catch {
             setError("An unexpected error occurred. Please try again.");
             setIsLoading(false);
         }

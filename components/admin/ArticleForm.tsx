@@ -4,7 +4,6 @@
 import { Editor } from "@/components/admin/Editor";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createArticle, updateArticle } from "@/app/admin/actions";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 interface ArticleData {

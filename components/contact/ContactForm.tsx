@@ -21,7 +21,8 @@ export function ContactForm() {
 
         setIsSubmitting(true);
 
-        if ((e.target as any)._gotcha.value) {
+        const formData = new FormData(e.currentTarget as HTMLFormElement);
+        if (formData.get("_gotcha")) {
             // Honeypot trap
             setIsSuccess(true);
             return;
