@@ -14,7 +14,7 @@ export function TrendingHero({ articles }: TrendingHeroProps) {
     const [first, second, third] = articles;
 
     return (
-        <section className="mb-16 relative overflow-hidden">
+        <section className="mb-16 relative overflow-hidden pt-4">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand/20 blur-[120px] rounded-full pointer-events-none -z-10 mix-blend-screen" />
 
             <div className="flex items-center gap-3 mb-10">
@@ -50,7 +50,7 @@ function TrendingCard({ article, rank, isLarge = false, priority = false }: { ar
     return (
         <Link href={`/article/${article.slug}`} className="group block relative w-full h-full">
             <div className={cn(
-                "relative rounded-3xl overflow-hidden transition-all duration-500 ease-out group-hover:shadow-2xl ring-1 ring-white/10 group-hover:ring-brand/50",
+                "relative rounded-xl overflow-hidden transition-all duration-500 ease-out group-hover:shadow-2xl ring-1 ring-white/10 group-hover:ring-brand/50",
                 isLarge ? "aspect-[4/3] md:h-[600px]" : "aspect-[4/3] md:h-[288px]"
             )}>
                 {/* Image */}

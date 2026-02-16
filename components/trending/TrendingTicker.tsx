@@ -16,7 +16,7 @@ export function TrendingTicker() {
     ];
 
     return (
-        <div className="w-full bg-black text-white overflow-hidden py-3 border-y border-white/10 relative z-20">
+        <div className="w-full bg-black text-white overflow-hidden py-4 border-y border-white/10 relative z-20">
             <div className="flex items-center gap-8 animate-infinite-scroll whitespace-nowrap">
                 {[...topics, ...topics, ...topics].map((topic, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-white/80">

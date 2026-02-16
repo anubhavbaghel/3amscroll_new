@@ -95,7 +95,7 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
             {/* Category Pills Bar */}
             <div className="relative z-10 py-3">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-1 -mx-6 px-6 mask-linear-fade">
+                    <div className="py-1 -mx-6 px-6">
                         <CategoryNav className="w-full" />
                     </div>
                 </div>

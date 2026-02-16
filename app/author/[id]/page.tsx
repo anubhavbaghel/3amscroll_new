@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
-import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
+import { ArticleCard } from "@/components/article/ArticleCard";
 import { AuthorProfileHeader } from "@/components/author/AuthorProfileHeader";
 import { getAuthor, getAuthorArticles } from "@/lib/mock-data";
 
@@ -37,7 +37,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {articles.map((article) => (
-                            <ArticleCardDesktop key={article.id} article={article} />
+                            <ArticleCard key={article.id} article={article} />
                         ))}
                     </div>
 

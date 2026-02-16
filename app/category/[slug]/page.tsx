@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
-import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
+import { ArticleCard } from "@/components/article/ArticleCard";
 import { mockArticles, getCategory } from "@/lib/mock-data";
 
 interface CategoryPageProps {
@@ -46,7 +46,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                         {categoryArticles.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {categoryArticles.map((article) => (
-                                    <ArticleCardDesktop key={article.id} article={article} />
+                                    <ArticleCard key={article.id} article={article} />
                                 ))}
                             </div>
                         ) : (

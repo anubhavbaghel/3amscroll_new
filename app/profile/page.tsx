@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getProfile } from "@/app/actions/profile";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import Link from "next/link";
-import { ArticleCardDesktop } from "@/components/article/ArticleCardDesktop";
+import { ArticleCard } from "@/components/article/ArticleCard";
 import { User, Article } from "@/types";
 
 export default async function ProfilePage() {
@@ -64,7 +64,7 @@ export default async function ProfilePage() {
                 {articles && articles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {articles.map((article) => (
-                            <ArticleCardDesktop key={article.id} article={article as Article} />
+                            <ArticleCard key={article.id} article={article as Article} />
                         ))}
                     </div>
                 ) : (

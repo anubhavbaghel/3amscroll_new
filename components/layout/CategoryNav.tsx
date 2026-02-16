@@ -37,7 +37,7 @@ export function CategoryNav({ className }: CategoryNavProps) {
     const isTrending = pathname === routes.trending;
 
     return (
-        <div className={cn("flex items-center gap-1 overflow-x-auto scrollbar-hide py-2 px-4 md:px-0 mask-linear-fade", className)}>
+        <div className={cn("flex items-center gap-1 overflow-x-auto scrollbar-hide py-2 px-6 mask-linear-fade", className)}>
             <NavItem
                 href={routes.home}
                 label="For You"
