@@ -1,34 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { User } from "@supabase/supabase-js";
 import { AuthButton } from "@/components/auth/AuthButton";
-import { cn } from "@/lib/utils";
+
+import { CategoryNav } from "./CategoryNav";
 
 interface MobileHeaderProps {
     user?: User | null;
-}
-
-function CategoryLink({ href, label }: { href: string; label: string }) {
-    const pathname = usePathname();
-    const isActive = pathname === href;
-
-    return (
-        <Link
-            href={href}
-            className={cn(
-                "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0",
-                isActive
-                    ? "bg-brand text-white shadow-md shadow-brand/20 font-semibold"
-                    : "bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 hover:border-brand dark:hover:border-brand hover:text-brand"
-            )}
-        >
-            {label}
-        </Link>
-    );
 }
 
 export function MobileHeader({ user = null }: MobileHeaderProps) {
@@ -50,21 +30,8 @@ export function MobileHeader({ user = null }: MobileHeaderProps) {
             </div>
 
             {/* Category Pills (Horizontal Scroll) */}
-            <div className="bg-white/50 dark:bg-dark-bg/50 backdrop-blur-md border-b border-gray-100 dark:border-dark-border">
-                <div className="flex gap-3 overflow-x-auto scrollbar-hide py-3 px-4 md:px-6">
-                    <CategoryLink href={routes.home} label="For You" />
-                    <CategoryLink href={routes.trending} label="Trending" />
-                    <div className="w-px h-6 bg-gray-200 dark:bg-dark-border mx-1 my-auto flex-shrink-0" />
-                    {siteConfig.categories.map((category) => (
-                        <CategoryLink
-                            key={category.id}
-                            href={routes.category(category.slug)}
-                            label={category.name}
-                        />
-                    ))}
-                    {/* Right padding spacer to safely see the last item */}
-                    <div className="w-4 flex-shrink-0" />
-                </div>
+            <div className="pt-2 pb-3">
+                <CategoryNav />
             </div>
         </header>
     );
