@@ -14,7 +14,7 @@ export default async function FollowingPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black">
-            <main className="max-w-3xl mx-auto px-4 py-8 lg:py-12 pb-24 lg:pb-12">
+            <main className="max-w-3xl mx-auto px-4 pb-24 lg:pb-12 pt-32 lg:pt-48">
                 <div className="mb-8 text-center py-20">
                     <h1 className="text-3xl font-bold mb-4">Following Feed</h1>
                     <p className="text-gray-600 dark:text-gray-400 mb-6">

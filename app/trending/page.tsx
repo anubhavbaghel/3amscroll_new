@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { TrendingHero } from "@/components/trending/TrendingHero";
-import { TrendingList } from "@/components/trending/TrendingList";
+import { TrendingGrid } from "@/components/trending/TrendingGrid";
+import { TrendingTicker } from "@/components/trending/TrendingTicker";
 import { mockArticles } from "@/lib/mock-data";
 
 export default function TrendingPage() {
@@ -14,16 +15,18 @@ export default function TrendingPage() {
     const listArticles = sortedArticles.slice(3);
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black">
+        <div className="min-h-screen bg-white dark:bg-black overflow-x-hidden">
+            {/* Ticker Section - Mobile needs padding for fixed header, Desktop is sticky so no padding needed */}
+            <div className="pt-32 lg:pt-0">
+                <TrendingTicker />
+            </div>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 lg:pb-16 pt-8">
                 <TrendingHero articles={topArticles} />
 
-                <div className="flex gap-8">
-                    {/* Main Content */}
-                    <div className="flex-1 min-w-0 max-w-4xl mx-auto">
-                        <TrendingList articles={listArticles} />
-                    </div>
+                {/* Main Content */}
+                <div className="max-w-7xl mx-auto">
+                    <TrendingGrid articles={listArticles} />
                 </div>
             </main>
 

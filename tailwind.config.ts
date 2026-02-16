@@ -28,9 +28,16 @@ export default {
                 }
             },
             borderRadius: {
-                'xl': '1rem',
-                '2xl': '1.5rem',
                 '3xl': '2rem',
+            },
+            animation: {
+                'infinite-scroll': 'infinite-scroll 25s linear infinite',
+            },
+            keyframes: {
+                'infinite-scroll': {
+                    from: { transform: 'translateX(0)' },
+                    to: { transform: 'translateX(-100%)' },
+                }
             }
         },
     },
