@@ -1,14 +1,37 @@
+"use client";
+
 import { AuthButton } from "@/components/auth/AuthButton";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { Suspense } from "react";
 import { SearchBar } from "@/components/search/SearchBar";
 import { User } from "@supabase/supabase-js";
 import { WriteArticleButton } from "@/components/write/WriteArticleButton";
+import { cn } from "@/lib/utils";
 
 interface DesktopHeaderProps {
     user?: User | null;
+}
+
+function CategoryLink({ href, label }: { href: string; label: string }) {
+    const pathname = usePathname();
+    const isActive = pathname === href;
+
+    return (
+        <Link
+            href={href}
+            className={cn(
+                "px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all flex-shrink-0",
+                isActive
+                    ? "bg-brand text-white shadow-md shadow-brand/20 font-semibold"
+                    : "bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 hover:border-brand dark:hover:border-brand hover:text-brand hover:-translate-y-0.5"
+            )}
+        >
+            {label}
+        </Link>
+    );
 }
 
 export function DesktopHeader({ user = null }: DesktopHeaderProps) {
@@ -93,27 +116,15 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
             <div className="relative z-10 bg-white/50 dark:bg-dark-bg/50 backdrop-blur-md border-b border-gray-100 dark:border-dark-border py-3">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-1 -mx-6 px-6 mask-linear-fade">
-                        <Link
-                            href={routes.home}
-                            className="px-4 py-1.5 rounded-full bg-brand text-white text-sm font-semibold whitespace-nowrap shadow-md shadow-brand/20 hover:bg-brand-dark transition-colors flex-shrink-0"
-                        >
-                            For You
-                        </Link>
-                        <Link
-                            href={routes.trending}
-                            className="px-4 py-1.5 rounded-full bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-brand dark:hover:border-brand hover:text-brand transition-all hover:-translate-y-0.5 flex-shrink-0"
-                        >
-                            Trending
-                        </Link>
+                        <CategoryLink href={routes.home} label="For You" />
+                        <CategoryLink href={routes.trending} label="Trending" />
                         <div className="w-px h-6 bg-gray-200 dark:bg-dark-border mx-1 flex-shrink-0" />
                         {siteConfig.categories.map((category) => (
-                            <Link
+                            <CategoryLink
                                 key={category.id}
                                 href={routes.category(category.slug)}
-                                className="px-4 py-1.5 rounded-full bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-700 dark:text-gray-300 text-sm font-medium whitespace-nowrap hover:border-brand dark:hover:border-brand hover:text-brand transition-all hover:-translate-y-0.5 flex-shrink-0"
-                            >
-                                {category.name}
-                            </Link>
+                                label={category.name}
+                            />
                         ))}
                     </div>
                 </div>

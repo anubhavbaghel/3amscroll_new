@@ -34,7 +34,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="min-h-screen bg-white dark:bg-black">
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
-                <CategoryHeader category={category} count={stats.articlesCount} />
+                <CategoryHeader
+                    category={category}
+                    count={stats.articlesCount}
+                    featuredArticle={categoryArticles[0]}
+                />
 
                 <div className="flex gap-8">
                     {/* Main Content */}

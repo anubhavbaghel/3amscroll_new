@@ -45,7 +45,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black">
-            <CategoryHeader category={categoryName} count={categoryArticles.length} />
+            <CategoryHeader
+                category={categoryName}
+                count={categoryArticles.length}
+                featuredArticle={categoryArticles[0]}
+            />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10 relative z-20">
                 {categoryArticles.length > 0 ? (
