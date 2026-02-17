@@ -12,44 +12,36 @@ interface AuthorCardProps {
     articlesCount?: number;
 }
 
-export function AuthorCard({ author, authorId, avatar, bio, articlesCount = 0 }: AuthorCardProps) {
+export function AuthorCard({ author, authorId, avatar, bio }: AuthorCardProps) {
     return (
-        <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4 font-display">
-                About the Author
-            </h3>
-
-            <div className="flex items-start gap-4 mb-4">
-                <Link href={routes.author(authorId)} className="group flex-shrink-0">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800 border-2 border-transparent group-hover:border-brand transition-colors">
-                        {avatar ? (
-                            <Image src={avatar} alt={author} fill className="object-cover group-hover:scale-105 transition-transform" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-brand/10 text-brand font-bold text-xl">
-                                {author.charAt(0)}
-                            </div>
-                        )}
-                    </div>
-                </Link>
-                <div className="flex-1 min-w-0">
-                    <Link href={routes.author(authorId)} className="block">
-                        <h4 className="font-bold text-lg mb-1 hover:text-brand transition-colors">{author}</h4>
-                    </Link>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {articlesCount} articles published
-                    </p>
+        <div className="py-6">
+            <Link href={routes.author(authorId)} className="flex items-center gap-4 group">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-800">
+                    {avatar ? (
+                        <Image
+                            src={avatar}
+                            alt={author}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-brand/10 text-brand font-bold text-xl">
+                            {author.charAt(0)}
+                        </div>
+                    )}
                 </div>
-            </div>
-
-            {bio && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-                    {bio}
-                </p>
-            )}
-
-            <button className="w-full px-4 py-2 bg-brand text-white font-medium rounded-xl hover:bg-brand-dark transition-colors text-sm shadow-lg shadow-brand/20">
-                Follow
-            </button>
+                <div className="flex-1">
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Written by</div>
+                    <h4 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-brand transition-colors">
+                        {author}
+                    </h4>
+                    {bio && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                            {bio}
+                        </p>
+                    )}
+                </div>
+            </Link>
         </div>
     );
 }

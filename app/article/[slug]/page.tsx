@@ -1,17 +1,17 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleContent } from "@/components/article/ArticleContent";
+import { ArticleHeader } from "@/components/article/ArticleHeader";
 import { AuthorCard } from "@/components/article/AuthorCard";
-import { EngagementBar } from "@/components/article/EngagementBar";
+import { LikeButton } from "@/components/article/LikeButton";
+import { BookmarkButton } from "@/components/article/BookmarkButton";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { mockArticles } from "@/lib/mock-data";
-import { ArticleHero } from "@/components/article/ArticleHero";
-// import { Sidebar } from "@/components/layout/Sidebar";
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
-import { ReadingProgress } from "@/components/article/ReadingProgress";
 
 interface ArticlePageProps {
     params: Promise<{
@@ -72,7 +72,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
     const [article, savedArticleIds, likedArticleIds] = await Promise.all([
         getArticleBySlug(slug),
-        // getTrendingArticles(),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
         user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
     ]);
@@ -92,17 +91,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         "headline": article.title,
         "image": [article.coverImage],
         "datePublished": article.publishedAt,
-        "dateModified": article.publishedAt, // Simplified
+        "dateModified": article.publishedAt,
         "author": [{
             "@type": "Person",
             "name": article.author.name,
-            "url": `${baseUrl}/author/${article.author.id}` // Placeholder URL
+            "url": `${baseUrl}/author/${article.author.id}`
         }]
     };
-
-
-
-    // ... existing code ...
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
@@ -111,84 +106,64 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            <ReadingProgress />
+            {/* Simple Article Header */}
+            <ArticleHeader article={article} />
 
-            {/* Mobile Header */}
-            {/* ... rest of the component ... */}
-
-            {/* Hero Section */}
-            <div className="h-[60vh] lg:h-[85vh]">
-                <ArticleHero
-                    article={article}
-                    isSaved={savedArticleIds.has(article.id)}
-                    isLiked={likedArticleIds.has(article.id)}
-                />
+            {/* Feature Image */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
+                    <Image
+                        src={article.coverImage}
+                        alt={article.title}
+                        fill
+                        className="object-cover"
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                    />
+                </div>
             </div>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:-mt-20 relative z-20">
-                <div className="flex gap-12 lg:gap-16">
-                    {/* Article Content */}
-                    <div className="flex-1 min-w-0 bg-white dark:bg-dark-surface p-0 lg:p-12 lg:rounded-3xl lg:shadow-xl lg:shadow-black/5">
-                        <ArticleContent article={article} />
+            <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
+                <ArticleContent article={article} />
 
-                        {/* Related Articles */}
-                        <div className="mt-16 pt-16 border-t border-gray-100 dark:border-gray-800">
-                            <RelatedArticles articles={relatedArticles} />
-                        </div>
-                    </div>
+                {/* Author Card */}
+                <div className="mt-12 pt-12 border-t border-gray-200 dark:border-gray-800">
+                    <AuthorCard
+                        author={article.author.name}
+                        authorId={article.author.id}
+                        avatar={article.author.avatar}
+                        bio={article.author.bio}
+                        articlesCount={12}
+                    />
+                </div>
 
-                    {/* Sidebar - Desktop Only */}
-                    <aside className="hidden lg:block w-80 lg:w-96 flex-shrink-0">
-                        <div className="sticky top-24 space-y-8">
-                            {/* Author Card */}
-                            <AuthorCard
-                                author={article.author.name}
-                                authorId={article.author.id}
-                                avatar={article.author.avatar}
-                                bio={article.author.bio}
-                                articlesCount={12}
-                            />
-
-                            {/* Trending Articles */}
-                            <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
-                                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
-                                    Trending Now
-                                </h3>
-                                <div className="space-y-4">
-                                    {mockArticles.slice(0, 5).map((trendingArticle, index) => (
-                                        <a
-                                            key={trendingArticle.id}
-                                            href={`/article/${trendingArticle.slug}`}
-                                            className="block group"
-                                        >
-                                            <div className="flex gap-3">
-                                                <span className="text-2xl font-bold text-gray-300 dark:text-gray-700">
-                                                    {index + 1}
-                                                </span>
-                                                <div className="flex-1 min-w-0">
-                                                    <h4 className="font-semibold text-sm line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                                        {trendingArticle.title}
-                                                    </h4>
-                                                    <p className="text-xs text-gray-500 mt-1">
-                                                        {trendingArticle.readTime} min read
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
+                {/* Related Articles */}
+                <div className="mt-12">
+                    <RelatedArticles articles={relatedArticles} />
                 </div>
             </main>
 
-            {/* Engagement Bar - Sticky Bottom */}
-            <EngagementBar
-                likes={article.likes}
-                comments={article.comments}
-            />
+            {/* Simple Engagement Bar */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-40 lg:hidden">
+                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <LikeButton
+                            articleId={article.id}
+                            initialLikes={article.likes}
+                            initialIsLiked={likedArticleIds.has(article.id)}
+                            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
+                        />
+                        <span className="text-gray-400">·</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{article.comments} comments</span>
+                    </div>
+                    <BookmarkButton
+                        articleId={article.id}
+                        initialIsBookmarked={savedArticleIds.has(article.id)}
+                        className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
+                    />
+                </div>
+            </div>
 
             {/* Footer */}
             <Footer />
