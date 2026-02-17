@@ -1,9 +1,64 @@
 import { Footer } from "@/components/layout/Footer";
 import { TeamGrid } from "@/components/about/TeamGrid";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "About Us - Meet the Team",
+    description: "We are 3AM SCROLL - a digital sanctuary for the sleepless generation. Learn about our mission to curate the internet's noise into signals that matter for Gen Z.",
+    openGraph: {
+        title: "About 3AM SCROLL - Meet the Team",
+        description: "A digital sanctuary for the sleepless generation. We curate the internet's noise into signals that matter.",
+        url: "https://3amscroll.com/about",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "About 3AM SCROLL - Meet the Team",
+        description: "A digital sanctuary for the sleepless generation. We curate the internet's noise into signals that matter.",
+    },
+    alternates: {
+        canonical: "https://3amscroll.com/about",
+    },
+};
 
 export default function AboutPage() {
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is 3AM SCROLL?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "3AM SCROLL is a digital sanctuary for the sleepless generation. We curate the internet's noise into signals that matter, providing news, articles, and stories specifically for Gen Z."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What makes 3AM SCROLL different?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We're unfiltered, future-focused, and community-driven. We speak your language and cover stories with the authenticity Gen Z deserves, from AI to climate tech and everything in between."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What topics does 3AM SCROLL cover?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We cover tech, gaming, finance, lifestyle, travel, entertainment, creative content, world news, and career advice - all with a Gen Z perspective."
+                }
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-white dark:bg-black">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
 
             <main>
                 {/* Hero Section */}

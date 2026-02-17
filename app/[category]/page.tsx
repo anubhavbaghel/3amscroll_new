@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { getArticles } from "@/lib/data";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
+import { Metadata } from "next";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -15,13 +16,27 @@ const formatCategory = (slug: string) => {
     return slug.charAt(0).toUpperCase() + slug.slice(1);
 };
 
-export async function generateMetadata({ params }: CategoryPageProps) {
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
     const { category } = await params;
     const categoryName = formatCategory(category);
 
     return {
-        title: `${categoryName} News & Articles | 3AM SCROLL`,
-        description: `Latest ${categoryName} updates, stories, and insights.`,
+        title: `${categoryName} News & Articles`,
+        description: `Explore the latest ${categoryName.toLowerCase()} updates, stories, and insights curated for Gen Z. Stay informed with trending ${categoryName.toLowerCase()} content on 3AM SCROLL.`,
+        openGraph: {
+            title: `${categoryName} News & Articles | 3AM SCROLL`,
+            description: `Latest ${categoryName.toLowerCase()} updates, stories, and insights for Gen Z.`,
+            url: `https://3amscroll.com/${category}`,
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${categoryName} News & Articles | 3AM SCROLL`,
+            description: `Latest ${categoryName.toLowerCase()} updates, stories, and insights for Gen Z.`,
+        },
+        alternates: {
+            canonical: `https://3amscroll.com/${category}`,
+        },
     };
 }
 

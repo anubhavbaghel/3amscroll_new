@@ -1,6 +1,26 @@
 import { Footer } from "@/components/layout/Footer";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Contact Us - Get in Touch",
+    description: "Have a story to pitch? Found a bug? Or just want to say hi? Contact the 3AM SCROLL team. Email: hello@3amscroll.com. We usually reply within 24 hours.",
+    openGraph: {
+        title: "Contact 3AM SCROLL - Get in Touch",
+        description: "Have a story to pitch? Found a bug? Or just want to say hi? We'd love to hear from you.",
+        url: "https://3amscroll.com/contact",
+        type: "website",
+    },
+    twitter: {
+        card: "summary",
+        title: "Contact 3AM SCROLL",
+        description: "Get in touch with the 3AM SCROLL team. We'd love to hear from you.",
+    },
+    alternates: {
+        canonical: "https://3amscroll.com/contact",
+    },
+};
 
 export default function ContactPage() {
     return (

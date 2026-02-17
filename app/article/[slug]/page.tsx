@@ -7,6 +7,8 @@ import { AuthorCard } from "@/components/article/AuthorCard";
 import { LikeButton } from "@/components/article/LikeButton";
 import { BookmarkButton } from "@/components/article/BookmarkButton";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
+import { Breadcrumb } from "@/components/common/Breadcrumb";
+import { BreadcrumbSchema } from "@/components/common/BreadcrumbSchema";
 import { mockArticles } from "@/lib/mock-data";
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
@@ -91,13 +93,31 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         "headline": article.title,
         "image": [article.coverImage],
         "datePublished": article.publishedAt,
-        "dateModified": article.publishedAt,
+        "dateModified": article.updatedAt || article.publishedAt,
         "author": [{
             "@type": "Person",
             "name": article.author.name,
-            "url": `${baseUrl}/author/${article.author.id}`
-        }]
+            "url": `${baseUrl}/author/${article.author.id}`,
+            "image": article.author.avatar
+        }],
+        "publisher": {
+            "@type": "Organization",
+            "name": "3AM SCROLL",
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${baseUrl}/icon-512.png`
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `${baseUrl}/article/${article.slug}`
+        }
     };
+
+    const breadcrumbItems = [
+        { label: article.category, href: `/${article.category.toLowerCase()}` },
+        { label: article.title, href: `/article/${article.slug}` }
+    ];
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
@@ -105,9 +125,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
+            <BreadcrumbSchema items={breadcrumbItems} />
 
             {/* Simple Article Header */}
             <ArticleHeader article={article} />
+
+            {/* Breadcrumb Navigation */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 lg:pt-8">
+                <Breadcrumb items={breadcrumbItems} />
+            </div>
 
             {/* Feature Image */}
             <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">

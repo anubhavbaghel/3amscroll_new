@@ -9,6 +9,7 @@ export interface Article {
     category: string;
     author: Author;
     publishedAt: string;
+    updatedAt?: string; // Optional modification date for SEO
     readTime: number;
     views: number;
     likes: number;

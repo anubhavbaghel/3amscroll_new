@@ -31,15 +31,17 @@ export default async function HomePage() {
                         {/* Main Content Area */}
                         <div className="flex-1 min-w-0">
                             {/* Desktop Hero - Smaller, Contained */}
-                            <div className="hidden lg:block mb-8">
-                                <div className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
-                                    <ArticleHero
-                                        article={heroArticle}
-                                        isSaved={savedArticleIds.has(heroArticle.id)}
-                                        isLiked={likedArticleIds.has(heroArticle.id)}
-                                    />
+                            {heroArticle && (
+                                <div className="hidden lg:block mb-8">
+                                    <div className="relative h-[500px] rounded-2xl overflow-hidden group cursor-pointer">
+                                        <ArticleHero
+                                            article={heroArticle}
+                                            isSaved={savedArticleIds.has(heroArticle.id)}
+                                            isLiked={likedArticleIds.has(heroArticle.id)}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Article Grid */}
                             <div className="space-y-6">

@@ -3,29 +3,49 @@ import { Article, Author } from "@/types";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
 
+// Helper to fetch author profile
+async function getAuthorProfile(authorUuid: string) {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+        .from("profiles")
+        .select("name, avatar, bio")
+        .eq("id", authorUuid)
+        .single();
+
+    return data;
+}
+
 // Helper to map DB result to our App Type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mapDBArticleToAppArticle = (dbArticle: any): Article => ({
-    id: dbArticle.id,
-    slug: dbArticle.slug,
-    title: dbArticle.title,
-    excerpt: dbArticle.excerpt,
-    content: dbArticle.content,
-    coverImage: dbArticle.cover_image,
-    category: dbArticle.category,
-    author: {
-        id: dbArticle.author_id,
-        name: dbArticle.author_name || "Unknown Author",
-        avatar: dbArticle.author_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(dbArticle.author_name || "User")}&background=random`,
-        bio: "", // Placeholder until we have real profiles
-    },
-    publishedAt: dbArticle.published_at,
-    readTime: dbArticle.read_time || Math.ceil((dbArticle.content?.split(/\s+/).length || 0) / 200) || 5,
-    views: dbArticle.views,
-    likes: dbArticle.likes_count || 0,
-    comments: 0,
-    tags: [], // Placeholder
-});
+const mapDBArticleToAppArticle = async (dbArticle: any): Promise<Article> => {
+    // Fetch author profile if we have author_uuid
+    let authorProfile = null;
+    if (dbArticle.author_uuid) {
+        authorProfile = await getAuthorProfile(dbArticle.author_uuid);
+    }
+
+    return {
+        id: dbArticle.id,
+        slug: dbArticle.slug,
+        title: dbArticle.title,
+        excerpt: dbArticle.excerpt,
+        content: dbArticle.content,
+        coverImage: dbArticle.cover_image,
+        category: dbArticle.category,
+        author: {
+            id: dbArticle.author_uuid || dbArticle.author_id,
+            name: authorProfile?.name || dbArticle.author_name || "Unknown Author",
+            avatar: authorProfile?.avatar || dbArticle.author_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(authorProfile?.name || dbArticle.author_name || "User")}&background=random`,
+            bio: authorProfile?.bio || "",
+        },
+        publishedAt: dbArticle.published_at,
+        readTime: dbArticle.read_time || Math.ceil((dbArticle.content?.split(/\s+/).length || 0) / 200) || 5,
+        views: dbArticle.views,
+        likes: dbArticle.likes_count || 0,
+        comments: 0,
+        tags: [], // Placeholder
+    };
+};
 
 export const getArticles = unstable_cache(
     async (): Promise<Article[]> => {
@@ -34,6 +54,7 @@ export const getArticles = unstable_cache(
         const { data, error } = await supabase
             .from("articles")
             .select("*")
+            .eq("status", "published")
             .order("published_at", { ascending: false });
 
         if (error) {
@@ -41,7 +62,7 @@ export const getArticles = unstable_cache(
             return [];
         }
 
-        return (data || []).map(mapDBArticleToAppArticle);
+        return await Promise.all((data || []).map(mapDBArticleToAppArticle));
     },
     ["all-articles"],
     { revalidate: 60, tags: ["articles"] }
@@ -54,6 +75,7 @@ export const getArticleBySlug = cache(async (slug: string): Promise<Article | nu
         .from("articles")
         .select("*")
         .eq("slug", slug)
+        .eq("status", "published")
         .single();
 
     if (error) {
@@ -61,7 +83,7 @@ export const getArticleBySlug = cache(async (slug: string): Promise<Article | nu
         return null;
     }
 
-    return mapDBArticleToAppArticle(data);
+    return await mapDBArticleToAppArticle(data);
 });
 
 export const getTrendingArticles = unstable_cache(
@@ -72,6 +94,7 @@ export const getTrendingArticles = unstable_cache(
         const { data, error } = await supabase
             .from("articles")
             .select("*")
+            .eq("status", "published")
             .order("views", { ascending: false })
             .limit(5);
 
@@ -80,7 +103,7 @@ export const getTrendingArticles = unstable_cache(
             return [];
         }
 
-        return (data || []).map(mapDBArticleToAppArticle);
+        return await Promise.all((data || []).map(mapDBArticleToAppArticle));
     },
     ["trending-articles"],
     { revalidate: 60, tags: ["trending"] }
@@ -95,7 +118,8 @@ export async function getAuthorArticles(authorId: string): Promise<Article[]> {
     const { data, error } = await supabase
         .from("articles")
         .select("*")
-        .eq("author_id", authorId)
+        .eq("author_uuid", authorId)
+        .eq("status", "published")
         .order("published_at", { ascending: false });
 
     if (error) {
@@ -103,29 +127,29 @@ export async function getAuthorArticles(authorId: string): Promise<Article[]> {
         return [];
     }
 
-    return (data || []).map(mapDBArticleToAppArticle);
+    return await Promise.all((data || []).map(mapDBArticleToAppArticle));
 }
 
 export async function getAuthor(authorId: string): Promise<Author | null> {
-    // Hack: Since we don't have a populated "Profiles" table for authors yet (only for users),
-    // we'll try to find one article by this author and grab their details.
-    // In production, authors should have a record in 'profiles'.
+    // Fetch author from profiles table
     const supabase = createPublicClient();
 
     const { data, error } = await supabase
-        .from("articles")
-        .select("author_id, author_name, author_avatar")
-        .eq("author_id", authorId)
-        .limit(1)
+        .from("profiles")
+        .select("*")
+        .eq("id", authorId)
         .single();
 
-    if (error || !data) return null;
+    if (error || !data) {
+        console.error(`Error fetching author ${authorId}:`, error);
+        return null;
+    }
 
     return {
-        id: data.author_id,
-        name: data.author_name,
-        avatar: data.author_avatar,
-        bio: "",
+        id: data.id,
+        name: data.name || "Unknown Author",
+        avatar: data.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}&background=random`,
+        bio: data.bio || "",
     };
 }
 
