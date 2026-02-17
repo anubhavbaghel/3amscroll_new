@@ -16,7 +16,7 @@ interface ArticleHeroProps {
 
 export function ArticleHero({ article, isSaved = false, isLiked = false }: ArticleHeroProps) {
     return (
-        <div className="block relative h-[100dvh] lg:h-[85vh] w-full overflow-hidden group">
+        <div className="block relative h-[100dvh] lg:h-full w-full overflow-hidden group">
             {/* Main Article Link (Overlay) */}
             <Link
                 href={routes.article(article.slug)}
@@ -55,19 +55,19 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
             </div>
 
             {/* Content */}
-            <div className="relative z-20 h-full flex flex-col justify-end p-6 lg:p-12 pb-24 lg:pb-16 text-white pointer-events-none max-w-7xl mx-auto w-full">
+            <div className="relative z-20 h-full flex flex-col justify-end p-6 lg:p-10 pb-24 lg:pb-12 text-white pointer-events-none max-w-7xl mx-auto w-full">
                 {/* Category Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full bg-brand/80 backdrop-blur-md border border-white/20 text-xs lg:text-sm font-bold tracking-wider mb-4 lg:mb-6 w-fit shadow-lg shadow-brand/20 uppercase animate-fade-in-up">
+                <div className="inline-flex items-center gap-2 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full bg-brand/80 backdrop-blur-md border border-white/20 text-xs lg:text-sm font-bold tracking-wider mb-4 lg:mb-4 w-fit shadow-lg shadow-brand/20 uppercase animate-fade-in-up">
                     {article.category}
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-4 lg:mb-6 leading-[0.9] tracking-tight font-display text-white drop-shadow-lg animate-fade-in-up delay-100">
+                <h1 className="text-4xl md:text-6xl lg:text-5xl xl:text-6xl font-black mb-3 lg:mb-4 leading-[0.95] tracking-tight font-display text-white drop-shadow-lg animate-fade-in-up delay-100 line-clamp-3">
                     {article.title}
                 </h1>
 
                 {/* Excerpt */}
-                <p className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-6 lg:mb-8 line-clamp-3 lg:line-clamp-2 max-w-3xl font-medium leading-relaxed animate-fade-in-up delay-200">
+                <p className="text-lg md:text-xl lg:text-lg text-gray-200 mb-6 lg:mb-6 line-clamp-3 lg:line-clamp-2 max-w-2xl font-medium leading-relaxed animate-fade-in-up delay-200">
                     {article.excerpt}
                 </p>
 

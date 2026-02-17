@@ -9,7 +9,7 @@ interface ArticleGridProps {
 
 export function ArticleGrid({ articles, savedArticleIds, likedArticleIds }: ArticleGridProps) {
     return (
-        <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-8">
+        <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
             {articles.map((article, index) => (
                 <ArticleCard
                     key={article.id}

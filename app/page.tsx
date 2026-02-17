@@ -25,18 +25,8 @@ export default async function HomePage() {
             {/* Main Content */}
             <main>
                 {/* Hero Article - Full Screen on Mobile, Contained on Desktop */}
-                <div className="lg:hidden">
-                    <div className="pt-[140px]">
-                        <ArticleHero
-                            article={heroArticle}
-                            isSaved={savedArticleIds.has(heroArticle.id)}
-                            isLiked={likedArticleIds.has(heroArticle.id)}
-                        />
-                    </div>
-                </div>
-
                 {/* Desktop Layout with Sidebar */}
-                <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
+                <div className="max-w-7xl mx-auto px-4 lg:px-6 pb-8 pt-40 lg:pt-8">
                     <div className="flex gap-8">
                         {/* Main Content Area */}
                         <div className="flex-1 min-w-0">
@@ -54,7 +44,7 @@ export default async function HomePage() {
                             {/* Article Grid */}
                             <div className="space-y-6">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+                                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 pb-1 leading-tight">
                                         Latest Stories
                                     </h2>
                                 </div>
