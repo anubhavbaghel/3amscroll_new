@@ -46,7 +46,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
     }, [query, initialArticles]);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-black pt-24 pb-20 px-4 md:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-black pt-44 pb-20 px-4 md:px-8">
             <div className="max-w-4xl mx-auto">
 
                 {/* Search Input Section */}

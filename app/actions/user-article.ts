@@ -244,3 +244,39 @@ export async function getUserArticles() {
         return { error: "An unexpected error occurred" };
     }
 }
+
+export async function deleteUserArticle(articleId: string) {
+    try {
+        const supabase = await createClient();
+
+        // Check authentication
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !user) {
+            return { error: "You must be logged in to delete articles" };
+        }
+
+        // Delete article
+        // RLS policy "Users can delete their own articles" should handle permission check
+        // But we double check by adding eq('author_uuid', user.id) for safety
+        const { error } = await supabase
+            .from('articles')
+            .delete()
+            .eq('id', articleId)
+            .eq('author_uuid', user.id);
+
+        if (error) {
+            console.error('Error deleting article:', error);
+            return { error: "Failed to delete article" };
+        }
+
+        revalidatePath('/');
+        revalidatePath('/my-articles');
+        revalidatePath(`/article/${articleId}`); // Clears cache if user visits deleted article url
+
+        return { success: true };
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        return { error: "An unexpected error occurred" };
+    }
+}

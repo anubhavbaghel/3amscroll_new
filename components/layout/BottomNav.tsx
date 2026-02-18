@@ -61,12 +61,12 @@ export function BottomNav({ user }: BottomNavProps) {
                 {/* 5. Notification / Login */}
                 {user ? (
                     <Link
-                        href="/notifications" // Todo: Create notifications page
-                        className={`p-3 rounded-xl transition-colors ${isActive("/notifications") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                        href="/profile"
+                        className={`p-3 rounded-xl transition-colors ${isActive("/profile") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                             }`}
                     >
-                        <Bell className="w-6 h-6" strokeWidth={isActive("/notifications") ? 2.5 : 2} />
-                        <span className="sr-only">Notifications</span>
+                        <UserIcon className="w-6 h-6" strokeWidth={isActive("/profile") ? 2.5 : 2} />
+                        <span className="sr-only">Profile</span>
                     </Link>
                 ) : (
                     <Link

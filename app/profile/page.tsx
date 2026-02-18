@@ -45,11 +45,34 @@ export default async function ProfilePage() {
     };
 
     // Fetch User Articles
-    const { data: articles } = await supabase
+    const { data: dbArticles } = await supabase
         .from("articles")
         .select("*")
         .eq("author_uuid", authUser.id)
         .order("published_at", { ascending: false });
+
+    // Map DB articles to App Article type
+    const articles: Article[] = (dbArticles || []).map(article => ({
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        excerpt: article.excerpt,
+        content: article.content,
+        coverImage: article.cover_image,
+        category: article.category,
+        author: {
+            id: authUser.id,
+            name: user.name,
+            avatar: user.avatar || "",
+            bio: user.bio || ""
+        },
+        publishedAt: article.published_at,
+        readTime: article.read_time || 5,
+        views: article.views,
+        likes: article.likes_count || 0,
+        comments: article.comments_count || 0,
+        tags: []
+    }));
 
     return (
         <main className="min-h-screen pb-20 bg-white dark:bg-black">
@@ -58,13 +81,13 @@ export default async function ProfilePage() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 border-b border-gray-100 dark:border-dark-border pb-4">
                     <h2 className="text-2xl font-bold font-display">My Stories</h2>
-                    <span className="text-sm text-gray-500">{articles?.length || 0} Published</span>
+                    <span className="text-sm text-gray-500">{articles.length} Published</span>
                 </div>
 
-                {articles && articles.length > 0 ? (
+                {articles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {articles.map((article) => (
-                            <ArticleCard key={article.id} article={article as Article} />
+                            <ArticleCard key={article.id} article={article} />
                         ))}
                     </div>
                 ) : (

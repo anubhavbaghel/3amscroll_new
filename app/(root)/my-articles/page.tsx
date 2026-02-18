@@ -1,28 +1,75 @@
-import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+"use client";
+
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getUserArticles } from "@/app/actions/user-article";
+import { useEffect, useState } from "react";
+import { deleteUserArticle } from "@/app/actions/user-article";
 
-export const metadata: Metadata = {
-    title: "My Articles | 3AM SCROLL",
-    description: "Manage your articles",
-};
+interface Article {
+    id: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    category: string;
+    status: string;
+    slug: string;
+    created_at: string;
+    read_time: number;
+}
 
-export default async function MyArticlesPage() {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+export default function MyArticlesPage() {
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+    const supabase = createClient();
 
-    if (!user) {
-        redirect("/login?redirect=/my-articles");
+    useEffect(() => {
+        const fetchArticles = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                router.push("/login?redirect=/my-articles");
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from("articles")
+                .select("*")
+                .eq("author_uuid", user.id)
+                .order("created_at", { ascending: false });
+
+            if (data) {
+                setArticles(data);
+            }
+            setLoading(false);
+        };
+
+        fetchArticles();
+    }, [router, supabase]);
+
+    const handleDelete = async (articleId: string) => {
+        if (!confirm("Are you sure you want to delete this article? This action cannot be undone.")) return;
+
+        const result = await deleteUserArticle(articleId);
+
+        if (result.success) {
+            setArticles(articles.filter(a => a.id !== articleId));
+        } else {
+            alert(result.error);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white dark:bg-dark-bg flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+        );
     }
-
-    const result = await getUserArticles();
-    const articles = result.articles || [];
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-44 lg:pt-32">
                 <div className="flex items-center justify-between mb-8">
                     <div>
                         <h1 className="text-3xl font-bold font-display mb-2">My Articles</h1>
@@ -42,7 +89,7 @@ export default async function MyArticlesPage() {
                 </div>
 
                 {articles.length === 0 ? (
-                    <div className="text-center py-16">
+                    <div className="text-center py-16 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
                         <svg className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
@@ -65,11 +112,11 @@ export default async function MyArticlesPage() {
                         {articles.map((article) => (
                             <div
                                 key={article.id}
-                                className="border border-gray-200 dark:border-dark-border rounded-lg p-6 hover:shadow-md transition-shadow"
+                                className="border border-gray-200 dark:border-dark-border rounded-lg p-6 hover:shadow-md transition-shadow bg-white dark:bg-dark-surface"
                             >
-                                <div className="flex items-start justify-between">
+                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                     <div className="flex-1">
-                                        <div className="flex items-center gap-3 mb-2">
+                                        <div className="flex items-center gap-3 mb-2 flex-wrap">
                                             <h3 className="text-xl font-semibold font-display">
                                                 {article.title}
                                             </h3>
@@ -86,12 +133,12 @@ export default async function MyArticlesPage() {
                                         <div className="flex items-center gap-4 text-sm text-gray-500">
                                             <span>{article.category}</span>
                                             <span>•</span>
-                                            <span>{article.read_time} min read</span>
+                                            <span>{article.read_time || 5} min read</span>
                                             <span>•</span>
                                             <span>{new Date(article.created_at).toLocaleDateString()}</span>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 ml-4">
+                                    <div className="flex items-center gap-2 md:self-center">
                                         {article.status === 'published' && (
                                             <Link
                                                 href={`/article/${article.slug}`}
@@ -101,11 +148,17 @@ export default async function MyArticlesPage() {
                                             </Link>
                                         )}
                                         <Link
-                                            href={`/write/${article.id}`}
-                                            className="px-4 py-2 rounded-lg bg-brand hover:bg-brand-dark text-white transition-colors text-sm"
+                                            href={`/write/${article.id}`} // We need to ensure dynamic route [id] exists for editing
+                                            className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm"
                                         >
                                             Edit
                                         </Link>
+                                        <button
+                                            onClick={() => handleDelete(article.id)}
+                                            className="px-4 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 transition-colors text-sm"
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -116,3 +169,4 @@ export default async function MyArticlesPage() {
         </div>
     );
 }
+

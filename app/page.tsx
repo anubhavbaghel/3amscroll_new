@@ -26,7 +26,7 @@ export default async function HomePage() {
             <main>
                 {/* Hero Article - Full Screen on Mobile, Contained on Desktop */}
                 {/* Desktop Layout with Sidebar */}
-                <div className="max-w-7xl mx-auto px-4 lg:px-6 pb-8 pt-40 lg:pt-8">
+                <div className="max-w-7xl mx-auto px-4 lg:px-6 pb-8 pt-24 lg:pt-8">
                     <div className="flex gap-8">
                         {/* Main Content Area */}
                         <div className="flex-1 min-w-0">
@@ -55,6 +55,7 @@ export default async function HomePage() {
                                     articles={feedArticles}
                                     savedArticleIds={savedArticleIds}
                                     likedArticleIds={likedArticleIds}
+                                    mobileHeroArticle={heroArticle}
                                 />
                             </div>
 

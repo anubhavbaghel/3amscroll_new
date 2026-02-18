@@ -3,26 +3,29 @@ import { Article, Author } from "@/types";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
 
-// Helper to fetch author profile
-async function getAuthorProfile(authorUuid: string) {
+// Helper to batch fetch author profiles
+async function batchFetchAuthorProfiles(authorUuids: string[]) {
+    if (authorUuids.length === 0) return new Map();
+
     const supabase = createPublicClient();
     const { data } = await supabase
         .from("profiles")
-        .select("name, avatar, bio")
-        .eq("id", authorUuid)
-        .single();
+        .select("id, name, avatar, bio")
+        .in("id", authorUuids);
 
-    return data;
+    // Create a map for quick lookup
+    const profileMap = new Map();
+    (data || []).forEach(profile => {
+        profileMap.set(profile.id, profile);
+    });
+
+    return profileMap;
 }
 
 // Helper to map DB result to our App Type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mapDBArticleToAppArticle = async (dbArticle: any): Promise<Article> => {
-    // Fetch author profile if we have author_uuid
-    let authorProfile = null;
-    if (dbArticle.author_uuid) {
-        authorProfile = await getAuthorProfile(dbArticle.author_uuid);
-    }
+const mapDBArticleToAppArticle = (dbArticle: any, profileMap: Map<string, any>): Article => {
+    const authorProfile = dbArticle.author_uuid ? profileMap.get(dbArticle.author_uuid) : null;
 
     return {
         id: dbArticle.id,
@@ -62,7 +65,13 @@ export const getArticles = unstable_cache(
             return [];
         }
 
-        return await Promise.all((data || []).map(mapDBArticleToAppArticle));
+        if (!data || data.length === 0) return [];
+
+        // Batch fetch all author profiles
+        const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
+        const profileMap = await batchFetchAuthorProfiles(authorUuids);
+
+        return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
     ["all-articles"],
     { revalidate: 60, tags: ["articles"] }
@@ -83,7 +92,10 @@ export const getArticleBySlug = cache(async (slug: string): Promise<Article | nu
         return null;
     }
 
-    return await mapDBArticleToAppArticle(data);
+    // Fetch author profile
+    const profileMap = await batchFetchAuthorProfiles(data.author_uuid ? [data.author_uuid] : []);
+
+    return mapDBArticleToAppArticle(data, profileMap);
 });
 
 export const getTrendingArticles = unstable_cache(
@@ -103,7 +115,13 @@ export const getTrendingArticles = unstable_cache(
             return [];
         }
 
-        return await Promise.all((data || []).map(mapDBArticleToAppArticle));
+        if (!data || data.length === 0) return [];
+
+        // Batch fetch all author profiles
+        const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
+        const profileMap = await batchFetchAuthorProfiles(authorUuids);
+
+        return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
     ["trending-articles"],
     { revalidate: 60, tags: ["trending"] }
@@ -127,7 +145,13 @@ export async function getAuthorArticles(authorId: string): Promise<Article[]> {
         return [];
     }
 
-    return await Promise.all((data || []).map(mapDBArticleToAppArticle));
+    if (!data || data.length === 0) return [];
+
+    // Batch fetch all author profiles
+    const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
+    const profileMap = await batchFetchAuthorProfiles(authorUuids);
+
+    return data.map(article => mapDBArticleToAppArticle(article, profileMap));
 }
 
 export async function getAuthor(authorId: string): Promise<Author | null> {

@@ -5,6 +5,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 async function validateTurnstile(token: string | null) {
+    // Skip validation in development
+    if (process.env.NODE_ENV === 'development') {
+        return true;
+    }
+
     if (!token) return false;
 
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
@@ -37,17 +42,24 @@ export async function login(formData: FormData) {
     const supabase = await createClient();
     const redirectTo = formData.get("redirectTo") as string || "/";
 
-    const data = {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-    };
+    // ... (email/password extraction)
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     const token = formData.get("turnstileToken") as string;
-    if (!(await validateTurnstile(token))) {
+
+    // Only validate if NOT in development
+    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
         return redirect(`/login?error=${encodeURIComponent("Invalid captcha")}`);
     }
 
-    const { error } = await supabase.auth.signInWithPassword(data);
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+        options: {
+            captchaToken: token,
+        },
+    });
 
     if (error) {
         // If we came from a specific page (like admin login), we want to return there with the error
@@ -64,22 +76,27 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
     const supabase = await createClient();
 
-    const data = {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-        options: {
-            data: {
-                full_name: formData.get("fullName") as string,
-            }
-        }
-    };
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const fullName = formData.get("fullName") as string;
 
     const token = formData.get("turnstileToken") as string;
-    if (!(await validateTurnstile(token))) {
+
+    // Only validate if NOT in development
+    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
         return redirect(`/signup?error=${encodeURIComponent("Invalid captcha")}`);
     }
 
-    const { error } = await supabase.auth.signUp(data);
+    const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                full_name: fullName,
+            },
+            captchaToken: token,
+        },
+    });
 
     if (error) {
         console.error("Signup error:", error);
@@ -102,17 +119,23 @@ export async function loginWithState(formData: FormData) {
     const supabase = await createClient();
     const redirectTo = formData.get("redirectTo") as string || "/";
 
-    const data = {
-        email: formData.get("email") as string,
-        password: formData.get("password") as string,
-    };
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     const token = formData.get("turnstileToken") as string;
-    if (!(await validateTurnstile(token))) {
+
+    // Only validate if NOT in development
+    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
         return { success: false, error: "Invalid captcha" };
     }
 
-    const { error } = await supabase.auth.signInWithPassword(data);
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+        options: {
+            captchaToken: token,
+        },
+    });
 
     if (error) {
         return { success: false, error: error.message };

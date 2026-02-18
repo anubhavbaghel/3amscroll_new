@@ -83,8 +83,14 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                 <div className="mt-auto pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between pointer-events-auto">
                     {/* Author (Left) */}
                     <Link href={routes.author(article.author.id)} className="flex items-center gap-2 group/author hover:opacity-80 transition-opacity relative z-20">
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
-                            <Image src={article.author.avatar} alt={article.author.name} fill className="object-cover" />
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                            {article.author.avatar ? (
+                                <Image src={article.author.avatar} alt={article.author.name} fill className="object-cover" />
+                            ) : (
+                                <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                                    {article.author.name?.[0]?.toUpperCase()}
+                                </span>
+                            )}
                         </div>
                         <div className="flex flex-col">
                             <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover/author:text-brand">

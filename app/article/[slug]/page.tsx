@@ -7,10 +7,12 @@ import { AuthorCard } from "@/components/article/AuthorCard";
 import { LikeButton } from "@/components/article/LikeButton";
 import { BookmarkButton } from "@/components/article/BookmarkButton";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
+import { Comments } from "@/components/article/Comments";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { BreadcrumbSchema } from "@/components/common/BreadcrumbSchema";
 import { mockArticles } from "@/lib/mock-data";
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+import { getComments } from "@/app/actions/comment";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
@@ -72,10 +74,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    const [article, savedArticleIds, likedArticleIds] = await Promise.all([
+    const [article, savedArticleIds, likedArticleIds, commentsData] = await Promise.all([
         getArticleBySlug(slug),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
+        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>()),
+        getComments(slug) // Will need to update this to use article ID
     ]);
 
     if (!article) {
@@ -154,13 +157,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <ArticleContent article={article} />
 
                 {/* Author Card */}
-                <div className="mt-12 pt-12 border-t border-gray-200 dark:border-gray-800">
-                    <AuthorCard
-                        author={article.author.name}
-                        authorId={article.author.id}
-                        avatar={article.author.avatar}
-                        bio={article.author.bio}
-                        articlesCount={12}
+                <div className="mt-12">
+                    <AuthorCard author={article.author} />
+                </div>
+
+                {/* Comments Section */}
+                <div className="mt-12">
+                    <Comments
+                        articleId={article.id}
+                        initialComments={commentsData.comments || []}
+                        currentUserId={user?.id}
                     />
                 </div>
 

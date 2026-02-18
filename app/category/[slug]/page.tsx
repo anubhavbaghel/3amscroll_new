@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
 import { ArticleCard } from "@/components/article/ArticleCard";
-import { mockArticles, getCategory } from "@/lib/mock-data";
+import { getArticlesByCategory } from "@/app/actions/search";
+import { siteConfig } from "@/config/site";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -13,39 +14,36 @@ interface CategoryPageProps {
 export default async function CategoryPage({ params }: CategoryPageProps) {
     const { slug } = await params;
 
-    // Get category details
-    const category = getCategory(slug);
+    // Get category details from config
+    const category = siteConfig.categories.find(c => c.slug === slug);
 
     if (!category) {
         notFound();
     }
 
-    // Filter articles by category
-    const categoryArticles = mockArticles.filter(
-        (article) => article.category.toLowerCase() === category.name.toLowerCase()
-    );
+    // Fetch real articles
+    const { articles } = await getArticlesByCategory(category.name);
 
     const stats = {
-        articlesCount: categoryArticles.length,
-        authorsCount: new Set(categoryArticles.map(a => a.author.id)).size
+        articlesCount: articles.length,
+        authorsCount: new Set(articles.map(a => a.author.id)).size
     };
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16 lg:mt-0">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-44 lg:pt-8 min-h-screen">
                 <CategoryHeader
                     category={category}
                     count={stats.articlesCount}
-                    featuredArticle={categoryArticles[0]}
+                    featuredArticle={articles[0]}
                 />
 
                 <div className="flex gap-8">
                     {/* Main Content */}
                     <div className="flex-1 min-w-0">
-                        {categoryArticles.length > 0 ? (
+                        {articles.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {categoryArticles.map((article) => (
+                                {articles.map((article) => (
                                     <ArticleCard key={article.id} article={article} />
                                 ))}
                             </div>

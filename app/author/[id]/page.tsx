@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { AuthorProfileHeader } from "@/components/author/AuthorProfileHeader";
-import { getAuthor, getAuthorArticles } from "@/lib/mock-data";
+import { getAuthor, getAuthorArticles } from "@/lib/data";
 
 interface AuthorPageProps {
     params: Promise<{
@@ -12,13 +12,13 @@ interface AuthorPageProps {
 
 export default async function AuthorPage({ params }: AuthorPageProps) {
     const { id } = await params;
-    const author = getAuthor(id);
+    const author = await getAuthor(id);
 
     if (!author) {
         notFound();
     }
 
-    const articles = getAuthorArticles(id);
+    const articles = await getAuthorArticles(id);
 
     const stats = {
         articles: articles.length,
@@ -28,7 +28,6 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-
             <main>
                 <AuthorProfileHeader author={author} stats={stats} />
 

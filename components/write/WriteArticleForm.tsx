@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from 'next/dynamic';
 import { ImageUpload } from "@/components/admin/ImageUpload";
-import { createUserArticle } from "@/app/actions/user-article";
+import { createUserArticle, updateUserArticle } from "@/app/actions/user-article";
 import { toast } from "sonner";
 
 const Editor = dynamic(() => import("@/components/admin/Editor").then(mod => mod.Editor), {
@@ -23,31 +23,46 @@ const CATEGORIES = [
     "Lifestyle",
 ];
 
-export function WriteArticleForm() {
+interface WriteArticleFormProps {
+    initialData?: {
+        id: string;
+        title: string;
+        slug: string;
+        excerpt: string;
+        content: string;
+        coverImage: string;
+        category: string;
+        status: string;
+    };
+}
+
+export function WriteArticleForm({ initialData }: WriteArticleFormProps) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const [formData, setFormData] = useState({
-        title: "",
-        slug: "",
-        excerpt: "",
-        content: "",
-        coverImage: "",
-        category: "",
+        title: initialData?.title || "",
+        slug: initialData?.slug || "",
+        excerpt: initialData?.excerpt || "",
+        content: initialData?.content || "",
+        coverImage: initialData?.coverImage || "",
+        category: initialData?.category || "",
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Auto-generate slug from title
+    // Auto-generate slug from title (only for new articles)
     const handleTitleChange = (title: string) => {
-        setFormData(prev => ({
-            ...prev,
-            title,
-            slug: title
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-|-$/g, '')
-        }));
+        setFormData(prev => {
+            const updates: any = { title };
+            if (!initialData) {
+                updates.slug = title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-|-$/g, '');
+            }
+            return { ...prev, ...updates };
+        });
         setErrors(prev => ({ ...prev, title: '' }));
     };
 
@@ -55,10 +70,19 @@ export function WriteArticleForm() {
         setErrors({});
 
         startTransition(async () => {
-            const result = await createUserArticle({
-                ...formData,
-                status,
-            });
+            let result;
+
+            if (initialData) {
+                result = await updateUserArticle(initialData.id, {
+                    ...formData,
+                    status,
+                });
+            } else {
+                result = await createUserArticle({
+                    ...formData,
+                    status,
+                });
+            }
 
             if (result.error) {
                 toast.error(result.error);
