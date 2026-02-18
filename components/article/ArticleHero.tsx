@@ -28,11 +28,11 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
             <div className="absolute inset-0">
                 <Image
                     src={article.coverImage}
-                    alt={article.title}
+                    alt={`${article.title} - Cover Image`}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     priority
-                    sizes="100vw"
+                    sizes="(max-width: 1024px) 100vw, (max-width: 1536px) 80vw, 1200px"
                 />
                 {/* Enhanced Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 lg:opacity-80" />

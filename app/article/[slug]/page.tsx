@@ -11,8 +11,7 @@ import { MobileArticleBar } from "@/components/article/MobileArticleBar";
 import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { Comments } from "@/components/article/Comments";
-import { mockArticles } from "@/lib/mock-data";
-import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds, getRelatedArticles } from "@/lib/data";
 import { getComments } from "@/app/actions/comment";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
@@ -75,12 +74,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
     if (!article) notFound();
 
-    const relatedArticles = mockArticles
-        .filter((a) => a.category === article.category && a.id !== article.id)
-        .slice(0, 3);
+    const relatedArticles = await getRelatedArticles(article.category, article.id);
 
     const isBookmarked = savedArticleIds.has(article.id);
     const isLiked = likedArticleIds.has(article.id);
+
 
     const jsonLd = {
         "@context": "https://schema.org",

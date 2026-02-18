@@ -18,13 +18,12 @@ export function Logo({ className, variant = "default" }: LogoProps) {
         <Link
             href={routes.home}
             className={cn(
-                "font-display font-bold tracking-tight hover:text-blue-600 transition-colors relative group",
+                "font-logo font-bold tracking-tighter hover:text-brand transition-colors text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400",
                 sizeClasses[variant],
                 className
             )}
         >
-            <span className="relative z-10">3AM SCROLL</span>
-            <span className="absolute -inset-1 bg-blue-100 dark:bg-blue-900/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg -z-0" />
+            3AM SCROLL
         </Link>
     );
 }

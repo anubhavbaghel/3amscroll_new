@@ -104,7 +104,22 @@ export default async function RootLayout({
             <head>
                 <link rel="preconnect" href="https://api.fontshare.com" />
                 <link rel="dns-prefetch" href="https://api.fontshare.com" />
-                <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+                <link
+                    rel="preload"
+                    as="style"
+                    href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap"
+                />
+                <link
+                    href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap"
+                    rel="stylesheet"
+                    media="print"
+                    onLoad={(e) => {
+                        (e.currentTarget as HTMLLinkElement).media = "all";
+                    }}
+                />
+                <noscript>
+                    <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap" rel="stylesheet" />
+                </noscript>
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{

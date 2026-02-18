@@ -2,17 +2,24 @@ import { Footer } from "@/components/layout/Footer";
 import { TrendingHero } from "@/components/trending/TrendingHero";
 import { TrendingGrid } from "@/components/trending/TrendingGrid";
 import { TrendingTicker } from "@/components/trending/TrendingTicker";
-import { mockArticles } from "@/lib/mock-data";
+import { getTrendingArticles, getArticles } from "@/lib/data";
 
-export default function TrendingPage() {
-    // Sort articles by views/popularity
-    const sortedArticles = [...mockArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
+export default async function TrendingPage() {
+    // Fetch real data from DB
+    const [trendingArticles, allArticles] = await Promise.all([
+        getTrendingArticles(),
+        getArticles()
+    ]);
+
+    // Sort or use trendingArticles directly
+    const sortedArticles = trendingArticles.length > 0 ? trendingArticles : allArticles;
 
     // Top 3 for Hero
     const topArticles = sortedArticles.slice(0, 3);
 
     // Rest for List
     const listArticles = sortedArticles.slice(3);
+
 
     return (
         <div className="min-h-screen bg-white dark:bg-black overflow-x-hidden">

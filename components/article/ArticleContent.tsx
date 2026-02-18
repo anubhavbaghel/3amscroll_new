@@ -1,7 +1,4 @@
-"use client";
-
 import { Article } from "@/types";
-import DOMPurify from "isomorphic-dompurify";
 
 interface ArticleContentProps {
     article: Article;
@@ -65,8 +62,9 @@ export function ArticleContent({ article }: ArticleContentProps) {
         >
             <div
                 className="article-body"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
+                dangerouslySetInnerHTML={{ __html: article.content }}
             />
         </article>
     );
 }
+

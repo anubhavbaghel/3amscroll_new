@@ -1,9 +1,9 @@
-import dynamic from "next/dynamic";
-const Sidebar = dynamic(() => import("@/components/layout/Sidebar").then((mod) => mod.Sidebar));
+import { Sidebar } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleGrid } from "@/components/home/ArticleGrid";
 import { getArticles, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+
 import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
