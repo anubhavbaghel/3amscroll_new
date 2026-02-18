@@ -22,11 +22,12 @@ export default async function ProfilePage() {
         return <div>Profile not found</div>;
     }
 
-    // Cast to User type
+    // Cast to User type — use authUser.email since profiles table doesn't store email
+    const userEmail = authUser.email || "";
     const user: User = {
         id: profileData.id,
-        email: profileData.email,
-        name: authUser.user_metadata.full_name || authUser.user_metadata.name || profileData.username || profileData.email.split('@')[0], // Fallback hierarchy
+        email: userEmail,
+        name: authUser.user_metadata.full_name || authUser.user_metadata.name || profileData.username || userEmail.split('@')[0] || "User",
         username: profileData.username,
         avatar: profileData.avatar_url,
         banner: profileData.banner_url,
@@ -34,14 +35,14 @@ export default async function ProfilePage() {
         website: profileData.website,
         location: profileData.location,
         social_links: profileData.social_links,
-        role: "user", // Default, though we could fetch from DB
-        savedArticles: [], // We'll implementations saved later
+        role: "user",
+        savedArticles: [],
         preferences: {
             categories: [],
             notifications: false,
             theme: "system"
         },
-        joinedAt: profileData.updated_at // Using updated_at or created_at if available
+        joinedAt: profileData.updated_at
     };
 
     // Fetch User Articles

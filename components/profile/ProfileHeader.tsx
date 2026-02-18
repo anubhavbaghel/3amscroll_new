@@ -64,7 +64,7 @@ export function ProfileHeader({ user, isOwnProfile }: ProfileHeaderProps) {
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white font-display">
                             {user.name}
                         </h1>
-                        <p className="text-gray-500 dark:text-gray-400 font-medium">@{user.username || user.email.split('@')[0]}</p>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium">@{user.username || user.email?.split('@')[0] || "user"}</p>
 
                         {user.bio && (
                             <p className="mt-2 text-gray-700 dark:text-gray-300 max-w-2xl text-sm md:text-base leading-relaxed">
