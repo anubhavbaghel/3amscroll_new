@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getAuthor } from "@/lib/mock-data";
+import { getAuthor } from "@/lib/data";
 
-// We'll use the existing authors from mock-data
-const TEAM_IDS = ["author-1", "author-2", "author-3", "author-4", "author-5", "author-6"];
+const TEAM_IDS = ["711d5fbc-e448-433e-b873-1382dfa54823", "author-2", "author-3"]; // Replace with real IDs or fetch all contributors
 
-export function TeamGrid() {
-    const team = TEAM_IDS.map(id => getAuthor(id)).filter(Boolean);
+export async function TeamGrid() {
+    const teamResults = await Promise.all(TEAM_IDS.map(id => getAuthor(id)));
+    const team = teamResults.filter(Boolean);
 
     return (
         <section className="py-20 bg-gray-50 dark:bg-gray-900/50">

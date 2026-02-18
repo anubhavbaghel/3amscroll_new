@@ -1,11 +1,6 @@
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
-import dynamic from "next/dynamic";
-
-const CategoryHeader = dynamic(
-    () => import("@/components/category/CategoryHeader").then((mod) => mod.CategoryHeader),
-    { ssr: true, loading: () => <div className="h-48 w-full bg-gray-100 dark:bg-gray-900 animate-pulse rounded-2xl mb-12" /> }
-);
+import { DynamicCategoryHeader } from "@/components/category/DynamicCategoryHeader";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { getArticlesByCategory } from "@/app/actions/search";
 import { siteConfig } from "@/config/site";
@@ -37,7 +32,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     return (
         <div className="min-h-screen bg-white dark:bg-black">
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-44 lg:pt-8 min-h-screen">
-                <CategoryHeader
+                <DynamicCategoryHeader
                     category={category}
                     count={stats.articlesCount}
                     featuredArticle={articles[0]}
