@@ -77,7 +77,7 @@ export const getArticles = unstable_cache(
     { revalidate: 60, tags: ["articles"] }
 );
 
-const getCachedArticleBySlug = unstable_cache(
+const getCachedArticleBySlug = (slug: string) => unstable_cache(
     async (slug: string) => {
         const supabase = createPublicClient();
         const { data, error } = await supabase
@@ -95,9 +95,9 @@ const getCachedArticleBySlug = unstable_cache(
         const profileMap = await batchFetchAuthorProfiles(data.author_uuid ? [data.author_uuid] : []);
         return mapDBArticleToAppArticle(data, profileMap);
     },
-    ["article-by-slug"],
+    ["article-by-slug", slug],
     { revalidate: 60, tags: ["articles"] }
-);
+)(slug);
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return getCachedArticleBySlug(slug);
@@ -128,7 +128,7 @@ export const getTrendingArticles = unstable_cache(
     { revalidate: 60, tags: ["trending"] }
 );
 
-const getCachedAuthorArticles = unstable_cache(
+const getCachedAuthorArticles = (authorId: string) => unstable_cache(
     async (authorId: string) => {
         const supabase = createPublicClient();
         const { data, error } = await supabase
@@ -149,15 +149,15 @@ const getCachedAuthorArticles = unstable_cache(
         const profileMap = await batchFetchAuthorProfiles(authorUuids);
         return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
-    ["author-articles"],
+    ["author-articles", authorId],
     { revalidate: 60, tags: ["articles", "authors"] }
-);
+)(authorId);
 
 export async function getAuthorArticles(authorId: string): Promise<Article[]> {
     return getCachedAuthorArticles(authorId);
 }
 
-const getCachedAuthor = unstable_cache(
+const getCachedAuthor = (authorId: string) => unstable_cache(
     async (authorId: string) => {
         const supabase = createPublicClient();
         const { data, error } = await supabase
@@ -180,9 +180,9 @@ const getCachedAuthor = unstable_cache(
             bio: data.bio || "",
         };
     },
-    ["author-profile"],
+    ["author-profile", authorId],
     { revalidate: 60, tags: ["authors"] }
-);
+)(authorId);
 
 export async function getAuthor(authorId: string): Promise<Author | null> {
     return getCachedAuthor(authorId);
@@ -213,7 +213,7 @@ export async function getLikedArticleIds(userId: string): Promise<Set<string>> {
     return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
 
-const getCachedRelatedArticles = unstable_cache(
+const getCachedRelatedArticles = (category: string, excludeId: string) => unstable_cache(
     async (category: string, excludeId: string) => {
         const supabase = createPublicClient();
         const { data, error } = await supabase
@@ -236,9 +236,9 @@ const getCachedRelatedArticles = unstable_cache(
         const profileMap = await batchFetchAuthorProfiles(authorUuids);
         return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
-    ["related-articles"],
+    ["related-articles", category, excludeId],
     { revalidate: 60, tags: ["articles"] }
-);
+)(category, excludeId);
 
 export async function getRelatedArticles(category: string, excludeId: string): Promise<Article[]> {
     return getCachedRelatedArticles(category, excludeId);
