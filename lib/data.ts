@@ -181,8 +181,10 @@ export async function getAuthor(authorId: string): Promise<Author | null> {
                 .eq("id", authorId)
                 .single();
 
-            if (error || !data) {
-                console.error(`Error fetching author ${authorId}:`, error);
+            if (error) {
+                if (error.code !== 'PGRST116') {
+                    console.error(`Error fetching author ${authorId}:`, error);
+                }
                 return null;
             }
 

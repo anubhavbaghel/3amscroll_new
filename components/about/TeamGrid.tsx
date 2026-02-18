@@ -1,12 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getAuthor } from "@/lib/data";
-
-const TEAM_IDS = ["711d5fbc-e448-433e-b873-1382dfa54823"]; // Add more real UUIDs as needed
+import { createPublicClient } from "@/lib/supabase/server";
 
 export async function TeamGrid() {
-    const teamResults = await Promise.all(TEAM_IDS.map(id => getAuthor(id)));
-    const team = teamResults.filter(Boolean);
+    const supabase = createPublicClient();
+
+    const { data: team = [] } = await supabase
+        .from("profiles")
+        .select("*")
+        .limit(6);
+
 
     return (
         <section className="py-20 bg-gray-50 dark:bg-gray-900/50">
