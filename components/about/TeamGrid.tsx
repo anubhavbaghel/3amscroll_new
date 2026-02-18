@@ -5,10 +5,12 @@ import { createPublicClient } from "@/lib/supabase/server";
 export async function TeamGrid() {
     const supabase = createPublicClient();
 
-    const { data: team = [] } = await supabase
+    const { data } = await supabase
         .from("profiles")
         .select("*")
         .limit(6);
+
+    const team = data || [];
 
 
     return (
