@@ -59,7 +59,7 @@ export function BottomNav({ user }: BottomNavProps) {
                 </Link>
 
                 {/* 5. Notification / Login */}
-                {user ? (
+                {user?.id ? (
                     <Link
                         href="/profile"
                         className={`p-3 rounded-xl transition-colors ${isActive("/profile") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
@@ -70,12 +70,12 @@ export function BottomNav({ user }: BottomNavProps) {
                     </Link>
                 ) : (
                     <Link
-                        href="/login"
-                        className={`p-3 rounded-xl transition-colors ${isActive("/login") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                        href={routes.login}
+                        className={`flex flex-col items-center gap-0.5 p-2 rounded-xl transition-colors ${isActive(routes.login) ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                             }`}
                     >
-                        <UserIcon className="w-6 h-6" strokeWidth={isActive("/login") ? 2.5 : 2} />
-                        <span className="sr-only">Login</span>
+                        <UserIcon className="w-6 h-6" strokeWidth={1.5} />
+                        <span className="text-[10px] font-medium">Login</span>
                     </Link>
                 )}
             </div>
