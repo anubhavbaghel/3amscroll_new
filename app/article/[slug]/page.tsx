@@ -63,7 +63,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const { slug } = await params;
 
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     const [article, savedArticleIds, likedArticleIds, commentsData] = await Promise.all([
         getArticleBySlug(slug),

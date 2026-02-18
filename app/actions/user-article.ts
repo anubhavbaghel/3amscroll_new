@@ -75,7 +75,8 @@ export async function createUserArticle(data: CreateUserArticleData) {
         const supabase = await createClient();
 
         // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const user = authData?.user;
 
         if (authError || !user) {
             return { error: "You must be logged in to create articles" };
@@ -150,7 +151,8 @@ export async function updateUserArticle(articleId: string, data: CreateUserArtic
     try {
         const supabase = await createClient();
 
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const user = authData?.user;
 
         if (authError || !user) {
             return { error: "You must be logged in to update articles" };
@@ -218,7 +220,8 @@ export async function getUserArticles() {
     try {
         const supabase = await createClient();
 
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const user = authData?.user;
 
         if (authError || !user) {
             return { error: "You must be logged in" };
@@ -250,7 +253,8 @@ export async function deleteUserArticle(articleId: string) {
         const supabase = await createClient();
 
         // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        const user = authData?.user;
 
         if (authError || !user) {
             return { error: "You must be logged in to delete articles" };

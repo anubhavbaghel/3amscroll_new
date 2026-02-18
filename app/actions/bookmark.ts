@@ -7,7 +7,8 @@ export async function toggleBookmark(articleId: string) {
     const supabase = await createClient();
 
     // Check if user is logged in
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
     if (!user) {
         return { error: "You must be logged in to save articles." };
     }

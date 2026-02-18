@@ -2,7 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export default async function DebugAuthPage() {
     const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data, error: authError } = await supabase.auth.getUser();
+    const user = data?.user;
 
     let profile = null;
     let profileError = null;

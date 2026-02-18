@@ -8,7 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     const [allArticles, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
         getArticles(),

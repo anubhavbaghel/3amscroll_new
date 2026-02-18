@@ -11,7 +11,8 @@ interface EditPageProps {
 export default async function EditPage({ params }: EditPageProps) {
     const { id } = await params;
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     if (!user) {
         redirect("/login");

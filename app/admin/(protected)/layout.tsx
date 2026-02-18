@@ -4,8 +4,8 @@ import { ReactNode } from "react";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
     const supabase = await createClient();
-
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     if (!user) {
         redirect("/admin/login");

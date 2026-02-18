@@ -10,7 +10,8 @@ export const metadata = {
 
 export default async function NotificationsPage() {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     return (
         <div className="min-h-screen bg-white dark:bg-black pt-20 pb-24">

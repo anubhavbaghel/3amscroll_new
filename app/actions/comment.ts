@@ -7,7 +7,8 @@ export async function createComment(articleId: string, content: string) {
     const supabase = await createClient();
 
     // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    const user = authData?.user;
 
     if (authError || !user) {
         return { error: "You must be logged in to comment." };
@@ -52,7 +53,8 @@ export async function deleteComment(commentId: string) {
     const supabase = await createClient();
 
     // Check authentication
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+    const user = authData?.user;
 
     if (authError || !user) {
         return { error: "You must be logged in." };

@@ -77,39 +77,35 @@ export const getArticles = unstable_cache(
     { revalidate: 60, tags: ["articles"] }
 );
 
+const getCachedArticleBySlug = unstable_cache(
+    async (slug: string) => {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from("articles")
+            .select("*")
+            .eq("slug", slug)
+            .eq("status", "published")
+            .single();
+
+        if (error) {
+            console.error(`Error fetching article ${slug}:`, error);
+            return null;
+        }
+
+        const profileMap = await batchFetchAuthorProfiles(data.author_uuid ? [data.author_uuid] : []);
+        return mapDBArticleToAppArticle(data, profileMap);
+    },
+    ["article-by-slug"],
+    { revalidate: 60, tags: ["articles"] }
+);
+
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-    return unstable_cache(
-        async () => {
-            const supabase = createPublicClient();
-
-            const { data, error } = await supabase
-                .from("articles")
-                .select("*")
-                .eq("slug", slug)
-                .eq("status", "published")
-                .single();
-
-            if (error) {
-                console.error(`Error fetching article ${slug}:`, error);
-                return null;
-            }
-
-            // Fetch author profile
-            const profileMap = await batchFetchAuthorProfiles(data.author_uuid ? [data.author_uuid] : []);
-
-            return mapDBArticleToAppArticle(data, profileMap);
-        },
-        ["article-by-slug", slug],
-        { revalidate: 60, tags: ["articles"] }
-    )();
+    return getCachedArticleBySlug(slug);
 }
-
 
 export const getTrendingArticles = unstable_cache(
     async (): Promise<Article[]> => {
         const supabase = createPublicClient();
-
-        // Sort by views + likes (simple popularity metric)
         const { data, error } = await supabase
             .from("articles")
             .select("*")
@@ -124,87 +120,76 @@ export const getTrendingArticles = unstable_cache(
 
         if (!data || data.length === 0) return [];
 
-        // Batch fetch all author profiles
         const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
         const profileMap = await batchFetchAuthorProfiles(authorUuids);
-
         return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
     ["trending-articles"],
     { revalidate: 60, tags: ["trending"] }
 );
 
-// TODO: Implement getAuthor(id) properly when we reference real "Profiles" table
-// For now, since articles store author info directly (denormalized in mock migration),
-// we can just fetch articles by author_id to reconstruct the author page.
+const getCachedAuthorArticles = unstable_cache(
+    async (authorId: string) => {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from("articles")
+            .select("*")
+            .eq("author_uuid", authorId)
+            .eq("status", "published")
+            .order("published_at", { ascending: false });
+
+        if (error) {
+            console.error(`Error fetching articles for author ${authorId}:`, error);
+            return [];
+        }
+
+        if (!data || data.length === 0) return [];
+
+        const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
+        const profileMap = await batchFetchAuthorProfiles(authorUuids);
+        return data.map(article => mapDBArticleToAppArticle(article, profileMap));
+    },
+    ["author-articles"],
+    { revalidate: 60, tags: ["articles", "authors"] }
+);
+
 export async function getAuthorArticles(authorId: string): Promise<Article[]> {
-    return unstable_cache(
-        async () => {
-            const supabase = createPublicClient();
-
-            const { data, error } = await supabase
-                .from("articles")
-                .select("*")
-                .eq("author_uuid", authorId)
-                .eq("status", "published")
-                .order("published_at", { ascending: false });
-
-            if (error) {
-                console.error(`Error fetching articles for author ${authorId}:`, error);
-                return [];
-            }
-
-            if (!data || data.length === 0) return [];
-
-            // Batch fetch all author profiles
-            const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
-            const profileMap = await batchFetchAuthorProfiles(authorUuids);
-
-            return data.map(article => mapDBArticleToAppArticle(article, profileMap));
-        },
-        ["author-articles", authorId],
-        { revalidate: 60, tags: ["articles", "authors"] }
-    )();
+    return getCachedAuthorArticles(authorId);
 }
 
+const getCachedAuthor = unstable_cache(
+    async (authorId: string) => {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", authorId)
+            .single();
 
+        if (error) {
+            if (error.code !== 'PGRST116') {
+                console.error(`Error fetching author ${authorId}:`, error);
+            }
+            return null;
+        }
+
+        return {
+            id: data.id,
+            name: data.name || "Unknown Author",
+            avatar: data.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}&background=random`,
+            bio: data.bio || "",
+        };
+    },
+    ["author-profile"],
+    { revalidate: 60, tags: ["authors"] }
+);
 
 export async function getAuthor(authorId: string): Promise<Author | null> {
-    return unstable_cache(
-        async () => {
-            // Fetch author from profiles table
-            const supabase = createPublicClient();
-
-            const { data, error } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", authorId)
-                .single();
-
-            if (error) {
-                if (error.code !== 'PGRST116') {
-                    console.error(`Error fetching author ${authorId}:`, error);
-                }
-                return null;
-            }
-
-            return {
-                id: data.id,
-                name: data.name || "Unknown Author",
-                avatar: data.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}&background=random`,
-                bio: data.bio || "",
-            };
-        },
-        ["author-profile", authorId],
-        { revalidate: 60, tags: ["authors"] }
-    )();
+    return getCachedAuthor(authorId);
 }
-
-
 
 export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
     const supabase = await createClient();
-
     const { data, error } = await supabase
         .from("bookmarks")
         .select("article_id")
@@ -214,54 +199,49 @@ export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
         console.error("Error fetching saved articles:", error);
         return new Set();
     }
-
     return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
 
 export async function getLikedArticleIds(userId: string): Promise<Set<string>> {
     const supabase = await createClient();
-
     const { data, error } = await supabase
         .from("likes")
         .select("article_id")
         .eq("user_id", userId);
 
-    if (error) {
-        return new Set();
-    }
-
+    if (error) return new Set();
     return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
 
+const getCachedRelatedArticles = unstable_cache(
+    async (category: string, excludeId: string) => {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from("articles")
+            .select("*")
+            .eq("status", "published")
+            .eq("category", category)
+            .neq("id", excludeId)
+            .order("published_at", { ascending: false })
+            .limit(3);
+
+        if (error) {
+            console.error("Error fetching related articles:", error);
+            return [];
+        }
+
+        if (!data || data.length === 0) return [];
+
+        const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
+        const profileMap = await batchFetchAuthorProfiles(authorUuids);
+        return data.map(article => mapDBArticleToAppArticle(article, profileMap));
+    },
+    ["related-articles"],
+    { revalidate: 60, tags: ["articles"] }
+);
+
 export async function getRelatedArticles(category: string, excludeId: string): Promise<Article[]> {
-    return unstable_cache(
-        async () => {
-            const supabase = createPublicClient();
-
-            const { data, error } = await supabase
-                .from("articles")
-                .select("*")
-                .eq("status", "published")
-                .eq("category", category)
-                .neq("id", excludeId)
-                .order("published_at", { ascending: false })
-                .limit(3);
-
-            if (error) {
-                console.error("Error fetching related articles:", error);
-                return [];
-            }
-
-            if (!data || data.length === 0) return [];
-
-            const authorUuids = [...new Set(data.map(a => a.author_uuid).filter(Boolean))];
-            const profileMap = await batchFetchAuthorProfiles(authorUuids);
-
-            return data.map(article => mapDBArticleToAppArticle(article, profileMap));
-        },
-        ["related-articles", category, excludeId],
-        { revalidate: 60, tags: ["articles"] }
-    )();
+    return getCachedRelatedArticles(category, excludeId);
 }
 
 

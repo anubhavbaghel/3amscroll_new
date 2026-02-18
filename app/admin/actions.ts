@@ -8,7 +8,8 @@ export async function createArticle(formData: FormData) {
     const supabase = await createClient();
 
     // Get current user to set as author
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData?.user;
 
     if (!user) {
         redirect("/login");
@@ -105,7 +106,8 @@ export async function deleteArticle(id: string) {
     const supabase = await createClient();
 
     // Auth check
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData?.user;
     if (!user) {
         throw new Error("Unauthorized");
     }

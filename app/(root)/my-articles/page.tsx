@@ -26,7 +26,8 @@ export default function MyArticlesPage() {
 
     useEffect(() => {
         const fetchArticles = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: authData } = await supabase.auth.getUser();
+            const user = authData?.user;
             if (!user) {
                 router.push("/login?redirect=/my-articles");
                 return;

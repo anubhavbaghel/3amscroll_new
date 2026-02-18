@@ -8,7 +8,8 @@ import { User, Article } from "@/types";
 
 export default async function ProfilePage() {
     const supabase = await createClient();
-    const { data: { user: authUser } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const authUser = data?.user;
 
     if (!authUser) {
         redirect("/login?redirectTo=/profile");
