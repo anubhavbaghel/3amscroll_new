@@ -3,14 +3,14 @@ import Image from "next/image";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { ArticleHeader } from "@/components/article/ArticleHeader";
-import { AuthorCard } from "@/components/article/AuthorCard";
+import { AuthorCardDetailed } from "@/components/article/AuthorCardDetailed";
 import { LikeButton } from "@/components/article/LikeButton";
 import { BookmarkButton } from "@/components/article/BookmarkButton";
 import { ShareButton } from "@/components/article/ShareButton";
+import { MobileArticleBar } from "@/components/article/MobileArticleBar";
+import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { Comments } from "@/components/article/Comments";
-import { Breadcrumb } from "@/components/common/Breadcrumb";
-import { BreadcrumbSchema } from "@/components/common/BreadcrumbSchema";
 import { mockArticles } from "@/lib/mock-data";
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
 import { getComments } from "@/app/actions/comment";
@@ -29,9 +29,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     const article = await getArticleBySlug(slug);
 
     if (!article) {
-        return {
-            title: "Article Not Found | 3AM SCROLL",
-        };
+        return { title: "Article Not Found | 3AM SCROLL" };
     }
 
     const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'https://3amscroll.vercel.app'}/api/og`);
@@ -49,14 +47,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             description: article.excerpt,
             url: `https://3amscroll.com/article/${article.slug}`,
             siteName: '3AM SCROLL',
-            images: [
-                {
-                    url: ogUrl.toString(),
-                    width: 1200,
-                    height: 630,
-                    alt: article.title,
-                },
-            ],
+            images: [{ url: ogUrl.toString(), width: 1200, height: 630, alt: article.title }],
             locale: 'en_US',
             type: 'article',
         },
@@ -79,17 +70,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         getArticleBySlug(slug),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
         user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        getComments(slug) // Will need to update this to use article ID
+        getComments(slug),
     ]);
 
-    if (!article) {
-        notFound();
-    }
+    if (!article) notFound();
 
-    // Get related articles (same category, excluding current)
     const relatedArticles = mockArticles
         .filter((a) => a.category === article.category && a.id !== article.id)
         .slice(0, 3);
+
+    const isBookmarked = savedArticleIds.has(article.id);
+    const isLiked = likedArticleIds.has(article.id);
 
     const jsonLd = {
         "@context": "https://schema.org",
@@ -98,72 +89,87 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         "image": [article.coverImage],
         "datePublished": article.publishedAt,
         "dateModified": article.updatedAt || article.publishedAt,
-        "author": [{
-            "@type": "Person",
-            "name": article.author.name,
-            "url": `${baseUrl}/author/${article.author.id}`,
-            "image": article.author.avatar
-        }],
-        "publisher": {
-            "@type": "Organization",
-            "name": "3AM SCROLL",
-            "logo": {
-                "@type": "ImageObject",
-                "url": `${baseUrl}/icon-512.png`
-            }
-        },
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": `${baseUrl}/article/${article.slug}`
-        }
+        "author": [{ "@type": "Person", "name": article.author.name, "url": `${baseUrl}/author/${article.author.id}` }],
+        "publisher": { "@type": "Organization", "name": "3AM SCROLL" },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${baseUrl}/article/${article.slug}` }
     };
-
-    const breadcrumbItems = [
-        { label: article.category, href: `/${article.category.toLowerCase()}` },
-        { label: article.title, href: `/article/${article.slug}` }
-    ];
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-            <BreadcrumbSchema items={breadcrumbItems} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-            {/* Simple Article Header */}
+            <ArticleNavbar
+                user={user}
+                articleId={article.id}
+                articleTitle={article.title}
+                articleSlug={article.slug}
+                initialIsBookmarked={isBookmarked}
+            />
+
+            {/* ─── ARTICLE HEADER ─────────────────────────────────────
+                Order: category → title → date/readtime → author+follow → excerpt
+            ──────────────────────────────────────────────────────── */}
             <ArticleHeader article={article} />
 
-            {/* Breadcrumb Navigation */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-24 lg:pt-8">
-                <Breadcrumb items={breadcrumbItems} />
-            </div>
-
-            {/* Feature Image */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg">
+            {/* ─── COVER IMAGE — wider than text column ─────────────── */}
+            <div className="max-w-[860px] mx-auto px-4 sm:px-6 mt-8 mb-10">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
                     <Image
                         src={article.coverImage}
                         alt={article.title}
                         fill
                         className="object-cover"
                         priority
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                        sizes="(max-width: 768px) 100vw, 860px"
                     />
                 </div>
             </div>
 
-            {/* Main Content */}
-            <main className="max-w-3xl mx-auto px-4 sm:px-6 pb-16">
+            {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
+            <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
+
+                {/* Article text content */}
                 <ArticleContent article={article} />
 
-                {/* Author Card */}
-                <div className="mt-12">
-                    <AuthorCard author={article.author} />
+                {/* Desktop engagement row — hidden on mobile */}
+                <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-y border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center gap-6">
+                        <LikeButton
+                            articleId={article.id}
+                            initialLikes={article.likes}
+                            initialIsLiked={isLiked}
+                            className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors text-sm"
+                        />
+                        <span className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            {article.comments}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <BookmarkButton
+                            articleId={article.id}
+                            initialIsBookmarked={isBookmarked}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        />
+                        <ShareButton
+                            title={article.title}
+                            excerpt={article.excerpt}
+                            url={`https://3amscroll.com/article/${article.slug}`}
+                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        />
+                    </div>
                 </div>
 
-                {/* Comments Section */}
-                <div className="mt-12">
+                {/* ─── DETAILED AUTHOR CARD ─────────────────────────── */}
+                <AuthorCardDetailed
+                    author={article.author}
+                    followersCount={0}
+                />
+
+                {/* ─── RESPONSES / COMMENTS ─────────────────────────── */}
+                <div id="comments">
                     <Comments
                         articleId={article.id}
                         initialComments={commentsData.comments || []}
@@ -171,42 +177,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     />
                 </div>
 
-                {/* Related Articles */}
+                {/* ─── RELATED ARTICLES ─────────────────────────────── */}
                 <div className="mt-12">
                     <RelatedArticles articles={relatedArticles} />
                 </div>
             </main>
 
-            {/* Simple Engagement Bar */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-40 lg:hidden">
-                <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <LikeButton
-                            articleId={article.id}
-                            initialLikes={article.likes}
-                            initialIsLiked={likedArticleIds.has(article.id)}
-                            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
-                        />
-                        <span className="text-gray-400">·</span>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">{article.comments} comments</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <ShareButton
-                            title={article.title}
-                            excerpt={article.excerpt}
-                            url={`https://3amscroll.com/article/${article.slug}`}
-                            className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
-                        />
-                        <BookmarkButton
-                            articleId={article.id}
-                            initialIsBookmarked={savedArticleIds.has(article.id)}
-                            className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
-                        />
-                    </div>
-                </div>
-            </div>
+            {/* ─── MOBILE BOTTOM BAR ────────────────────────────────
+                Applaud · Comment · Bookmark · Share — mobile only
+            ──────────────────────────────────────────────────────── */}
+            <MobileArticleBar
+                articleId={article.id}
+                articleTitle={article.title}
+                articleExcerpt={article.excerpt}
+                articleSlug={article.slug}
+                initialLikes={article.likes}
+                initialIsLiked={isLiked}
+                initialIsBookmarked={isBookmarked}
+                commentsCount={article.comments}
+                onCommentClick={undefined}
+            />
 
-            {/* Footer */}
             <Footer />
         </div>
     );

@@ -18,6 +18,9 @@ export function MobileHeader({ user = null }: MobileHeaderProps) {
     const pathname = usePathname();
     const isProfilePage = pathname?.startsWith("/profile");
     const isSettingsPage = pathname?.startsWith("/settings");
+    const isArticlePage = pathname?.startsWith("/article");
+
+    if (isArticlePage) return null;
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-dark-border transition-colors lg:hidden">

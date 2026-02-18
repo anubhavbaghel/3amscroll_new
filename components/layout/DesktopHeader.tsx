@@ -10,11 +10,18 @@ import { User } from "@supabase/supabase-js";
 import { WriteArticleButton } from "@/components/write/WriteArticleButton";
 import { CategoryNav } from "./CategoryNav";
 
+import { usePathname } from "next/navigation";
+
 interface DesktopHeaderProps {
     user?: User | null;
 }
 
 export function DesktopHeader({ user = null }: DesktopHeaderProps) {
+    const pathname = usePathname();
+    const isArticlePage = pathname?.startsWith("/article");
+
+    if (isArticlePage) return null;
+
     return (
         <header className="hidden lg:block sticky top-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-dark-border transition-colors">
             {/* Main Header */}
