@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getAuthor } from "@/lib/data";
 
-const TEAM_IDS = ["711d5fbc-e448-433e-b873-1382dfa54823", "author-2", "author-3"]; // Replace with real IDs or fetch all contributors
+const TEAM_IDS = ["711d5fbc-e448-433e-b873-1382dfa54823"]; // Add more real UUIDs as needed
 
 export async function TeamGrid() {
     const teamResults = await Promise.all(TEAM_IDS.map(id => getAuthor(id)));
