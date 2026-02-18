@@ -17,24 +17,20 @@ export default async function ProfilePage() {
     // specific profile fetch (ensures we get latest metadata)
     const profileData = await getProfile(authUser.id);
 
-    if (!profileData) {
-        // Fallback if profile doesn't exist yet (shouldn't happen with triggers, but safe)
-        return <div>Profile not found</div>;
-    }
-
     // Cast to User type — use authUser.email since profiles table doesn't store email
+    // profileData may be null if the row doesn't exist yet; fall back to auth metadata
     const userEmail = authUser.email || "";
     const user: User = {
-        id: profileData.id,
+        id: authUser.id,
         email: userEmail,
-        name: authUser.user_metadata.full_name || authUser.user_metadata.name || profileData.username || userEmail.split('@')[0] || "User",
-        username: profileData.username,
-        avatar: profileData.avatar_url,
-        banner: profileData.banner_url,
-        bio: profileData.bio,
-        website: profileData.website,
-        location: profileData.location,
-        social_links: profileData.social_links,
+        name: profileData?.name || authUser.user_metadata.full_name || authUser.user_metadata.name || profileData?.username || userEmail.split('@')[0] || "User",
+        username: profileData?.username,
+        avatar: profileData?.avatar_url,
+        banner: profileData?.banner_url,
+        bio: profileData?.bio,
+        website: profileData?.website,
+        location: profileData?.location,
+        social_links: profileData?.social_links,
         role: "user",
         savedArticles: [],
         preferences: {
@@ -42,7 +38,7 @@ export default async function ProfilePage() {
             notifications: false,
             theme: "system"
         },
-        joinedAt: profileData.updated_at
+        joinedAt: profileData?.updated_at || new Date().toISOString()
     };
 
     // Fetch User Articles

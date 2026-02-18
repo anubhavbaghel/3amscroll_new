@@ -13,7 +13,23 @@ export async function getProfile(userId: string) {
         .single();
 
     if (error) {
-        console.error("Error fetching profile:", error);
+        // PGRST116 = "no rows returned" — profile doesn't exist yet, create it
+        if (error.code === "PGRST116") {
+            console.log("Profile not found, creating one for user:", userId);
+            const { data: newProfile, error: insertError } = await supabase
+                .from("profiles")
+                .upsert({ id: userId, updated_at: new Date().toISOString() })
+                .select()
+                .single();
+
+            if (insertError) {
+                console.error("Error creating profile:", insertError.code, insertError.message, insertError.details);
+                return null;
+            }
+            return newProfile;
+        }
+
+        console.error("Error fetching profile:", error.code, error.message, error.details, error.hint);
         return null;
     }
 
