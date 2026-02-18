@@ -6,6 +6,7 @@ import { ArticleHeader } from "@/components/article/ArticleHeader";
 import { AuthorCard } from "@/components/article/AuthorCard";
 import { LikeButton } from "@/components/article/LikeButton";
 import { BookmarkButton } from "@/components/article/BookmarkButton";
+import { ShareButton } from "@/components/article/ShareButton";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { Comments } from "@/components/article/Comments";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
@@ -189,11 +190,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <span className="text-gray-400">·</span>
                         <span className="text-sm text-gray-600 dark:text-gray-400">{article.comments} comments</span>
                     </div>
-                    <BookmarkButton
-                        articleId={article.id}
-                        initialIsBookmarked={savedArticleIds.has(article.id)}
-                        className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
-                    />
+                    <div className="flex items-center gap-3">
+                        <ShareButton
+                            title={article.title}
+                            excerpt={article.excerpt}
+                            url={`https://3amscroll.com/article/${article.slug}`}
+                            className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
+                        />
+                        <BookmarkButton
+                            articleId={article.id}
+                            initialIsBookmarked={savedArticleIds.has(article.id)}
+                            className="text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
+                        />
+                    </div>
                 </div>
             </div>
 

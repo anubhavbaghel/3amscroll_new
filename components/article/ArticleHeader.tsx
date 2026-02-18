@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Article } from "@/types";
 import { routes } from "@/config/routes";
+import { ShareButton } from "@/components/article/ShareButton";
 
 interface ArticleHeaderProps {
     article: Article;
 }
 
 export function ArticleHeader({ article }: ArticleHeaderProps) {
+    const articleUrl = `https://3amscroll.com/article/${article.slug}`;
+
     return (
         <header className="max-w-3xl mx-auto px-4 sm:px-6 pt-36 lg:pt-44 pb-8">
             {/* Title */}
@@ -20,8 +25,8 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
                 {article.excerpt}
             </p>
 
-            {/* Author Info */}
-            <div className="flex items-center gap-4 pb-8 border-b border-gray-200 dark:border-gray-800">
+            {/* Author Info + Share */}
+            <div className="flex items-center justify-between pb-8 border-b border-gray-200 dark:border-gray-800">
                 <Link href={routes.author(article.author.id)} className="flex items-center gap-3 group">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden">
                         <Image
@@ -42,6 +47,15 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
                         </div>
                     </div>
                 </Link>
+
+                {/* Share button — visible on desktop */}
+                <ShareButton
+                    title={article.title}
+                    excerpt={article.excerpt}
+                    url={articleUrl}
+                    showLabel={true}
+                    className="hidden lg:flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-brand dark:hover:text-brand transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5"
+                />
             </div>
         </header>
     );
