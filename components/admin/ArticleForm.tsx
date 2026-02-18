@@ -4,7 +4,7 @@
 import { Editor } from "@/components/admin/Editor";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createArticle, updateArticle } from "@/app/admin/actions";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { toast } from "sonner";
 interface ArticleData {
     id?: string;
@@ -33,6 +33,34 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
     const [content, setContent] = useState(initialData?.content || "");
     const [coverImage, setCoverImage] = useState(initialData?.cover_image || "");
     const [status, setStatus] = useState(initialData?.status || "draft");
+    const [isDirty, setIsDirty] = useState(false);
+
+    // Track dirty state
+    useEffect(() => {
+        const isCurrentlyDirty =
+            title !== (initialData?.title || "") ||
+            slug !== (initialData?.slug || "") ||
+            category !== (initialData?.category || "Tech") ||
+            excerpt !== (initialData?.excerpt || "") ||
+            content !== (initialData?.content || "") ||
+            coverImage !== (initialData?.cover_image || "") ||
+            status !== (initialData?.status || "draft");
+
+        setIsDirty(isCurrentlyDirty);
+    }, [title, slug, category, excerpt, content, coverImage, status, initialData]);
+
+    // Prevent navigation if dirty
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    }, [isDirty]);
 
     // Auto-generate slug from title if in create mode and slug is empty
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,8 +100,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                     await updateArticle(formData);
                     toast.success("Article updated successfully!");
                 }
-                // Redirect is handled by server action, but we can do it here too if needed
-                // router.push("/admin"); 
+                setIsDirty(false); // Reset dirty state on successful save
             } catch (error) {
                 console.error(error);
                 toast.error("Something went wrong");

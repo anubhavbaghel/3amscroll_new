@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
+import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
 
 export default async function AdminPage() {
     const supabase = await createClient();
@@ -24,7 +25,7 @@ export default async function AdminPage() {
         return <div className="p-8">Error loading articles.</div>;
     }
 
-    // Server Actions for Publishing/Deleting
+    // Server Actions for Publishing
     async function updateStatus(formData: FormData) {
         "use server";
         const id = formData.get("id") as string;
@@ -32,16 +33,6 @@ export default async function AdminPage() {
 
         const supabase = await createClient();
         await supabase.from("articles").update({ status }).eq("id", id);
-        revalidatePath("/admin");
-        revalidatePath("/");
-    }
-
-    async function deleteArticle(formData: FormData) {
-        "use server";
-        const id = formData.get("id") as string;
-
-        const supabase = await createClient();
-        await supabase.from("articles").delete().eq("id", id);
         revalidatePath("/admin");
         revalidatePath("/");
     }
@@ -119,12 +110,7 @@ export default async function AdminPage() {
                                         </button>
                                     </form>
 
-                                    <form action={deleteArticle}>
-                                        <input type="hidden" name="id" value={article.id} />
-                                        <button type="submit" className="text-red-600 hover:text-red-900 text-sm">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <DeleteArticleButton id={article.id} variant="ghost" />
                                 </div>
                             </div>
                         </div>
@@ -213,12 +199,7 @@ export default async function AdminPage() {
                                             </Link>
 
                                             {/* Delete */}
-                                            <form action={deleteArticle}>
-                                                <input type="hidden" name="id" value={article.id} />
-                                                <button type="submit" className="text-red-600 hover:text-red-900 px-2">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            <DeleteArticleButton id={article.id} variant="ghost" />
                                         </div>
                                     </td>
                                 </tr>

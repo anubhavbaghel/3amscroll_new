@@ -5,7 +5,13 @@ import { Trash2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-export function DeleteArticleButton({ id }: { id: string }) {
+export function DeleteArticleButton({
+    id,
+    variant = "default"
+}: {
+    id: string;
+    variant?: "default" | "ghost"
+}) {
     const [isPending, startTransition] = useTransition();
 
     const handleDelete = () => {
@@ -14,7 +20,6 @@ export function DeleteArticleButton({ id }: { id: string }) {
                 try {
                     await deleteArticle(id);
                     toast.success("Article deleted successfully");
-                    // Redirect is handled by server action
                 } catch (error) {
                     console.error(error);
                     toast.error("Failed to delete article");
@@ -22,6 +27,21 @@ export function DeleteArticleButton({ id }: { id: string }) {
             });
         }
     };
+
+    if (variant === "ghost") {
+        return (
+            <button
+                onClick={handleDelete}
+                disabled={isPending}
+                className="text-red-600 hover:text-red-900 px-2 disabled:opacity-50 flex items-center gap-1"
+                title="Delete Article"
+            >
+                <Trash2 className="w-4 h-4" />
+                <span className="sr-only">Delete</span>
+                {isPending && <span className="text-[10px]">...</span>}
+            </button>
+        );
+    }
 
     return (
         <button
