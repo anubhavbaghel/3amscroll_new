@@ -23,6 +23,12 @@ export async function createArticle(formData: FormData) {
     const cover_image = formData.get("cover_image") as string;
     const status = formData.get("status") as string;
 
+    // SEO Fields
+    const seo_title = formData.get("seo_title") as string;
+    const seo_description = formData.get("seo_description") as string;
+    const focus_keyword = formData.get("focus_keyword") as string;
+    const cover_image_alt = formData.get("cover_image_alt") as string;
+
     const formattedSlug = slugRaw.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
     const authorName = user.user_metadata.full_name || user.email?.split("@")[0] || "Anonymous";
@@ -36,6 +42,10 @@ export async function createArticle(formData: FormData) {
         content,
         cover_image,
         status,
+        seo_title,
+        seo_description,
+        focus_keyword,
+        cover_image_alt,
         author_id: user.id,
         author_name: authorName,
         author_avatar: authorAvatar,
@@ -78,6 +88,12 @@ export async function updateArticle(formData: FormData) {
     const content = formData.get("content") as string;
     const status = formData.get("status") as string;
 
+    // SEO Fields
+    const seo_title = formData.get("seo_title") as string;
+    const seo_description = formData.get("seo_description") as string;
+    const focus_keyword = formData.get("focus_keyword") as string;
+    const cover_image_alt = formData.get("cover_image_alt") as string;
+
     const { error } = await supabase
         .from("articles")
         .update({
@@ -88,6 +104,10 @@ export async function updateArticle(formData: FormData) {
             cover_image,
             content,
             status,
+            seo_title,
+            seo_description,
+            focus_keyword,
+            cover_image_alt,
             updated_at: new Date().toISOString(),
         })
         .eq("id", id);

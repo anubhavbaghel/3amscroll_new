@@ -7,6 +7,7 @@ import { createArticle, updateArticle } from "@/app/admin/actions";
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Search, Target, CheckCircle2, AlertCircle, Eye, BarChart3 } from "lucide-react";
 interface ArticleData {
     id?: string;
     title: string;
@@ -16,6 +17,10 @@ interface ArticleData {
     content: string;
     cover_image: string;
     status: string;
+    seo_title?: string;
+    seo_description?: string;
+    focus_keyword?: string;
+    cover_image_alt?: string;
 }
 
 interface ArticleFormProps {
@@ -34,6 +39,10 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
     const [content, setContent] = useState(initialData?.content || "");
     const [coverImage, setCoverImage] = useState(initialData?.cover_image || "");
     const [status, setStatus] = useState(initialData?.status || "draft");
+    const [seoTitle, setSeoTitle] = useState(initialData?.seo_title || "");
+    const [seoDescription, setSeoDescription] = useState(initialData?.seo_description || "");
+    const [focusKeyword, setFocusKeyword] = useState(initialData?.focus_keyword || "");
+    const [coverImageAlt, setCoverImageAlt] = useState(initialData?.cover_image_alt || "");
     const [isDirty, setIsDirty] = useState(false);
 
     // Track dirty state
@@ -45,10 +54,14 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
             excerpt !== (initialData?.excerpt || "") ||
             content !== (initialData?.content || "") ||
             coverImage !== (initialData?.cover_image || "") ||
-            status !== (initialData?.status || "draft");
+            status !== (initialData?.status || "draft") ||
+            seoTitle !== (initialData?.seo_title || "") ||
+            seoDescription !== (initialData?.seo_description || "") ||
+            focusKeyword !== (initialData?.focus_keyword || "") ||
+            coverImageAlt !== (initialData?.cover_image_alt || "");
 
         setIsDirty(isCurrentlyDirty);
-    }, [title, slug, category, excerpt, content, coverImage, status, initialData]);
+    }, [title, slug, category, excerpt, content, coverImage, status, seoTitle, seoDescription, focusKeyword, coverImageAlt, initialData]);
 
     // Prevent navigation if dirty
     useEffect(() => {
@@ -91,6 +104,10 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         formData.append("content", content);
         formData.append("cover_image", coverImage);
         formData.append("status", status);
+        formData.append("seo_title", seoTitle);
+        formData.append("seo_description", seoDescription);
+        formData.append("focus_keyword", focusKeyword);
+        formData.append("cover_image_alt", coverImageAlt);
 
         startTransition(async () => {
             try {
@@ -110,6 +127,42 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
             }
         });
     };
+
+    const seoChecklist = [
+        {
+            id: 'keyword-title',
+            label: "Focus keyword in SEO title",
+            passed: focusKeyword && seoTitle.toLowerCase().includes(focusKeyword.toLowerCase()),
+        },
+        {
+            id: 'keyword-slug',
+            label: "Focus keyword in Slug",
+            passed: focusKeyword && slug.toLowerCase().includes(focusKeyword.toLowerCase()),
+        },
+        {
+            id: 'keyword-desc',
+            label: "Focus keyword in Meta Description",
+            passed: focusKeyword && seoDescription.toLowerCase().includes(focusKeyword.toLowerCase()),
+        },
+        {
+            id: 'desc-length',
+            label: "Meta Description length (120-160)",
+            passed: seoDescription.length >= 120 && seoDescription.length <= 160,
+        },
+        {
+            id: 'title-length',
+            label: "SEO Title length (max 60)",
+            passed: seoTitle.length > 0 && seoTitle.length <= 60,
+        },
+        {
+            id: 'word-count',
+            label: "Content length (min 300 words)",
+            passed: content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length >= 300,
+        }
+    ];
+
+    const passedCount = seoChecklist.filter(c => c.passed).length;
+    const seoScore = Math.round((passedCount / seoChecklist.length) * 100);
 
     return (
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -152,6 +205,117 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                             />
                         </div>
                     </div>
+
+                    {/* SEO Section */}
+                    <div className="bg-white dark:bg-gray-900 shadow rounded-lg p-6 space-y-8">
+                        <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
+                            <div className="flex items-center gap-2">
+                                <Search className="w-5 h-5 text-indigo-500" />
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Search Engine Optimization</h3>
+                            </div>
+                            <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 rounded-full">
+                                <BarChart3 className="w-4 h-4 text-gray-500" />
+                                <span className="text-xs font-bold text-gray-700 dark:text-gray-300">SEO Score: {seoScore}%</span>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label htmlFor="focusKeyword" className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        <Target className="w-4 h-4 text-indigo-500" />
+                                        Focus Keyword
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="focusKeyword"
+                                        value={focusKeyword}
+                                        onChange={(e) => setFocusKeyword(e.target.value)}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
+                                        placeholder="e.g., sustainable living"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="seoTitle" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        SEO Meta Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="seoTitle"
+                                        value={seoTitle}
+                                        onChange={(e) => setSeoTitle(e.target.value)}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
+                                        placeholder="Target title for Google"
+                                    />
+                                    <div className="mt-1 flex justify-between text-[10px] font-medium">
+                                        <span className={seoTitle.length > 60 ? "text-red-500" : "text-gray-400"}>
+                                            {seoTitle.length} / 60 characters
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="seoDescription" className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        SEO Meta Description
+                                    </label>
+                                    <textarea
+                                        id="seoDescription"
+                                        value={seoDescription}
+                                        onChange={(e) => setSeoDescription(e.target.value)}
+                                        rows={3}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
+                                        placeholder="This description will appear in search results..."
+                                    />
+                                    <div className="mt-1 flex justify-between text-[10px] font-medium">
+                                        <span className={(seoDescription.length < 120 || seoDescription.length > 160) ? "text-amber-500" : "text-green-500"}>
+                                            {seoDescription.length} characters (Recommended: 120-160)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                {/* SERP PREVIEW */}
+                                <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-800">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Eye className="w-4 h-4 text-gray-400" />
+                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Search Preview</span>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <div className="text-[14px] text-gray-400 truncate">
+                                            3amscroll.com › article › {slug || 'your-slug'}
+                                        </div>
+                                        <div className="text-[20px] text-[#1a0dab] dark:text-[#8ab4f8] hover:underline cursor-pointer font-medium leading-tight line-clamp-1">
+                                            {seoTitle || title || 'Article Title'}
+                                        </div>
+                                        <div className="text-[14px] text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                                            {seoDescription || excerpt || 'Enter a meta description to see a preview of how your article might appear in search engine results.'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Checklist */}
+                                <div className="space-y-3">
+                                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">SEO Checklist</h4>
+                                    <div className="space-y-2">
+                                        {seoChecklist.map((check) => (
+                                            <div key={check.id} className="flex items-start gap-2">
+                                                {check.passed ? (
+                                                    <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                                ) : (
+                                                    <AlertCircle className="w-4 h-4 text-gray-300 dark:text-gray-700 mt-0.5 shrink-0" />
+                                                )}
+                                                <span className={`text-xs ${check.passed ? "text-gray-700 dark:text-gray-300" : "text-gray-500"}`}>
+                                                    {check.label}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Right Column: Settings */}
@@ -166,6 +330,19 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                                 onChange={setCoverImage}
                                 disabled={isPending}
                             />
+                            <div className="mt-4">
+                                <label htmlFor="cover_image_alt" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Alt Text (SEO & Accessibility)
+                                </label>
+                                <input
+                                    type="text"
+                                    id="cover_image_alt"
+                                    value={coverImageAlt}
+                                    onChange={(e) => setCoverImageAlt(e.target.value)}
+                                    placeholder="Describe the image content"
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
+                                />
+                            </div>
                         </div>
 
                         <div>
