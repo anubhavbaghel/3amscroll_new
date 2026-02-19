@@ -39,12 +39,14 @@ export async function createArticle(formData: FormData) {
         author_id: user.id,
         author_name: authorName,
         author_avatar: authorAvatar,
+        author_uuid: user.id,
+        created_by: user.id,
         published_at: status === 'published' ? new Date().toISOString() : null
     });
 
     if (error) {
         console.error("Error creating article:", error);
-        throw new Error("Could not create article. Slug might be duplicate.");
+        throw new Error(`Could not create article: ${error.message}`);
     }
 
     revalidatePath("/admin");
@@ -92,7 +94,7 @@ export async function updateArticle(formData: FormData) {
 
     if (error) {
         console.error("Error updating article:", error);
-        throw new Error("Failed to update article");
+        throw new Error(`Failed to update article: ${error.message}`);
     }
 
     revalidatePath("/admin");
@@ -116,8 +118,8 @@ export async function deleteArticle(id: string) {
         .eq("id", id);
 
     if (error) {
-        console.error("Error deleting article:", error);
-        throw new Error("Failed to delete article");
+        console.error("Error deleting article:", error.message, error.details, error.hint);
+        throw new Error(`Failed to delete article: ${error.message}`);
     }
 
     revalidatePath("/admin");

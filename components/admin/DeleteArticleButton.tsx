@@ -11,7 +11,7 @@ export function DeleteArticleButton({
     variant = "default"
 }: {
     id: string;
-    variant?: "default" | "ghost"
+    variant?: "default" | "ghost" | "minimal"
 }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -43,6 +43,19 @@ export function DeleteArticleButton({
                 <Trash2 className="w-4 h-4" />
                 <span className="sr-only">Delete</span>
                 {isPending && <span className="text-[10px]">...</span>}
+            </button>
+        );
+    }
+
+    if (variant === "minimal") {
+        return (
+            <button
+                onClick={handleDelete}
+                disabled={isPending}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors disabled:opacity-50"
+            >
+                <Trash2 className="w-4 h-4" />
+                {isPending ? "Deleting..." : "Delete Article"}
             </button>
         );
     }

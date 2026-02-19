@@ -26,7 +26,7 @@ export default async function ProfilePage() {
         email: userEmail,
         name: profileData?.name || authUser.user_metadata.full_name || authUser.user_metadata.name || profileData?.username || userEmail.split('@')[0] || "User",
         username: profileData?.username,
-        avatar: profileData?.avatar_url,
+        avatar: profileData?.avatar_url || authUser.user_metadata.avatar_url || authUser.user_metadata.picture || "",
         banner: profileData?.banner_url,
         bio: profileData?.bio,
         website: profileData?.website,
