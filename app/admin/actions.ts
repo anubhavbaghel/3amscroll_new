@@ -126,3 +126,30 @@ export async function deleteArticle(id: string) {
     revalidatePath("/");
     return { success: true };
 }
+
+export async function updateArticleStatus(id: string, status: string) {
+    const supabase = await createClient();
+
+    // Auth check
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user) {
+        throw new Error("Unauthorized");
+    }
+
+    const { error } = await supabase
+        .from("articles")
+        .update({
+            status,
+            updated_at: new Date().toISOString()
+        })
+        .eq("id", id);
+
+    if (error) {
+        console.error("Error updating article status:", error);
+        throw new Error(`Failed to update status: ${error.message}`);
+    }
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+}
