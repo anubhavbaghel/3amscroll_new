@@ -44,12 +44,12 @@ export async function createArticle(formData: FormData) {
 
     if (error) {
         console.error("Error creating article:", error);
-        return redirect("/admin/articles/new?error=Could not create article. Slug might be duplicate.");
+        throw new Error("Could not create article. Slug might be duplicate.");
     }
 
     revalidatePath("/admin");
     revalidatePath("/");
-    redirect("/admin");
+    return { success: true };
 }
 
 export async function getArticle(id: string) {
@@ -91,15 +91,13 @@ export async function updateArticle(formData: FormData) {
         .eq("id", id);
 
     if (error) {
-        // We can't redirect with error parameter easily if we are calling this from a form
-        // But let's assume standard error handling
         console.error("Error updating article:", error);
-        return;
+        throw new Error("Failed to update article");
     }
 
     revalidatePath("/admin");
     revalidatePath(`/article/${slug}`);
-    redirect("/admin");
+    return { success: true };
 }
 
 export async function deleteArticle(id: string) {
@@ -124,5 +122,5 @@ export async function deleteArticle(id: string) {
 
     revalidatePath("/admin");
     revalidatePath("/");
-    redirect("/admin");
+    return { success: true };
 }

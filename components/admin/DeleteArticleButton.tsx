@@ -3,6 +3,7 @@
 import { deleteArticle } from "@/app/admin/actions";
 import { Trash2 } from "lucide-react";
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export function DeleteArticleButton({
@@ -12,6 +13,7 @@ export function DeleteArticleButton({
     id: string;
     variant?: "default" | "ghost"
 }) {
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const handleDelete = () => {
@@ -20,6 +22,8 @@ export function DeleteArticleButton({
                 try {
                     await deleteArticle(id);
                     toast.success("Article deleted successfully");
+                    router.push("/admin");
+                    router.refresh();
                 } catch (error) {
                     console.error(error);
                     toast.error("Failed to delete article");

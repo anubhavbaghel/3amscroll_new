@@ -5,6 +5,7 @@ import { Editor } from "@/components/admin/Editor";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createArticle, updateArticle } from "@/app/admin/actions";
 import { useState, useTransition, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 interface ArticleData {
     id?: string;
@@ -23,7 +24,7 @@ interface ArticleFormProps {
 }
 
 export function ArticleForm({ initialData, mode }: ArticleFormProps) {
-    // const router = useRouter();
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const [title, setTitle] = useState(initialData?.title || "");
@@ -101,6 +102,8 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                     toast.success("Article updated successfully!");
                 }
                 setIsDirty(false); // Reset dirty state on successful save
+                router.push("/admin");
+                router.refresh();
             } catch (error) {
                 console.error(error);
                 toast.error("Something went wrong");
