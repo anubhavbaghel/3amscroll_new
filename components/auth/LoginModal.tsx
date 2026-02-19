@@ -146,7 +146,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="block w-full rounded-lg border-0 py-2.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 bg-transparent"
+                                className="block w-full rounded-lg border-0 py-2.5 px-4 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 bg-transparent"
                                 placeholder="Email address"
                             />
                         </div>
@@ -159,7 +159,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="block w-full rounded-lg border-0 py-2.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 bg-transparent"
+                                className="block w-full rounded-lg border-0 py-2.5 px-4 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6 bg-transparent"
                                 placeholder="Password"
                             />
                         </div>
