@@ -20,7 +20,7 @@ export function WriteArticleButton({ user, className, showIcon = true, children 
         e.preventDefault();
 
         if (user) {
-            router.push("/write");
+            router.push("/admin/articles/new");
         } else {
             setIsModalOpen(true);
         }
@@ -43,7 +43,7 @@ export function WriteArticleButton({ user, className, showIcon = true, children 
             <LoginModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                redirectTo="/write"
+                redirectTo="/admin/articles/new"
             />
         </>
     );

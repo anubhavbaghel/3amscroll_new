@@ -34,6 +34,10 @@ export async function createArticle(formData: FormData) {
     const authorName = user.user_metadata.full_name || user.email?.split("@")[0] || "Anonymous";
     const authorAvatar = user.user_metadata.avatar_url || "";
 
+    // Calculate read time
+    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+    const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
     const { error } = await supabase.from("articles").insert({
         title,
         slug: formattedSlug,
@@ -51,6 +55,7 @@ export async function createArticle(formData: FormData) {
         author_avatar: authorAvatar,
         author_uuid: user.id,
         created_by: user.id,
+        read_time: readTime,
         published_at: status === 'published' ? new Date().toISOString() : null
     });
 
@@ -94,6 +99,10 @@ export async function updateArticle(formData: FormData) {
     const focus_keyword = formData.get("focus_keyword") as string;
     const cover_image_alt = formData.get("cover_image_alt") as string;
 
+    // Calculate read time
+    const wordCount = content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+    const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
     const { error } = await supabase
         .from("articles")
         .update({
@@ -108,6 +117,7 @@ export async function updateArticle(formData: FormData) {
             seo_description,
             focus_keyword,
             cover_image_alt,
+            read_time: readTime,
             updated_at: new Date().toISOString(),
         })
         .eq("id", id);

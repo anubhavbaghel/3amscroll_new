@@ -85,8 +85,10 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (e: React.FormEvent, submitStatus?: string) => {
+        if (e) e.preventDefault();
+
+        const targetStatus = submitStatus || status;
 
         if (!title || !slug || !excerpt || !content || !coverImage) {
             toast.error("Please fill in all required fields");
@@ -103,7 +105,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         formData.append("excerpt", excerpt);
         formData.append("content", content);
         formData.append("cover_image", coverImage);
-        formData.append("status", status);
+        formData.append("status", targetStatus);
         formData.append("seo_title", seoTitle);
         formData.append("seo_description", seoDescription);
         formData.append("focus_keyword", focusKeyword);
@@ -376,28 +378,22 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                             </select>
                         </div>
 
-                        <div>
-                            <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Status
-                            </label>
-                            <select
-                                id="status"
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
-                            >
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                            </select>
-                        </div>
-
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={(e) => handleSubmit(e as any, "draft")}
+                                disabled={isPending}
+                                className="w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isPending ? "Saving..." : "Save as Draft"}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={(e) => handleSubmit(e as any, "published")}
                                 disabled={isPending}
                                 className="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isPending ? (mode === "create" ? "Creating..." : "Saving...") : (mode === "create" ? "Create Article" : "Save Changes")}
+                                {isPending ? (mode === "create" ? "Publishing..." : "Publish Changes") : (mode === "create" ? "Publish Article" : "Publish Changes")}
                             </button>
                         </div>
                     </div>
