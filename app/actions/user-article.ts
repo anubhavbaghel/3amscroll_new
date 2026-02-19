@@ -11,6 +11,10 @@ interface CreateUserArticleData {
     coverImage: string;
     category: string;
     status: 'draft' | 'published';
+    seo_title?: string;
+    seo_description?: string;
+    focus_keyword?: string;
+    cover_image_alt?: string;
 }
 
 interface ArticleValidationError {
@@ -120,6 +124,10 @@ export async function createUserArticle(data: CreateUserArticleData) {
                 cover_image: data.coverImage,
                 category: data.category,
                 status: data.status,
+                seo_title: data.seo_title,
+                seo_description: data.seo_description,
+                focus_keyword: data.focus_keyword,
+                cover_image_alt: data.cover_image_alt,
                 author_uuid: user.id,
                 created_by: user.id,
                 read_time: readTime,
@@ -193,6 +201,10 @@ export async function updateUserArticle(articleId: string, data: CreateUserArtic
                 cover_image: data.coverImage,
                 category: data.category,
                 status: data.status,
+                seo_title: data.seo_title,
+                seo_description: data.seo_description,
+                focus_keyword: data.focus_keyword,
+                cover_image_alt: data.cover_image_alt,
                 read_time: readTime,
                 published_at: data.status === 'published' && !existingArticle ? new Date().toISOString() : undefined,
             })
