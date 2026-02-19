@@ -59,7 +59,7 @@ export function LoginModal({ isOpen, onClose, redirectTo = "/write" }: LoginModa
         formData.append("redirectTo", redirectTo);
         formData.append("turnstileToken", token);
 
-        if (!token) {
+        if (process.env.NODE_ENV !== 'development' && !token) {
             setError("Please complete the captcha.");
             setIsLoading(false);
             return;
