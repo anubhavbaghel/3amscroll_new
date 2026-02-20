@@ -48,11 +48,6 @@ export async function login(formData: FormData) {
 
     const token = formData.get("turnstileToken") as string;
 
-    // Only validate if NOT in development
-    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
-        return redirect(`/login?error=${encodeURIComponent("Invalid captcha")}`);
-    }
-
     const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -81,11 +76,6 @@ export async function signup(formData: FormData) {
     const fullName = formData.get("fullName") as string;
 
     const token = formData.get("turnstileToken") as string;
-
-    // Only validate if NOT in development
-    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
-        return redirect(`/signup?error=${encodeURIComponent("Invalid captcha")}`);
-    }
 
     const { error } = await supabase.auth.signUp({
         email,
@@ -123,11 +113,6 @@ export async function loginWithState(formData: FormData) {
     const password = formData.get("password") as string;
 
     const token = formData.get("turnstileToken") as string;
-
-    // Only validate if NOT in development
-    if (process.env.NODE_ENV !== 'development' && !(await validateTurnstile(token))) {
-        return { success: false, error: "Invalid captcha" };
-    }
 
     const { error } = await supabase.auth.signInWithPassword({
         email,
