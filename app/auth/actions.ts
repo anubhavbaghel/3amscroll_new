@@ -57,7 +57,7 @@ export async function login(formData: FormData) {
         email,
         password,
         options: {
-            captchaToken: token,
+            ...(token ? { captchaToken: token } : {}),
         },
     });
 
@@ -94,7 +94,7 @@ export async function signup(formData: FormData) {
             data: {
                 full_name: fullName,
             },
-            captchaToken: token,
+            ...(token ? { captchaToken: token } : {}),
         },
     });
 
@@ -133,7 +133,7 @@ export async function loginWithState(formData: FormData) {
         email,
         password,
         options: {
-            captchaToken: token,
+            ...(token ? { captchaToken: token } : {}),
         },
     });
 
