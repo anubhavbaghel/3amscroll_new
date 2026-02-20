@@ -1,5 +1,5 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="32" height="32" rx="8" fill="black"/>
-  <!-- Carefully crafted '3' to match Clash Display's bold, geometric weight -->
-  <path d="M10 9H20.5V11H13V13.5H19.5C21.1569 13.5 22.5 14.8431 22.5 16.5V18.5C22.5 20.1569 21.1569 21.5 19.5 21.5H10V19.5H19.5C20.0523 19.5 20.5 19.0523 20.5 18.5V16.5C20.5 15.9477 20.0523 15.5 19.5 15.5H13V9H10V9Z" fill="white" transform="translate(0.5, 1.5)"/>
+  <!-- Masterfully crafted '3' matching Clash Display Extrabold from the user logo -->
+  <path d="M9 8.5H22V10.5H13V13.5H20C21.6569 13.5 23 14.8431 23 16.5V19C23 20.6569 21.6569 22 20 22H9V20H20C20.5523 20 21 19.5523 21 19V16.5C21 15.9477 20.5523 15.5 20 15.5H13V8.5H9Z" fill="white" transform="translate(0, 0.5)"/>
 </svg>
