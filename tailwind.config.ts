@@ -9,9 +9,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Switzer', 'sans-serif'],
-                display: ['Switzer', 'sans-serif'],
-                logo: ['Clash Display', 'sans-serif'],
+                sans: ['var(--font-switzer)', 'sans-serif'],
+                display: ['var(--font-switzer)', 'sans-serif'],
+                logo: ['var(--font-clash-display)', 'sans-serif'],
             },
             colors: {
                 background: "var(--background)",
