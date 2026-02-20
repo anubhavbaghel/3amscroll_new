@@ -9,7 +9,7 @@ interface AuthorCardProps {
 export function AuthorCard({ author }: AuthorCardProps) {
     return (
         <div className="py-8 border-t border-gray-200 dark:border-gray-800">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-5">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-500 mb-5">
                 Written by
             </p>
             <div className="flex items-start gap-4">
@@ -41,7 +41,7 @@ export function AuthorCard({ author }: AuthorCardProps) {
                     </Link>
 
                     {author.bio && (
-                        <p className="mt-1.5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+                        <p className="mt-1.5 text-sm text-gray-700 dark:text-gray-400 leading-relaxed line-clamp-3">
                             {author.bio}
                         </p>
                     )}

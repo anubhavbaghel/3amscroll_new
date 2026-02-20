@@ -18,7 +18,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                         <h2 className="text-[13px] font-black uppercase tracking-[0.15em] text-slate-900 dark:text-white">
                             Editors' Picks
                         </h2>
-                        <svg className="w-5 h-5 text-gray-400/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <circle cx="12" cy="12" r="1.5" />
                             <circle cx="19" cy="12" r="1.5" />
                             <circle cx="5" cy="12" r="1.5" />
@@ -60,7 +60,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                                             <h3 className="font-bold text-base leading-tight text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors line-clamp-2">
                                                 {article.title}
                                             </h3>
-                                            <div className="mt-2 text-[12px] font-medium text-slate-500 dark:text-gray-400 tracking-wide uppercase">
+                                            <div className="mt-2 text-[12px] font-medium text-gray-700 dark:text-gray-400 tracking-wide uppercase">
                                                 {new Date(article.publishedAt).toLocaleDateString('en-US', {
                                                     month: 'short',
                                                     day: 'numeric',

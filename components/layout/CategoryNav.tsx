@@ -19,7 +19,7 @@ function NavItem({ href, label, icon: Icon, isActive }: { href: string; label: s
                 "group flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative overflow-hidden flex-shrink-0",
                 isActive
                     ? "text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 shadow-md transform scale-105"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                    : "text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/50 dark:hover:bg-white/5"
             )}
         >
             {Icon && (

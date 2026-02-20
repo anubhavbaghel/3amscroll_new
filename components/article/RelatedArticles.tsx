@@ -92,10 +92,10 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                                 <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-brand transition-colors text-gray-900 dark:text-white">
                                     {article.title}
                                 </h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+                                <p className="text-sm text-gray-700 dark:text-gray-400 line-clamp-2 mb-3">
                                     {article.excerpt}
                                 </p>
-                                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+                                <div className="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-400">
                                     <span>{article.author.name}</span>
                                     <span>•</span>
                                     <span>{article.readTime} min read</span>

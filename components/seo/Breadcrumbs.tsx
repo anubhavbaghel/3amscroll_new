@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
     return (
-        <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400 mb-6 font-medium">
+        <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-400 mb-6 font-medium">
             <Link
                 href="/"
                 className="hover:text-brand transition-colors flex items-center gap-1"
@@ -24,7 +24,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
 
             {items.map((item, index) => (
                 <div key={item.href} className="flex items-center space-x-2">
-                    <ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600" />
+                    <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-600" />
                     {item.active ? (
                         <span className="text-gray-900 dark:text-white font-semibold truncate max-w-[200px] sm:max-w-md">
                             {item.label}

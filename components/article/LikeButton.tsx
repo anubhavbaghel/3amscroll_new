@@ -45,7 +45,8 @@ export function LikeButton({ articleId, initialLikes, initialIsLiked = false, cl
     return (
         <button
             onClick={handleToggle}
-            className={`flex items-center gap-1 transition-colors ${className} ${isLiked ? "text-red-500" : ""}`}
+            className={`flex items-center gap-1 transition-colors pointer-events-auto relative z-20 ${className} ${isLiked ? "text-red-500" : ""}`}
+            aria-label={isLiked ? "Unlike article" : "Like article"}
             disabled={isPending}
         >
             <svg

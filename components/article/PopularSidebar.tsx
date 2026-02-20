@@ -33,7 +33,7 @@ export function PopularSidebar({ articles }: PopularSidebarProps) {
                             <h4 className="font-bold text-gray-900 dark:text-gray-100 leading-tight group-hover:text-brand transition-colors">
                                 {article.title}
                             </h4>
-                            <p className="text-xs text-gray-500 line-clamp-2">
+                            <p className="text-xs text-gray-700 dark:text-gray-400 line-clamp-2">
                                 {article.excerpt}
                             </p>
                         </div>

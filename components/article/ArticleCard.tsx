@@ -22,7 +22,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
         <div className={`group relative flex flex-col bg-white dark:bg-dark-surface rounded-xl overflow-hidden border border-gray-100 dark:border-white/5 hover:border-brand/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full ${className}`}>
             {/* Rank Number (Absolute) - Only if rank is provided */}
             {rank && (
-                <div className="absolute top-2 right-4 text-6xl font-black text-gray-100 dark:text-white/5 font-logo z-0 pointer-events-none select-none">
+                <div className="absolute top-2 right-4 text-6xl font-black text-gray-200 dark:text-white/10 font-logo z-0 pointer-events-none select-none">
                     {rank.toString().padStart(2, '0')}
                 </div>
             )}
@@ -120,15 +120,15 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                                     articleId={article.id}
                                     initialLikes={article.likes}
                                     initialIsLiked={isLiked}
-                                    className="hover:text-red-500 transition-colors"
+                                    className="p-2 -m-2 hover:text-red-500 transition-colors"
                                 />
                             </span>
-                            <span className="flex items-center gap-1.5 hover:text-blue-500 transition-colors">
+                            <Link href={routes.article(article.slug) + "#comments"} aria-label="View comments" className="flex items-center gap-1.5 p-2 -m-2 hover:text-blue-500 transition-colors">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
                                 {formatNumber(article.comments)}
-                            </span>
+                            </Link>
                         </div>
 
                         {/* Mobile: Just Icons */}
@@ -139,7 +139,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                                 initialIsLiked={isLiked}
                                 className="hover:text-red-500 transition-colors"
                             />
-                            <Link href={routes.article(article.slug) + "#comments"} className="hover:text-blue-500">
+                            <Link href={routes.article(article.slug) + "#comments"} aria-label="View comments" className="p-2 -m-2 hover:text-blue-500">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
@@ -149,7 +149,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                         <BookmarkButton
                             articleId={article.id}
                             initialIsBookmarked={isSaved}
-                            className="text-gray-400 hover:text-brand transition-colors"
+                            className="p-2 -m-2 text-gray-400 hover:text-brand transition-colors"
                         />
                     </div>
                 </div>
