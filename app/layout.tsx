@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import localFont from "next/font/local";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const switzer = localFont({
     src: [
@@ -177,6 +178,7 @@ export default async function RootLayout({
                 <BottomNav user={user} role={role} />
                 <FloatingWriteButton user={user} role={role} />
                 <Toaster position="top-right" richColors />
+                <GoogleAnalytics gaId="G-XXXXXXXXXX" />
             </body>
         </html >
     );
