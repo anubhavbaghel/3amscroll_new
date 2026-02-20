@@ -4,7 +4,6 @@ import { Footer } from "@/components/layout/Footer";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { ArticleHeader } from "@/components/article/ArticleHeader";
 import { AuthorCardDetailed } from "@/components/article/AuthorCardDetailed";
-import { LikeButton } from "@/components/article/LikeButton";
 import { BookmarkButton } from "@/components/article/BookmarkButton";
 import { ShareButton } from "@/components/article/ShareButton";
 import { MobileArticleBar } from "@/components/article/MobileArticleBar";
@@ -13,11 +12,7 @@ import { RelatedArticles } from "@/components/article/RelatedArticles";
 import "../../article-styles.css";
 import dynamic from "next/dynamic";
 
-const Comments = dynamic(() => import("@/components/article/Comments").then(mod => mod.Comments), {
-    loading: () => <div className="animate-pulse h-40 bg-gray-100 dark:bg-white/5 rounded-2xl w-full" />,
-});
-import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds, getRelatedArticles } from "@/lib/data";
-import { getComments } from "@/app/actions/comment";
+import { getArticleBySlug, getSavedArticleIds, getRelatedArticles } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
@@ -89,16 +84,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const article = await getArticleBySlug(slug);
     if (!article) notFound();
 
-    const [savedArticleIds, likedArticleIds, commentsData] = await Promise.all([
+    const [savedArticleIds] = await Promise.all([
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        getComments(article.id),
     ]);
 
     const relatedArticles = await getRelatedArticles(article.category, article.id);
 
     const isBookmarked = savedArticleIds.has(article.id);
-    const isLiked = likedArticleIds.has(article.id);
 
 
     const jsonLd = {
@@ -182,21 +174,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* Article text content */}
                 <ArticleContent article={article} />
 
-                {/* Desktop engagement row — hidden on mobile */}
                 <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-6">
-                        <LikeButton
-                            articleId={article.id}
-                            initialLikes={article.likes}
-                            initialIsLiked={isLiked}
-                            className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors text-sm"
-                        />
-                        <span className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            {article.comments}
-                        </span>
                     </div>
                     <div className="flex items-center gap-1">
                         <BookmarkButton
@@ -219,14 +198,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     followersCount={0}
                 />
 
-                {/* ─── RESPONSES / COMMENTS ─────────────────────────── */}
-                <div id="comments">
-                    <Comments
-                        articleId={article.id}
-                        initialComments={commentsData.comments || []}
-                        currentUserId={user?.id}
-                    />
-                </div>
 
                 {/* ─── RELATED ARTICLES ─────────────────────────────── */}
                 <div className="mt-12">
@@ -242,11 +213,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 articleTitle={article.title}
                 articleExcerpt={article.excerpt}
                 articleSlug={article.slug}
-                initialLikes={article.likes}
-                initialIsLiked={isLiked}
                 initialIsBookmarked={isBookmarked}
-                commentsCount={article.comments}
-                onCommentClick={undefined}
             />
 
             <Footer />

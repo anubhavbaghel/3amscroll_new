@@ -2,8 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Hand, MessageSquare, Bookmark, Share2 } from "lucide-react";
-import { toggleLike } from "@/app/actions/like";
+import { MessageSquare, Bookmark, Share2 } from "lucide-react";
 import { toggleBookmark } from "@/app/actions/bookmark";
 import { ShareButton } from "@/components/article/ShareButton";
 
@@ -12,11 +11,7 @@ interface MobileArticleBarProps {
     articleTitle: string;
     articleExcerpt?: string;
     articleSlug: string;
-    initialLikes: number;
-    initialIsLiked: boolean;
     initialIsBookmarked: boolean;
-    commentsCount: number;
-    onCommentClick?: () => void;
 }
 
 export function MobileArticleBar({
@@ -24,33 +19,11 @@ export function MobileArticleBar({
     articleTitle,
     articleExcerpt,
     articleSlug,
-    initialLikes,
-    initialIsLiked,
     initialIsBookmarked,
-    commentsCount,
-    onCommentClick,
 }: MobileArticleBarProps) {
-    const [isLiked, setIsLiked] = useState(initialIsLiked);
-    const [likesCount, setLikesCount] = useState(initialLikes);
     const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
-    const [isPendingLike, startLikeTransition] = useTransition();
     const [isPendingBookmark, startBookmarkTransition] = useTransition();
     const router = useRouter();
-
-    const handleLike = () => {
-        const prev = { isLiked, likesCount };
-        setIsLiked(!isLiked);
-        setLikesCount(isLiked ? likesCount - 1 : likesCount + 1);
-
-        startLikeTransition(async () => {
-            const result = await toggleLike(articleId);
-            if (result.error) {
-                setIsLiked(prev.isLiked);
-                setLikesCount(prev.likesCount);
-                if (result.error.includes("logged in")) router.push("/login");
-            }
-        });
-    };
 
     const handleBookmark = () => {
         const prev = isBookmarked;
@@ -75,44 +48,6 @@ export function MobileArticleBar({
                     <div className="flex items-center justify-between max-w-md mx-auto px-6 h-14 pb-safe">
 
                         <div className="flex items-center gap-6">
-                            {/* Applaud / Like */}
-                            <button
-                                onClick={handleLike}
-                                disabled={isPendingLike}
-                                className="flex items-center gap-2 py-2 group transition-all active:scale-90"
-                                aria-label="Applaud"
-                            >
-                                <Hand
-                                    className={`w-[22px] h-[22px] transition-all duration-300 ${isLiked ? "text-brand fill-brand" : "text-gray-500 dark:text-gray-400"
-                                        }`}
-                                    strokeWidth={1.5}
-                                />
-                                {likesCount > 0 && (
-                                    <span className={`text-[13px] font-medium tabular-nums ${isLiked ? "text-brand" : "text-gray-500 dark:text-gray-400"}`}>
-                                        {likesCount.toLocaleString()}
-                                    </span>
-                                )}
-                            </button>
-
-                            {/* Comment */}
-                            <button
-                                onClick={onCommentClick}
-                                className="flex items-center gap-2 py-2 group transition-all active:scale-90"
-                                aria-label="Comment"
-                            >
-                                <MessageSquare
-                                    className="w-[22px] h-[22px] text-gray-500 dark:text-gray-400 transition-colors group-hover:text-brand"
-                                    strokeWidth={1.5}
-                                />
-                                {commentsCount > 0 && (
-                                    <span className="text-[13px] font-medium text-gray-500 dark:text-gray-400 transition-colors group-hover:text-brand">
-                                        {commentsCount}
-                                    </span>
-                                )}
-                            </button>
-                        </div>
-
-                        <div className="flex items-center gap-6">
                             {/* Bookmark */}
                             <button
                                 onClick={handleBookmark}
@@ -126,7 +61,9 @@ export function MobileArticleBar({
                                     strokeWidth={1.5}
                                 />
                             </button>
+                        </div>
 
+                        <div className="flex items-center gap-6">
                             {/* Share */}
                             <div className="flex items-center group transition-all active:scale-90">
                                 <ShareButton
@@ -144,3 +81,5 @@ export function MobileArticleBar({
         </div>
     );
 }
+
+

@@ -6,18 +6,16 @@ import { Article } from "@/types";
 import { routes } from "@/config/routes";
 
 import { BookmarkButton } from "@/components/article/BookmarkButton";
-import { LikeButton } from "@/components/article/LikeButton";
 
 interface ArticleCardProps {
     article: Article;
     priority?: boolean;
     isSaved?: boolean;
-    isLiked?: boolean;
     rank?: number;
     className?: string;
 }
 
-export function ArticleCard({ article, priority = false, isSaved = false, isLiked = false, rank, className }: ArticleCardProps) {
+export function ArticleCard({ article, priority = false, isSaved = false, rank, className }: ArticleCardProps) {
     return (
         <div className={`group relative flex flex-col bg-white dark:bg-dark-surface rounded-xl overflow-hidden border border-gray-100 dark:border-white/5 hover:border-brand/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full ${className}`}>
             {/* Rank Number (Absolute) - Only if rank is provided */}
@@ -116,35 +114,10 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                     {/* Engagement Buttons (Right) */}
                     <div className="flex items-center gap-3 relative z-20">
                         <div className="hidden md:flex items-center gap-4 text-gray-400 text-xs font-medium">
-                            <span className="flex items-center gap-1.5">
-                                <LikeButton
-                                    articleId={article.id}
-                                    initialLikes={article.likes}
-                                    initialIsLiked={isLiked}
-                                    className="p-2 -m-2 hover:text-red-500 transition-colors"
-                                />
-                            </span>
-                            <Link href={routes.article(article.slug) + "#comments"} aria-label="View comments" className="flex items-center gap-1.5 p-2 -m-2 hover:text-blue-500 transition-colors">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
-                                {formatNumber(article.comments)}
-                            </Link>
                         </div>
 
                         {/* Mobile: Just Icons */}
                         <div className="md:hidden flex items-center gap-3 text-gray-400">
-                            <LikeButton
-                                articleId={article.id}
-                                initialLikes={article.likes}
-                                initialIsLiked={isLiked}
-                                className="hover:text-red-500 transition-colors"
-                            />
-                            <Link href={routes.article(article.slug) + "#comments"} aria-label="View comments" className="p-2 -m-2 hover:text-blue-500">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
-                            </Link>
                         </div>
 
                         <BookmarkButton

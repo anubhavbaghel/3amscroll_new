@@ -12,8 +12,6 @@ export interface Article {
     updatedAt?: string; // Optional modification date for SEO
     readTime: number;
     views: number;
-    likes: number;
-    comments: number;
     tags: string[];
 }
 

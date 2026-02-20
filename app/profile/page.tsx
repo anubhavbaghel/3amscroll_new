@@ -67,8 +67,6 @@ export default async function ProfilePage() {
         publishedAt: article.published_at,
         readTime: article.read_time || 5,
         views: article.views,
-        likes: article.likes_count || 0,
-        comments: article.comments_count || 0,
         tags: []
     }));
 

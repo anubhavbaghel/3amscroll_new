@@ -23,7 +23,6 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
     const stats = {
         articles: articles.length,
         views: articles.reduce((acc, curr) => acc + (curr.views || 0), 0),
-        likes: articles.reduce((acc, curr) => acc + (curr.likes || 0), 0),
     };
 
     return (

@@ -2,7 +2,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleHero } from "@/components/article/ArticleHero";
 import { ArticleGrid } from "@/components/home/ArticleGrid";
-import { getArticles, getTrendingArticles, getSavedArticleIds, getLikedArticleIds } from "@/lib/data";
+import { getArticles, getTrendingArticles, getSavedArticleIds } from "@/lib/data";
 
 import { createClient } from "@/lib/supabase/server";
 
@@ -11,13 +11,12 @@ export default async function HomePage() {
     const { data } = await supabase.auth.getUser();
     const user = data?.user;
 
-    const [allArticles, trendingArticles, savedArticleIds, likedArticleIds] = await Promise.all([
+    const [articles, trendingArticles, savedArticleIds] = await Promise.all([
         getArticles(),
         getTrendingArticles(),
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>())
     ]);
-    const [heroArticle, ...feedArticles] = allArticles;
+    const [heroArticle, ...feedArticles] = articles;
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
@@ -38,7 +37,6 @@ export default async function HomePage() {
                                         <ArticleHero
                                             article={heroArticle}
                                             isSaved={savedArticleIds.has(heroArticle.id)}
-                                            isLiked={likedArticleIds.has(heroArticle.id)}
                                         />
                                     </div>
                                 </div>
@@ -55,7 +53,6 @@ export default async function HomePage() {
                                 <ArticleGrid
                                     articles={feedArticles}
                                     savedArticleIds={savedArticleIds}
-                                    likedArticleIds={likedArticleIds}
                                     mobileHeroArticle={heroArticle}
                                 />
                             </div>

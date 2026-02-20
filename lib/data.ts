@@ -46,8 +46,6 @@ const mapDBArticleToAppArticle = (dbArticle: any, profileMap: Map<string, any>):
         publishedAt: dbArticle.published_at,
         readTime: dbArticle.read_time || Math.ceil((dbArticle.content?.split(/\s+/).length || 0) / 200) || 5,
         views: dbArticle.views,
-        likes: dbArticle.likes_count || 0,
-        comments: 0,
         tags: [], // Placeholder
     };
 };
@@ -204,16 +202,6 @@ export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
     return new Set(data.map((item: { article_id: string }) => item.article_id));
 }
 
-export async function getLikedArticleIds(userId: string): Promise<Set<string>> {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-        .from("likes")
-        .select("article_id")
-        .eq("user_id", userId);
-
-    if (error) return new Set();
-    return new Set(data.map((item: { article_id: string }) => item.article_id));
-}
 
 const getCachedRelatedArticles = (category: string, excludeId: string) => unstable_cache(
     async (category: string, excludeId: string) => {

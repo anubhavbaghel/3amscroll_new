@@ -4,11 +4,10 @@ import { ArticleCard } from "@/components/article/ArticleCard";
 interface ArticleGridProps {
     articles: Article[];
     savedArticleIds?: Set<string>;
-    likedArticleIds?: Set<string>;
     mobileHeroArticle?: Article;
 }
 
-export function ArticleGrid({ articles, savedArticleIds = new Set(), likedArticleIds = new Set(), mobileHeroArticle }: ArticleGridProps) {
+export function ArticleGrid({ articles, savedArticleIds = new Set(), mobileHeroArticle }: ArticleGridProps) {
     return (
         <div className="space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
             {/* Mobile Hero Article (Only visible on mobile) */}
@@ -18,7 +17,6 @@ export function ArticleGrid({ articles, savedArticleIds = new Set(), likedArticl
                         article={mobileHeroArticle}
                         priority={true}
                         isSaved={savedArticleIds.has(mobileHeroArticle.id)}
-                        isLiked={likedArticleIds.has(mobileHeroArticle.id)}
                     />
                 </div>
             )}
@@ -29,7 +27,6 @@ export function ArticleGrid({ articles, savedArticleIds = new Set(), likedArticl
                     article={article}
                     priority={index < 1}
                     isSaved={savedArticleIds.has(article.id)}
-                    isLiked={likedArticleIds.has(article.id)}
                 />
             ))}
         </div>

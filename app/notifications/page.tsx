@@ -24,7 +24,7 @@ export default async function NotificationsPage() {
                     </div>
                     <h2 className="text-xl font-semibold mb-2">No notifications yet</h2>
                     <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
-                        When you get likes, comments, or followers, they'll show up here.
+                        When you get followers or other updates, they'll show up here.
                     </p>
                 </div>
             </div>

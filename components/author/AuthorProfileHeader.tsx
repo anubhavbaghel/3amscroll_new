@@ -7,7 +7,6 @@ interface AuthorProfileHeaderProps {
     stats: {
         articles: number;
         views: number;
-        likes: number;
     };
 }
 
@@ -92,12 +91,6 @@ export function AuthorProfileHeader({ author, stats }: AuthorProfileHeaderProps)
                                     {(stats.views / 1000).toFixed(1)}k
                                 </div>
                                 <div className="text-sm text-gray-500 uppercase tracking-wider font-medium">Views</div>
-                            </div>
-                            <div>
-                                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                                    {(stats.likes / 1000).toFixed(1)}k
-                                </div>
-                                <div className="text-sm text-gray-500 uppercase tracking-wider font-medium">Likes</div>
                             </div>
                         </div>
                     </div>
