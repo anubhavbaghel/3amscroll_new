@@ -34,27 +34,40 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                 aria-label={`Read ${article.title}`}
             />
 
-            {/* Image Container */}
-            <div className="relative aspect-video w-full overflow-hidden">
-                <Image
-                    src={article.coverImage}
-                    alt={article.title}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    priority={priority}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
+            {/* Image Container - Conditional */}
+            {article.coverImage ? (
+                <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                        src={article.coverImage}
+                        alt={article.title}
+                        fill
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        priority={priority}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
 
-                {/* Gradient Overlay (Subtle) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                    {/* Gradient Overlay (Subtle) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
-                {/* Category Badge (Top Left) */}
-                <div className="absolute top-3 left-3 z-10">
-                    <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider border border-white/10 shadow-lg">
+                    {/* Category Badge (Top Left) */}
+                    <div className="absolute top-3 left-3 z-10">
+                        <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider border border-white/10 shadow-lg">
+                            {article.category}
+                        </span>
+                    </div>
+                </div>
+            ) : (
+                <div className="pt-10 px-6 pb-2 border-b border-gray-50 dark:border-white/5 bg-gray-50/30 dark:bg-white/[0.02]">
+                    <span className="text-brand text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 bg-brand/10 rounded-full border border-brand/20 inline-block mb-6">
                         {article.category}
                     </span>
+                    <div className="absolute top-6 right-6 opacity-[0.05] dark:opacity-[0.08] pointer-events-none select-none">
+                        <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14.59 2.59c-.38-.38-.89-.59-1.42-.59H4.99c-1.1 0-2 .9-2 2v15.99c0 1.1.89 2 2 2h14.01c1.1 0 2-.9 2-2V8c0-.53-.21-1.04-.59-1.41l-4.83-4.83zM15 19H5V4h7v5h5v10z" />
+                        </svg>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Content */}
             <div className="flex-1 p-4 md:p-5 flex flex-col relative z-10 pointer-events-none">
@@ -70,12 +83,12 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold mb-2 leading-tight text-gray-900 dark:text-gray-100 group-hover:text-brand transition-colors font-display line-clamp-2">
+                <h3 className={`${article.coverImage ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'} font-bold mb-3 leading-tight text-gray-900 dark:text-gray-100 group-hover:text-brand transition-colors font-display line-clamp-3`}>
                     {article.title}
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-gray-500 text-sm line-clamp-2 mb-4 leading-relaxed dark:text-gray-400">
+                <p className={`text-gray-500 text-sm mb-4 leading-relaxed dark:text-gray-400 ${article.coverImage ? 'line-clamp-2' : 'line-clamp-4'}`}>
                     {article.excerpt}
                 </p>
 

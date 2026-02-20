@@ -5,13 +5,14 @@ import { unstable_cache } from "next/cache";
 
 // Helper to batch fetch author profiles
 async function batchFetchAuthorProfiles(authorUuids: string[]) {
-    if (authorUuids.length === 0) return new Map();
+    const validUuids = authorUuids.filter(Boolean);
+    if (validUuids.length === 0) return new Map();
 
     const supabase = createPublicClient();
     const { data } = await supabase
         .from("profiles")
         .select("id, name, avatar, bio")
-        .in("id", authorUuids);
+        .in("id", validUuids);
 
     // Create a map for quick lookup
     const profileMap = new Map();
@@ -25,7 +26,8 @@ async function batchFetchAuthorProfiles(authorUuids: string[]) {
 // Helper to map DB result to our App Type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapDBArticleToAppArticle = (dbArticle: any, profileMap: Map<string, any>): Article => {
-    const authorProfile = dbArticle.author_uuid ? profileMap.get(dbArticle.author_uuid) : null;
+    const authorId = dbArticle.author_uuid || dbArticle.author_id;
+    const authorProfile = authorId ? profileMap.get(authorId) : null;
 
     return {
         id: dbArticle.id,
@@ -36,7 +38,7 @@ const mapDBArticleToAppArticle = (dbArticle: any, profileMap: Map<string, any>):
         coverImage: dbArticle.cover_image,
         category: dbArticle.category,
         author: {
-            id: dbArticle.author_uuid || dbArticle.author_id,
+            id: authorId || "unknown",
             name: authorProfile?.name || dbArticle.author_name || "Unknown Author",
             avatar: authorProfile?.avatar || dbArticle.author_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(authorProfile?.name || dbArticle.author_name || "User")}&background=random`,
             bio: authorProfile?.bio || "",

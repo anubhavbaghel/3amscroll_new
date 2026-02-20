@@ -24,19 +24,32 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                 aria-label={`Read ${article.title}`}
             />
 
-            {/* Background Image */}
+            {/* Background Image or Typographic Texture */}
             <div className="absolute inset-0">
-                <Image
-                    src={article.coverImage}
-                    alt={`${article.title} - Cover Image`}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                    priority
-                    sizes="(max-width: 1024px) 100vw, (max-width: 1536px) 80vw, 1200px"
-                />
-                {/* Enhanced Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 lg:opacity-80" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent opacity-60" />
+                {article.coverImage ? (
+                    <>
+                        <Image
+                            src={article.coverImage}
+                            alt={`${article.title} - Cover Image`}
+                            fill
+                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            priority
+                            sizes="(max-width: 1024px) 100vw, (max-width: 1536px) 80vw, 1200px"
+                        />
+                        {/* Enhanced Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 lg:opacity-80" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent opacity-60" />
+                    </>
+                ) : (
+                    <div className="absolute inset-0 bg-slate-900 overflow-hidden">
+                        <div className="absolute inset-0 opacity-[0.03] select-none pointer-events-none flex flex-wrap gap-12 p-12 text-white font-black text-8xl uppercase tracking-tighter">
+                            {Array.from({ length: 12 }).map((_, i) => (
+                                <span key={i} className="whitespace-nowrap">{article.category}</span>
+                            ))}
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-brand/5 to-purple-500/10" />
+                    </div>
+                )}
             </div>
 
             {/* Bookmark/Like Buttons (Top Right) */}

@@ -7,7 +7,7 @@ import { createArticle, updateArticle } from "@/app/admin/actions";
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Search, Target, CheckCircle2, AlertCircle, Eye, BarChart3 } from "lucide-react";
+import { Search, Target, CheckCircle2, AlertCircle, Eye, BarChart3, Sparkles, RefreshCcw } from "lucide-react";
 interface ArticleData {
     id?: string;
     title: string;
@@ -44,6 +44,14 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
     const [focusKeyword, setFocusKeyword] = useState(initialData?.focus_keyword || "");
     const [coverImageAlt, setCoverImageAlt] = useState(initialData?.cover_image_alt || "");
     const [isDirty, setIsDirty] = useState(false);
+    const [isSeoSuggesting, setIsSeoSuggesting] = useState(false);
+    const [lastContentWordCount, setLastContentWordCount] = useState(0);
+
+    // Track word count
+    useEffect(() => {
+        const words = content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+        setLastContentWordCount(words);
+    }, [content]);
 
     // Track dirty state
     useEffect(() => {
@@ -76,6 +84,75 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [isDirty]);
 
+    // AI Helper: Suggest SEO content with improved heuristics
+    const suggestSEO = async () => {
+        if (!title && !content) {
+            toast.error("Add a title or content first!");
+            return;
+        }
+
+        setIsSeoSuggesting(true);
+        try {
+            const stopWords = new Set(['the', 'and', 'for', 'with', 'this', 'that', 'from', 'your', 'will', 'have', 'more', 'about', 'their', 'there', 'what', 'which', 'when', 'article', 'post', 'blog', 'read', 'guide', 'how', 'why', 'can', 'should', 'would', 'could', 'some', 'these', 'those', 'into', 'only', 'than', 'then', 'also', 'just', 'more', 'very', 'been', 'being', 'were', 'have', 'had', 'has', 'any', 'all', 'out', 'up', 'down', 'new', 'old', 'get', 'make', 'may', 'see', 'use', 'one', 'two', 'three', 'best', 'top', 'fast', 'slow', 'big', 'small']);
+
+            const cleanTitle = title.toLowerCase().replace(/[^a-z0-9\s]/g, "");
+            const cleanContent = content.replace(/<[^>]*>/g, " ").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+
+            // Extract words and bigrams
+            const titleWords = cleanTitle.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
+            const contentWords = cleanContent.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
+
+            const scores: Record<string, number> = {};
+
+            // Score single words
+            contentWords.forEach(w => scores[w] = (scores[w] || 0) + 1);
+            titleWords.forEach(w => scores[w] = (scores[w] || 0) + 5);
+
+            // Simple Bigram logic (e.g., "iphone 16", "artificial intelligence")
+            const allWords = [...titleWords, ...contentWords];
+            for (let i = 0; i < allWords.length - 1; i++) {
+                const bigram = `${allWords[i]} ${allWords[i + 1]}`;
+                scores[bigram] = (scores[bigram] || 0) + 3;
+            }
+
+            const sortedSuggestions = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const bestKeyword = sortedSuggestions[0]?.[0] || title.split(' ')[0] || "";
+
+            setFocusKeyword(bestKeyword);
+
+            // Optimized SEO Title (stricter limit)
+            const brand = " | 3AM SCROLL";
+            const maxTitleLen = 60 - brand.length;
+            const optimizedTitle = title.length > maxTitleLen ? title.substring(0, maxTitleLen - 3) + "..." : title;
+            setSeoTitle(optimizedTitle + brand);
+
+            // Excerpt and Meta Description extraction (target sweet spot)
+            const bodyText = content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+            if (!excerpt && bodyText) {
+                const autoExcerpt = bodyText.substring(0, 155).trim();
+                setExcerpt(autoExcerpt + (bodyText.length > 155 ? "..." : ""));
+            }
+
+            // Target exactly 155-157 chars to stay in the 120-160 sweet spot
+            let prospectiveDesc = (excerpt || bodyText).substring(0, 157).trim();
+            if (prospectiveDesc.length > 155) {
+                prospectiveDesc = prospectiveDesc.substring(0, 152) + "...";
+            }
+            setSeoDescription(prospectiveDesc);
+
+            if (!coverImageAlt && title) {
+                setCoverImageAlt(`Article image for: ${title}`);
+            }
+
+            toast.success("SEO fields optimized!");
+        } catch (error) {
+            toast.error("Failed to generate suggestions");
+        } finally {
+            setIsSeoSuggesting(false);
+        }
+    };
+
     // Auto-generate slug from title if in create mode and slug is empty
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newTitle = e.target.value;
@@ -90,8 +167,8 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
 
         const targetStatus = submitStatus || status;
 
-        if (!title || !slug || !excerpt || !content || !coverImage) {
-            toast.error("Please fill in all required fields");
+        if (!title || !slug || !excerpt || !content) {
+            toast.error("Please fill in all required fields (Title, Content, Excerpt)");
             return;
         }
 
@@ -104,7 +181,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         formData.append("category", category);
         formData.append("excerpt", excerpt);
         formData.append("content", content);
-        formData.append("cover_image", coverImage);
+        formData.append("cover_image", coverImage || "");
         formData.append("status", targetStatus);
         formData.append("seo_title", seoTitle);
         formData.append("seo_description", seoDescription);
@@ -159,12 +236,18 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         {
             id: 'word-count',
             label: "Content length (min 300 words)",
-            passed: content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length >= 300,
+            passed: lastContentWordCount >= 300,
         }
     ];
 
     const passedCount = seoChecklist.filter(c => c.passed).length;
     const seoScore = Math.round((passedCount / seoChecklist.length) * 100);
+
+    const getScoreColor = (score: number) => {
+        if (score >= 80) return "text-green-500 border-green-500/20 bg-green-500/5";
+        if (score >= 50) return "text-amber-500 border-amber-500/20 bg-amber-500/5";
+        return "text-red-500 border-red-500/20 bg-red-500/5";
+    };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -215,9 +298,20 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                                 <Search className="w-5 h-5 text-indigo-500" />
                                 <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Search Engine Optimization</h3>
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 rounded-full">
-                                <BarChart3 className="w-4 h-4 text-gray-500" />
-                                <span className="text-xs font-bold text-gray-700 dark:text-gray-300">SEO Score: {seoScore}%</span>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={suggestSEO}
+                                    disabled={isSeoSuggesting}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all disabled:opacity-50 mr-2"
+                                >
+                                    <Sparkles className={`w-3.5 h-3.5 ${isSeoSuggesting ? "animate-spin" : ""}`} />
+                                    {isSeoSuggesting ? "Analyzing..." : "Magic Suggest"}
+                                </button>
+                                <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 rounded-full">
+                                    <BarChart3 className="w-4 h-4 text-gray-500" />
+                                    <span className="text-xs font-bold text-gray-700 dark:text-gray-300">SEO Score: {seoScore}%</span>
+                                </div>
                             </div>
                         </div>
 

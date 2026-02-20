@@ -111,18 +111,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <ArticleHeader article={article} />
 
             {/* ─── COVER IMAGE — wider than text column ─────────────── */}
-            <div className="max-w-[860px] mx-auto px-4 sm:px-6 mt-8 mb-10">
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
-                    <Image
-                        src={article.coverImage}
-                        alt={article.title}
-                        fill
-                        className="object-cover"
-                        priority
-                        sizes="(max-width: 768px) 100vw, 860px"
-                    />
+            {article.coverImage && (
+                <div className="max-w-[860px] mx-auto px-4 sm:px-6 mt-8 mb-10">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
+                        <Image
+                            src={article.coverImage}
+                            alt={article.title}
+                            fill
+                            className="object-cover"
+                            priority
+                            sizes="(max-width: 768px) 100vw, 860px"
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
             <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
@@ -131,7 +133,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <ArticleContent article={article} />
 
                 {/* Desktop engagement row — hidden on mobile */}
-                <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-y border-gray-200 dark:border-gray-800">
+                <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
                     <div className="flex items-center gap-6">
                         <LikeButton
                             articleId={article.id}

@@ -71,15 +71,14 @@ export function ArticleNavbar({
 
                     <Link
                         href={routes.home}
-                        className={`font-bold tracking-tighter transition-all duration-300 font-logo ${scrolled ? "text-xl opacity-100" : "text-2xl opacity-0 translate-y-2 pointer-events-none"
+                        className={`font-bold tracking-tighter transition-all duration-300 font-logo ${scrolled ? "text-xl" : "text-2xl"
                             } text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400`}
                     >
                         3AM SCROLL
                     </Link>
 
-                    {/* Desktop Title on Scroll */}
-                    <div className={`hidden md:block transition-all duration-300 font-medium text-sm text-gray-500 dark:text-gray-400 line-clamp-1 max-w-sm ${scrolled ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"
-                        }`}>
+                    {/* Desktop Title */}
+                    <div className={`hidden md:block transition-all duration-300 font-medium text-sm text-gray-500 dark:text-gray-400 line-clamp-1 max-w-sm`}>
                         {articleTitle}
                     </div>
                 </div>
