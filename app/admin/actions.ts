@@ -4,6 +4,19 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+async function isAdmin(supabase: any) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    return profile?.role === 'admin';
+}
+
 export async function createArticle(formData: FormData) {
     const supabase = await createClient();
 
@@ -11,8 +24,8 @@ export async function createArticle(formData: FormData) {
     const { data: authData } = await supabase.auth.getUser();
     const user = authData?.user;
 
-    if (!user) {
-        redirect("/login");
+    if (!user || !(await isAdmin(supabase))) {
+        throw new Error("Unauthorized: Admin access required");
     }
 
     const title = formData.get("title") as string;
@@ -85,6 +98,11 @@ export async function updateArticle(formData: FormData) {
     const supabase = await createClient();
 
     const id = formData.get("id") as string;
+
+    if (!(await isAdmin(supabase))) {
+        throw new Error("Unauthorized: Admin access required");
+    }
+
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
     const category = formData.get("category") as string;
@@ -138,8 +156,8 @@ export async function deleteArticle(id: string) {
     // Auth check
     const { data: authData } = await supabase.auth.getUser();
     const user = authData?.user;
-    if (!user) {
-        throw new Error("Unauthorized");
+    if (!user || !(await isAdmin(supabase))) {
+        throw new Error("Unauthorized: Admin access required");
     }
 
     const { error } = await supabase
@@ -162,8 +180,8 @@ export async function updateArticleStatus(id: string, status: string) {
 
     // Auth check
     const { data: authData } = await supabase.auth.getUser();
-    if (!authData?.user) {
-        throw new Error("Unauthorized");
+    if (!authData?.user || !(await isAdmin(supabase))) {
+        throw new Error("Unauthorized: Admin access required");
     }
 
     const { error } = await supabase
