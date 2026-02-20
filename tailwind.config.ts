@@ -32,12 +32,17 @@ export default {
             },
             animation: {
                 'infinite-scroll': 'infinite-scroll 25s linear infinite',
+                'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
             },
             keyframes: {
                 'infinite-scroll': {
                     from: { transform: 'translateX(0)' },
                     to: { transform: 'translateX(-100%)' },
-                }
+                },
+                'fade-in-up': {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
             }
         },
     },
