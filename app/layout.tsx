@@ -178,7 +178,7 @@ export default async function RootLayout({
                 <BottomNav user={user} role={role} />
                 <FloatingWriteButton user={user} role={role} />
                 <Toaster position="top-right" richColors />
-                <GoogleAnalytics gaId="G-XXXXXXXXXX" />
+                <GoogleAnalytics gaId="G-3PVH4N2F01" />
             </body>
         </html >
     );
