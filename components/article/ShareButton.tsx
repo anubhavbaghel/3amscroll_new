@@ -19,7 +19,14 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
 
     // Use current URL if not provided
     const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-    const shareText = excerpt ? `${title} — ${excerpt}` : title;
+
+    // Premium formatting: *Bold Title* \n\n Excerpt
+    const shareText = excerpt
+        ? `*${title}*\n\n${excerpt}`
+        : `*${title}*`;
+
+    // WhatsApp logic uses the same formatting plus a CTA
+    const whatsappMessage = `${shareText}\n\nRead the full story here:\n${shareUrl}`;
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -41,7 +48,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
             try {
                 await navigator.share({
                     title,
-                    text: shareText,
+                    text: shareText, // Use formatted text
                     url: shareUrl,
                 });
             } catch (err) {
@@ -84,7 +91,8 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
     const shareToWhatsApp = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`;
+
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
         setIsOpen(false);
     };

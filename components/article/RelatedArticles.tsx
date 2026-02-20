@@ -65,15 +65,23 @@ export function RelatedArticles({ articles }: RelatedArticlesProps) {
                     >
                         <article className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-lg hover:border-brand dark:hover:border-brand transition-all h-full">
                             {/* Image */}
-                            <div className="aspect-video bg-gray-200 dark:bg-gray-800 relative overflow-hidden">
-                                <Image
-                                    src={article.coverImage}
-                                    alt={article.title}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                    sizes="320px"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                            <div className="aspect-video bg-gray-100 dark:bg-[#0B1221] relative overflow-hidden flex items-center justify-center">
+                                {article.coverImage ? (
+                                    <>
+                                        <Image
+                                            src={article.coverImage}
+                                            alt={article.title}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="320px"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                                    </>
+                                ) : (
+                                    <span className="text-2xl font-black tracking-[0.2em] text-blue-400/90 font-display">
+                                        3AM
+                                    </span>
+                                )}
                             </div>
 
                             {/* Content */}

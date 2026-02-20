@@ -90,7 +90,12 @@ export async function getComments(articleId: string) {
         .order("created_at", { ascending: false });
 
     if (error) {
-        console.error("Error fetching comments:", error);
+        console.error("Error fetching comments details:", {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+        });
         return { error: "Failed to load comments.", comments: [] };
     }
 

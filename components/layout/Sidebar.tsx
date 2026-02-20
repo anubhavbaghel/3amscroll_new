@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { Article } from "@/types";
@@ -11,35 +12,66 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
     return (
         <aside className="hidden lg:block lg:w-80 xl:w-96 shrink-0">
             <div className="sticky top-24 space-y-6">
-                {/* Trending Now */}
+                {/* Editors' Picks (formerly Trending) */}
                 <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border rounded-2xl p-6">
-                    <h2 className="text-xl font-bold mb-4">
-                        Trending Now
-                    </h2>
-                    <div className="space-y-4">
-                        {trendingArticles.slice(0, 5).map((article, index) => (
-                            <Link
-                                key={article.id}
-                                href={routes.article(article.slug)}
-                                className="block group"
-                            >
-                                <div className="flex gap-3">
-                                    <span className="text-2xl font-bold text-gray-300 dark:text-gray-700">
-                                        {index + 1}
-                                    </span>
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-blue-600 transition-colors">
-                                            {article.title}
-                                        </h3>
-                                        <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                                            <span>{article.category}</span>
-                                            <span>·</span>
-                                            <span>{article.readTime} min</span>
+                    <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2 mb-6">
+                        <h2 className="text-[13px] font-black uppercase tracking-[0.15em] text-slate-900 dark:text-white">
+                            Editors' Picks
+                        </h2>
+                        <svg className="w-5 h-5 text-gray-400/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="1.5" />
+                            <circle cx="19" cy="12" r="1.5" />
+                            <circle cx="5" cy="12" r="1.5" />
+                        </svg>
+                    </div>
+
+                    <div className="space-y-6">
+                        {trendingArticles.slice(0, 5).map((article) => {
+                            const hasImage = article.coverImage && article.coverImage.length > 0;
+
+                            return (
+                                <Link
+                                    key={article.id}
+                                    href={routes.article(article.slug)}
+                                    className="block group"
+                                >
+                                    <div className="flex gap-4 items-start">
+                                        {/* Square Thumbnail - Cleaned up to avoid weird borders */}
+                                        <div className="relative w-[88px] h-[88px] shrink-0 rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#0B1221] flex items-center justify-center">
+                                            {hasImage ? (
+                                                <Image
+                                                    src={article.coverImage}
+                                                    alt={article.title}
+                                                    fill
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <span className="text-[0.85rem] font-black tracking-[0.2em] text-blue-400/90 font-display">
+                                                    3AM
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Content Area */}
+                                        <div className="flex-1 min-w-0 pt-0.5">
+                                            <div className="text-[11px] font-bold uppercase tracking-widest text-[#4461F2] dark:text-blue-400 mb-1.5">
+                                                {article.category}
+                                            </div>
+                                            <h3 className="font-bold text-base leading-tight text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors line-clamp-2">
+                                                {article.title}
+                                            </h3>
+                                            <div className="mt-2 text-[12px] font-medium text-slate-500 dark:text-gray-400 tracking-wide uppercase">
+                                                {new Date(article.publishedAt).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric'
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
 

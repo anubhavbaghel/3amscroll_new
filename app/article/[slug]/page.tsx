@@ -66,14 +66,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const { data } = await supabase.auth.getUser();
     const user = data?.user;
 
-    const [article, savedArticleIds, likedArticleIds, commentsData] = await Promise.all([
-        getArticleBySlug(slug),
+    const article = await getArticleBySlug(slug);
+    if (!article) notFound();
+
+    const [savedArticleIds, likedArticleIds, commentsData] = await Promise.all([
         user ? getSavedArticleIds(user.id) : Promise.resolve(new Set<string>()),
         user ? getLikedArticleIds(user.id) : Promise.resolve(new Set<string>()),
-        getComments(slug),
+        getComments(article.id),
     ]);
-
-    if (!article) notFound();
 
     const relatedArticles = await getRelatedArticles(article.category, article.id);
 

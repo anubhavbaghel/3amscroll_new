@@ -13,11 +13,15 @@ interface BottomNavProps {
 
 export function BottomNav({ user, role }: BottomNavProps) {
     const pathname = usePathname();
+    const isArticlePage = pathname?.startsWith("/article");
+
+    // Hide BottomNav on article pages to avoid clash with MobileArticleBar
+    if (isArticlePage) return null;
 
     const isActive = (path: string) => pathname === path;
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 lg:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 lg:hidden pb-safe">
             <div className="flex items-center justify-around h-16">
                 {/* 1. Home */}
                 <Link
