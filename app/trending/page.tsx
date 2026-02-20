@@ -29,6 +29,7 @@ export default async function TrendingPage() {
             </div>
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 lg:pb-16 pt-8">
+                <h1 className="sr-only">Trending Stories and Articles</h1>
                 <TrendingHero articles={topArticles} />
 
                 {/* Main Content */}

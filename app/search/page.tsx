@@ -13,9 +13,10 @@ export default async function SearchPage() {
     const allArticles = await getArticles();
 
     return (
-        <>
+        <main>
+            <h1 className="sr-only">Search results for stories, authors, and topics</h1>
             <DynamicSearchPageContent initialArticles={allArticles} />
             <Footer />
-        </>
+        </main>
     );
 }

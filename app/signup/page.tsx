@@ -9,9 +9,9 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
         <div className="flex min-h-screen flex-col items-center justify-center py-2 bg-gray-50 dark:bg-black">
             <div className="w-full max-w-md space-y-8 px-4">
                 <div className="text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                         Create an account
-                    </h2>
+                    </h1>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                         Join 3AM SCROLL to save articles and more
                     </p>

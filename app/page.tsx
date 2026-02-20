@@ -47,9 +47,9 @@ export default async function HomePage() {
                             {/* Article Grid */}
                             <div className="space-y-6">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 pb-1 leading-tight">
+                                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 pb-1 leading-tight">
                                         Latest Stories
-                                    </h2>
+                                    </h1>
                                 </div>
 
                                 <ArticleGrid
