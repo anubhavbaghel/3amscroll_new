@@ -128,7 +128,6 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <head>
-                <link rel="preconnect" href="https://pnbbeidunmjofkdmvrtm.supabase.co" crossOrigin="" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
