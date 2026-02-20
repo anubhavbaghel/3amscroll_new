@@ -41,13 +41,13 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
                     {user ? (
                         <>
                             {/* Notification Icon - Always visible on mobile if logged in */}
-                            <Link href="/notifications" className="p-2 text-gray-600 dark:text-gray-300 hover:text-brand transition-colors">
+                            <Link href="/notifications" aria-label="Notifications" className="p-2 text-gray-700 dark:text-gray-300 hover:text-brand transition-colors">
                                 <Bell className="w-6 h-6" />
                             </Link>
 
                             {/* Settings Icon - Only on Profile Page */}
                             {isProfilePage && (
-                                <Link href="/settings" className="p-2 text-gray-600 dark:text-gray-300 hover:text-brand transition-colors">
+                                <Link href="/settings" aria-label="Settings" className="p-2 text-gray-700 dark:text-gray-300 hover:text-brand transition-colors">
                                     <Settings className="w-6 h-6" />
                                 </Link>
                             )}

@@ -22,11 +22,11 @@ export function TrendingHero({ articles }: TrendingHeroProps) {
                     <TrendingUp className="w-8 h-8 text-brand animate-pulse" />
                 </div>
                 <div>
-                    <h1 className="text-4xl md:text-5xl font-black font-logo tracking-tight uppercase italic relative">
+                    <h2 className="text-4xl md:text-5xl font-black font-logo tracking-tight uppercase italic relative text-gray-900 dark:text-white">
                         Trending Now
                         <span className="absolute -top-2 -right-6 text-xs bg-red-600 text-white px-1.5 py-0.5 rounded animate-bounce">LIVE</span>
-                    </h1>
-                    <p className="text-gray-500 font-medium">What the world is reading at 3AM.</p>
+                    </h2>
+                    <p className="text-gray-700 font-medium dark:text-gray-400">What the world is reading at 3AM.</p>
                 </div>
             </div>
 
@@ -83,12 +83,12 @@ function TrendingCard({ article, rank, isLarge = false, priority = false }: { ar
                         </div>
                     </div>
 
-                    <h3 className={cn(
+                    <h2 className={cn(
                         "font-black text-white leading-[0.9] mb-4 font-logo uppercase italic group-hover:text-brand-glow transition-colors",
                         isLarge ? "text-3xl md:text-5xl lg:text-6xl" : "text-xl md:text-2xl"
                     )}>
                         {article.title}
-                    </h3>
+                    </h2>
 
                     <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
                         <div className="w-6 h-6 rounded-full bg-gray-700 overflow-hidden relative border border-white/20">

@@ -56,13 +56,14 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                         animate={{ opacity: 1, y: 0 }}
                         className="relative z-20"
                     >
-                        <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-gray-400" />
+                        <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-6 h-6 md:w-8 md:h-8 text-gray-700 dark:text-gray-400" />
                         <input
                             type="text"
                             placeholder="Search stories..."
+                            aria-label="Search stories"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
-                            className="w-full bg-white dark:bg-dark-surface border-2 border-transparent focus:border-brand dark:focus:border-brand-glow outline-none rounded-3xl py-4 md:py-6 pl-12 md:pl-20 pr-6 md:pr-8 text-lg md:text-3xl font-bold placeholder:text-gray-300 dark:placeholder:text-gray-700 shadow-xl shadow-gray-200/50 dark:shadow-none transition-all"
+                            className="w-full bg-white dark:bg-dark-surface border-2 border-transparent focus:border-brand dark:focus:border-brand-glow outline-none rounded-3xl py-4 md:py-6 pl-12 md:pl-20 pr-6 md:pr-8 text-lg md:text-3xl font-bold placeholder:text-gray-400 dark:placeholder:text-gray-700 shadow-xl shadow-gray-200/50 dark:shadow-none transition-all"
                             autoFocus
                         />
                     </motion.div>
@@ -76,10 +77,10 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                         transition={{ delay: 0.2 }}
                     >
                         <div className="mb-12">
-                            <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-500 mb-6">
+                            <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-700 mb-6 dark:text-gray-400">
                                 <TrendingUp className="w-4 h-4" />
                                 Trending Topics
-                            </h3>
+                            </h2>
                             <div className="flex flex-wrap gap-3">
                                 {trendingTopics.map((topic) => (
                                     <button
@@ -95,9 +96,9 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
 
                         {/* Discover Section (Random suggestions) */}
                         <div>
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-6">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-gray-700 mb-6 dark:text-gray-400">
                                 Discover
-                            </h3>
+                            </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-60 hover:opacity-100 transition-opacity">
                                 {initialArticles.slice(0, 4).map(article => (
                                     <ArticleCard key={article.id} article={article} />
@@ -117,7 +118,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                         >
                             {results.length > 0 ? (
                                 <div className="space-y-8">
-                                    <p className="text-gray-500">
+                                    <p className="text-gray-700 dark:text-gray-400">
                                         Found {results.length} result{results.length !== 1 ? 's' : ''} for <span className="text-gray-900 dark:text-white font-bold">&quot;{query}&quot;</span>
                                     </p>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -128,7 +129,7 @@ export function SearchPageContent({ initialArticles }: SearchPageContentProps) {
                                 </div>
                             ) : (
                                 <div className="text-center py-20">
-                                    <p className="text-xl text-gray-500">No stories found for &quot;{query}&quot;</p>
+                                    <p className="text-xl text-gray-700 dark:text-gray-400">No stories found for &quot;{query}&quot;</p>
                                 </div>
                             )}
                         </motion.div>

@@ -26,52 +26,52 @@ export function BottomNav({ user, role }: BottomNavProps) {
                 {/* 1. Home */}
                 <Link
                     href={routes.home}
-                    className={`p-3 rounded-xl transition-colors ${isActive(routes.home) ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                    aria-label="Home"
+                    className={`p-3 rounded-xl transition-colors ${isActive(routes.home) ? "text-brand" : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                         }`}
                 >
                     <Home className="w-6 h-6" strokeWidth={isActive(routes.home) ? 2.5 : 2} />
-                    <span className="sr-only">Home</span>
                 </Link>
 
                 {/* 2. Following */}
                 <Link
                     href={user ? "/following" : "/login"}
-                    className={`p-3 rounded-xl transition-colors ${isActive("/following") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                    aria-label="Following"
+                    className={`p-3 rounded-xl transition-colors ${isActive("/following") ? "text-brand" : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                         }`}
                 >
                     <Users className="w-6 h-6" strokeWidth={isActive("/following") ? 2.5 : 2} />
-                    <span className="sr-only">Following</span>
                 </Link>
 
                 {/* 3. Search (Center) */}
                 <Link
                     href={routes.trending} // Acting as Explore/Search tab
-                    className={`p-3 rounded-xl transition-colors ${isActive(routes.trending) ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                    aria-label="Explore and Search"
+                    className={`p-3 rounded-xl transition-colors ${isActive(routes.trending) ? "text-brand" : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                         }`}
                 >
                     <Search className="w-6 h-6" strokeWidth={isActive(routes.trending) ? 2.5 : 2} />
-                    <span className="sr-only">Search</span>
                 </Link>
 
                 {/* 4. Bookmark */}
                 <Link
                     href={user ? routes.saved : "/login"}
-                    className={`p-3 rounded-xl transition-colors ${isActive(routes.saved) ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                    aria-label="Saved Articles"
+                    className={`p-3 rounded-xl transition-colors ${isActive(routes.saved) ? "text-brand" : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                         }`}
                 >
                     <Bookmark className="w-6 h-6" strokeWidth={isActive(routes.saved) ? 2.5 : 2} />
-                    <span className="sr-only">Saved</span>
                 </Link>
 
                 {/* 5. Notification / Login */}
                 {user?.id ? (
                     <Link
                         href="/profile"
-                        className={`p-3 rounded-xl transition-colors ${isActive("/profile") ? "text-brand" : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
+                        aria-label="Your Profile"
+                        className={`p-3 rounded-xl transition-colors ${isActive("/profile") ? "text-brand" : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                             }`}
                     >
                         <UserIcon className="w-6 h-6" strokeWidth={isActive("/profile") ? 2.5 : 2} />
-                        <span className="sr-only">Profile</span>
                     </Link>
                 ) : (
                     <Link

@@ -72,7 +72,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
             {/* Content */}
             <div className="flex-1 p-4 md:p-5 flex flex-col relative z-10 pointer-events-none">
                 {/* Meta Row */}
-                <div className="flex items-center justify-between text-xs text-gray-400 font-medium mb-3">
+                <div className="flex items-center justify-between text-xs text-gray-700 font-medium mb-3 dark:text-gray-400">
                     <div className="flex items-center gap-2">
                         <span>{article.readTime} min read</span>
                         <span>•</span>
@@ -83,12 +83,12 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                 </div>
 
                 {/* Title */}
-                <h3 className={`${article.coverImage ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'} font-bold mb-3 leading-tight text-gray-900 dark:text-gray-100 group-hover:text-brand transition-colors font-display line-clamp-3`}>
+                <h2 className={`${article.coverImage ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'} font-bold mb-3 leading-tight text-gray-900 dark:text-gray-100 group-hover:text-brand transition-colors font-display line-clamp-3`}>
                     {article.title}
-                </h3>
+                </h2>
 
                 {/* Excerpt */}
-                <p className={`text-gray-500 text-sm mb-4 leading-relaxed dark:text-gray-400 ${article.coverImage ? 'line-clamp-2' : 'line-clamp-4'}`}>
+                <p className={`text-gray-700 text-sm mb-4 leading-relaxed dark:text-gray-400 ${article.coverImage ? 'line-clamp-2' : 'line-clamp-4'}`}>
                     {article.excerpt}
                 </p>
 
