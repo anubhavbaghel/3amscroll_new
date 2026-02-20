@@ -31,22 +31,35 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         return { title: "Article Not Found | 3AM SCROLL" };
     }
 
-    const ogUrl = new URL(`${process.env.NEXT_PUBLIC_APP_URL || 'https://3amscroll.vercel.app'}/api/og`);
+    // Ensure OG image URL is absolute and uses the production domain
+    const ogUrl = new URL(`${baseUrl}/api/og`);
     ogUrl.searchParams.set('title', article.title);
     ogUrl.searchParams.set('author', article.author.name);
     ogUrl.searchParams.set('date', new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
     ogUrl.searchParams.set('readTime', article.readTime.toString());
     ogUrl.searchParams.set('cover', article.coverImage);
 
+    const articleUrl = `${baseUrl}/article/${article.slug}`;
+
     return {
         title: `${article.title} | 3AM SCROLL`,
         description: article.excerpt,
+        alternates: {
+            canonical: articleUrl,
+        },
         openGraph: {
             title: article.title,
             description: article.excerpt,
-            url: `https://3amscroll.com/article/${article.slug}`,
+            url: articleUrl,
             siteName: '3AM SCROLL',
-            images: [{ url: ogUrl.toString(), width: 1200, height: 630, alt: article.title }],
+            images: [
+                {
+                    url: ogUrl.toString(),
+                    width: 1200,
+                    height: 630,
+                    alt: article.title,
+                }
+            ],
             locale: 'en_US',
             type: 'article',
         },
@@ -157,7 +170,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <ShareButton
                             title={article.title}
                             excerpt={article.excerpt}
-                            url={`https://3amscroll.com/article/${article.slug}`}
+                            url={`${baseUrl}/article/${article.slug}`}
                             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                         />
                     </div>
