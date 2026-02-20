@@ -43,6 +43,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                         fill
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                         priority={priority}
+                        fetchPriority={priority ? "high" : "auto"}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
 

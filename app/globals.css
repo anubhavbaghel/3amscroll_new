@@ -6,9 +6,9 @@
     --background: #ffffff;
     --foreground: #0a0a0a;
     /* Magazine Typography Variables */
-    --font-sans: 'Switzer', sans-serif;
-    --font-display: 'Switzer', sans-serif;
-    --font-logo: 'Clash Display', sans-serif;
+    --font-sans: var(--font-switzer), sans-serif;
+    --font-display: var(--font-switzer), sans-serif;
+    --font-logo: var(--font-clash-display), sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -76,7 +76,7 @@ h6 {
 .prose h2,
 .prose h3,
 .prose h4 {
-    font-family: 'Switzer', sans-serif;
+    font-family: var(--font-switzer), sans-serif;
     color: var(--foreground);
     letter-spacing: -0.02em;
 }

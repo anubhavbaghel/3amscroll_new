@@ -5,7 +5,29 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { FloatingWriteButton } from "@/components/write/FloatingWriteButton";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const switzer = localFont({
+    src: [
+        { path: "./fonts/switzer-400.woff2", weight: "400", style: "normal" },
+        { path: "./fonts/switzer-500.woff2", weight: "500", style: "normal" },
+        { path: "./fonts/switzer-600.woff2", weight: "600", style: "normal" },
+        { path: "./fonts/switzer-700.woff2", weight: "700", style: "normal" },
+        { path: "./fonts/switzer-800.woff2", weight: "800", style: "normal" },
+    ],
+    variable: "--font-switzer",
+    display: "swap",
+});
+
+const clashDisplay = localFont({
+    src: [
+        { path: "./fonts/clash-display-600.woff2", weight: "600", style: "normal" },
+        { path: "./fonts/clash-display-700.woff2", weight: "700", style: "normal" },
+    ],
+    variable: "--font-clash-display",
+    display: "swap",
+});
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://3amscroll.com'),
@@ -106,19 +128,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <head>
-                <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://pnbbeidunmjofkdmvrtm.supabase.co" crossOrigin="" />
-                <link rel="dns-prefetch" href="https://api.fontshare.com" />
-                <link
-                    rel="preload"
-                    as="style"
-                    href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap"
-                />
-                <link
-                    rel="stylesheet"
-                    href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap"
-                    media="all"
-                />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -161,7 +171,7 @@ export default async function RootLayout({
                     }}
                 />
             </head>
-            <body className="antialiased font-sans pb-16 lg:pb-0" suppressHydrationWarning>
+            <body className={`antialiased ${switzer.variable} ${clashDisplay.variable} font-sans pb-16 lg:pb-0`} suppressHydrationWarning>
                 <MobileHeader user={user} role={role} />
                 <DesktopHeader user={user} role={role} />
                 {children}
