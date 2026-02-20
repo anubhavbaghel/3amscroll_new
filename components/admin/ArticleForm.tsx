@@ -200,9 +200,8 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                 setIsDirty(false); // Reset dirty state on successful save
                 router.push("/admin");
                 router.refresh();
-            } catch (error) {
-                console.error(error);
-                toast.error("Something went wrong");
+            } catch (error: any) {
+                toast.error(error.message || "Something went wrong.");
             }
         });
     };

@@ -9,7 +9,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['var(--font-inter)', 'sans-serif'],
+                sans: ['Switzer', 'sans-serif'],
                 display: ['Switzer', 'sans-serif'],
                 logo: ['Clash Display', 'sans-serif'],
             },

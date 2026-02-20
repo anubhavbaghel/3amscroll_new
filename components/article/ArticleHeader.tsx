@@ -15,29 +15,22 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
             {article.category && (
                 <Link
                     href={`/category/${article.category.toLowerCase()}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-brand mb-5 hover:opacity-70 transition-opacity"
+                    className="inline-flex items-center gap-2 text-[0.75rem] font-bold uppercase tracking-widest text-brand mb-6 hover:opacity-70 transition-opacity"
                 >
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                    <span className="w-[6px] h-[6px] rounded-full bg-brand" />
                     {article.category}
                 </Link>
             )}
 
             {/* Title */}
-            <h1 className="text-[1.875rem] sm:text-[2.25rem] lg:text-[2.75rem] font-bold leading-[1.2] tracking-tight mb-3 text-gray-900 dark:text-white font-display">
+            <h1 className="text-[2.125rem] sm:text-[2.5rem] lg:text-[3rem] font-bold leading-[1.05] tracking-tight mb-8 text-gray-900 dark:text-white font-display">
                 {article.title}
             </h1>
 
-            {/* Date · Read time — directly below title */}
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
-                <span>{formatDate(article.publishedAt)}</span>
-                <span>·</span>
-                <span>{article.readTime} min read</span>
-            </div>
-
-            {/* Author row — avatar + name + follow */}
-            <div className="flex items-center gap-3 mb-7">
+            {/* Author row — Avatar + Multi-row Meta */}
+            <div className="flex items-center gap-4 mb-10">
                 <Link href={routes.author(article.author.id)} className="shrink-0">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-gray-800">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-gray-100 dark:ring-gray-800">
                         {article.author.avatar ? (
                             <Image
                                 src={article.author.avatar}
@@ -46,28 +39,36 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
                                 className="object-cover"
                             />
                         ) : (
-                            <div className="w-full h-full bg-brand flex items-center justify-center text-white font-bold">
+                            <div className="w-full h-full bg-brand flex items-center justify-center text-white font-bold text-xl">
                                 {article.author.name?.[0]?.toUpperCase()}
                             </div>
                         )}
                     </div>
                 </Link>
-                <div className="flex-1 min-w-0">
-                    <Link
-                        href={routes.author(article.author.id)}
-                        className="font-semibold text-sm text-gray-900 dark:text-white hover:text-brand dark:hover:text-brand transition-colors"
-                    >
-                        {article.author.name}
-                    </Link>
+
+                <div className="flex flex-col justify-center min-w-0">
+                    <div className="flex items-center gap-2 leading-none mb-1.5">
+                        <Link
+                            href={routes.author(article.author.id)}
+                            className="font-bold text-[1rem] text-gray-900 dark:text-white hover:text-brand transition-colors"
+                        >
+                            {article.author.name}
+                        </Link>
+                        <button className="text-[0.875rem] font-bold text-brand hover:underline">
+                            Follow
+                        </button>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[0.8125rem] font-medium text-gray-500 dark:text-gray-400 leading-none">
+                        <span>{formatDate(article.publishedAt)}</span>
+                        <span>·</span>
+                        <span>{article.readTime} min read</span>
+                    </div>
                 </div>
-                {/* Follow button */}
-                <button className="shrink-0 text-xs font-semibold px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-brand hover:text-brand dark:hover:border-brand dark:hover:text-brand transition-colors">
-                    Follow
-                </button>
             </div>
 
-            {/* Excerpt — below author */}
-            <p className="text-[1.0625rem] text-gray-600 dark:text-gray-400 leading-relaxed mb-0">
+            {/* Excerpt — directly below author metadata */}
+            <p className="text-[1.125rem] text-gray-600 dark:text-gray-400 leading-[1.6] mb-12 font-medium">
                 {article.excerpt}
             </p>
         </header>

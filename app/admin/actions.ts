@@ -136,12 +136,11 @@ export async function updateArticle(formData: FormData) {
             focus_keyword,
             cover_image_alt,
             read_time: readTime,
-            updated_at: new Date().toISOString(),
         })
         .eq("id", id);
 
     if (error) {
-        console.error("Error updating article:", error);
+        console.error("Supabase Update Error [Article ID:", id, "]:", error.message, error.details, error.hint);
         throw new Error(`Failed to update article: ${error.message}`);
     }
 
@@ -188,7 +187,6 @@ export async function updateArticleStatus(id: string, status: string) {
         .from("articles")
         .update({
             status,
-            updated_at: new Date().toISOString()
         })
         .eq("id", id);
 

@@ -5,14 +5,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { FloatingWriteButton } from "@/components/write/FloatingWriteButton";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-    subsets: ["latin"],
-    variable: "--font-inter",
-    display: "swap",
-});
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://3amscroll.com'),
@@ -111,7 +104,7 @@ export default async function RootLayout({
     }
 
     return (
-        <html lang="en" className={`${inter.variable}`}>
+        <html lang="en">
             <head>
                 <link rel="preconnect" href="https://api.fontshare.com" />
                 <link rel="dns-prefetch" href="https://api.fontshare.com" />

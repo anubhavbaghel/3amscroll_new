@@ -69,46 +69,23 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
 
             {/* Content */}
             <div className="relative z-20 h-full flex flex-col justify-end p-6 lg:p-10 pb-24 lg:pb-12 text-white pointer-events-none max-w-7xl mx-auto w-full">
-                {/* Category Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 lg:px-4 lg:py-1.5 rounded-full bg-brand/80 backdrop-blur-md border border-white/20 text-xs lg:text-sm font-bold tracking-wider mb-4 lg:mb-4 w-fit shadow-lg shadow-brand/20 uppercase animate-fade-in-up">
-                    {article.category}
+                {/* Styled Category Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand/90 backdrop-blur-md border border-white/20 text-[0.6875rem] font-black tracking-[0.05em] mb-4 w-fit shadow-lg shadow-brand/20 uppercase animate-fade-in-up">
+                    FEATURED STORY
                 </div>
 
                 {/* Title */}
-                <h1 className="text-4xl md:text-6xl lg:text-5xl xl:text-6xl font-black mb-3 lg:mb-4 leading-[0.95] tracking-tight font-display text-white drop-shadow-lg animate-fade-in-up delay-100 line-clamp-3">
+                <h1 className="text-[2rem] md:text-[3rem] font-bold mb-6 leading-[1.1] tracking-tight font-display text-white drop-shadow-lg animate-fade-in-up delay-100 max-w-4xl">
                     {article.title}
                 </h1>
 
-                {/* Excerpt */}
-                <p className="text-lg md:text-xl lg:text-lg text-gray-200 mb-6 lg:mb-6 line-clamp-3 lg:line-clamp-2 max-w-2xl font-medium leading-relaxed animate-fade-in-up delay-200">
-                    {article.excerpt}
-                </p>
-
-                {/* Author Link - Interactive */}
-                <div className="animate-fade-in-up delay-300">
-                    <Link
-                        href={routes.author(article.author.id)}
-                        className="flex items-center gap-3 lg:gap-4 group/author pointer-events-auto w-fit p-2 -ml-2 rounded-xl hover:bg-white/10 transition-colors"
-                    >
-                        <div className="relative w-10 h-10 lg:w-12 lg:h-12 rounded-full overflow-hidden border-2 border-white/50 group-hover/author:border-brand transition-colors">
-                            <Image
-                                src={article.author.avatar}
-                                alt={article.author.name}
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base lg:text-lg text-white group-hover/author:text-brand transition-colors">
-                                {article.author.name}
-                            </span>
-                            <span className="text-xs lg:text-sm text-gray-300 font-medium flex items-center gap-2">
-                                {formatTimeAgo(article.publishedAt)}
-                                <span className="w-1 h-1 rounded-full bg-gray-400" />
-                                {article.readTime} min read
-                            </span>
-                        </div>
+                {/* Simple Metadata Row (Julian Voss Style) */}
+                <div className="flex items-center gap-2 text-[0.875rem] md:text-[1rem] font-bold text-gray-200/90 animate-fade-in-up delay-200">
+                    <Link href={routes.author(article.author.id)} className="hover:text-white transition-colors">
+                        By {article.author.name}
                     </Link>
+                    <span className="opacity-60 text-lg leading-none">•</span>
+                    <span>{article.readTime} Min Read</span>
                 </div>
             </div>
 

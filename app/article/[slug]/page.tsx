@@ -112,7 +112,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* ─── COVER IMAGE — wider than text column ─────────────── */}
             {article.coverImage && (
-                <div className="max-w-[860px] mx-auto px-4 sm:px-6 mt-8 mb-10">
+                <div className="max-w-[680px] mx-auto px-4 sm:px-6 mt-8 mb-10">
                     <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
                         <Image
                             src={article.coverImage}
