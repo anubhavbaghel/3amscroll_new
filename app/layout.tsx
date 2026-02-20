@@ -107,6 +107,7 @@ export default async function RootLayout({
         <html lang="en">
             <head>
                 <link rel="preconnect" href="https://api.fontshare.com" />
+                <link rel="preconnect" href="https://pnbbeidunmjofkdmvrtm.supabase.co" crossOrigin="" />
                 <link rel="dns-prefetch" href="https://api.fontshare.com" />
                 <link
                     rel="preload"
@@ -116,6 +117,7 @@ export default async function RootLayout({
                 <link
                     rel="stylesheet"
                     href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&f[]=clash-display@600,700&display=swap"
+                    media="all"
                 />
                 <script
                     type="application/ld+json"

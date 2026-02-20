@@ -27,7 +27,7 @@ export function ArticleGrid({ articles, savedArticleIds = new Set(), likedArticl
                 <ArticleCard
                     key={article.id}
                     article={article}
-                    priority={index < 6}
+                    priority={index < 2}
                     isSaved={savedArticleIds.has(article.id)}
                     isLiked={likedArticleIds.has(article.id)}
                 />

@@ -100,7 +100,7 @@ export function ArticleCard({ article, priority = false, isSaved = false, isLike
                             {article.author.avatar ? (
                                 <Image src={article.author.avatar} alt={article.author.name} fill className="object-cover" />
                             ) : (
-                                <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                                <span className="text-xs font-bold text-gray-700 dark:text-gray-400">
                                     {article.author.name?.[0]?.toUpperCase()}
                                 </span>
                             )}

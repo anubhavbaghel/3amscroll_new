@@ -14,7 +14,7 @@ export function Footer() {
                         <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 drop-shadow-sm inline-block mb-3">
                             3AM SCROLL
                         </Link>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
                             Your late-night scroll companion for news, articles, and stories.
                         </p>
                         {/* Social Links */}
@@ -52,7 +52,7 @@ export function Footer() {
                                 <li key={category.id}>
                                     <Link
                                         href={routes.category(category.slug)}
-                                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                                        className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                     >
                                         {category.name}
                                     </Link>
@@ -66,27 +66,27 @@ export function Footer() {
                         <h3 className="font-semibold text-sm uppercase tracking-wider mb-4">Quick Links</h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link href={routes.home} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                <Link href={routes.home} className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link href={routes.trending} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                <Link href={routes.trending} className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     Trending
                                 </Link>
                             </li>
                             <li>
-                                <Link href={routes.about} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                <Link href={routes.about} className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     About Us
                                 </Link>
                             </li>
                             <li>
-                                <Link href={routes.saved} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                <Link href={routes.saved} className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     Saved Articles
                                 </Link>
                             </li>
                             <li>
-                                <Link href={routes.profile} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                <Link href={routes.profile} className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                     Profile
                                 </Link>
                             </li>
@@ -96,7 +96,7 @@ export function Footer() {
                     {/* Newsletter */}
                     <div>
                         <h3 className="font-semibold text-sm uppercase tracking-wider mb-4">Newsletter</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        <p className="text-sm text-gray-700 dark:text-gray-400 mb-4">
                             Get the latest stories delivered to your inbox.
                         </p>
                         <DynamicNewsletterForm />
@@ -106,17 +106,17 @@ export function Footer() {
                 {/* Bottom Bar */}
                 <div className="pt-8 border-t border-gray-200 dark:border-gray-800">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-gray-700 dark:text-gray-400">
                             © {new Date().getFullYear()} 3AM SCROLL. All rights reserved.
                         </p>
                         <div className="flex items-center gap-6">
-                            <Link href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <Link href="/privacy" className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                 Privacy Policy
                             </Link>
-                            <Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <Link href="/terms" className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                 Terms of Service
                             </Link>
-                            <Link href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <Link href="/contact" className="text-sm text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                 Contact
                             </Link>
                         </div>

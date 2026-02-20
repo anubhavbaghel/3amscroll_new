@@ -34,7 +34,8 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                             fill
                             className="object-cover transition-transform duration-1000 group-hover:scale-105"
                             priority
-                            sizes="(max-width: 1024px) 100vw, (max-width: 1536px) 80vw, 1200px"
+                            fetchPriority="high"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, (max-width: 1536px) 80vw, 1200px"
                         />
                         {/* Enhanced Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 lg:opacity-80" />
@@ -57,12 +58,14 @@ export function ArticleHero({ article, isSaved = false, isLiked = false }: Artic
                 <BookmarkButton
                     articleId={article.id}
                     initialIsBookmarked={isSaved}
+                    aria-label={isSaved ? "Remove from bookmarks" : "Add to bookmarks"}
                     className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 text-white hover:text-blue-400 bg-white/10 backdrop-blur-md border border-white/10 rounded-full transition-all hover:bg-white/20 active:scale-95"
                 />
                 <LikeButton
                     articleId={article.id}
                     initialLikes={article.likes}
                     initialIsLiked={isLiked}
+                    aria-label={isLiked ? "Unlike article" : "Like article"}
                     className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 text-white hover:text-red-500 bg-white/10 backdrop-blur-md border border-white/10 rounded-full transition-all hover:bg-white/20 active:scale-95"
                 />
             </div>
