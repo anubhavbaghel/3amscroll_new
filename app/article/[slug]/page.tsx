@@ -10,6 +10,7 @@ import { ShareButton } from "@/components/article/ShareButton";
 import { MobileArticleBar } from "@/components/article/MobileArticleBar";
 import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
+import "../../article-styles.css";
 import dynamic from "next/dynamic";
 
 const Comments = dynamic(() => import("@/components/article/Comments").then(mod => mod.Comments), {
