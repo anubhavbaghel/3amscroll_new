@@ -9,6 +9,7 @@ import { SearchBar } from "@/components/search/SearchBar";
 import { User } from "@supabase/supabase-js";
 import { WriteArticleButton } from "@/components/write/WriteArticleButton";
 import { CategoryNav } from "./CategoryNav";
+import { Bookmark } from "lucide-react";
 
 import { usePathname } from "next/navigation";
 
@@ -82,10 +83,18 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
 
                         {/* Right Actions */}
                         <div className="flex items-center justify-end gap-3">
-                            {/* Search */}
                             <Suspense fallback={<div className="w-48 xl:w-64 h-10 bg-gray-100 dark:bg-dark-surface rounded-full animate-pulse" />}>
                                 <SearchBar className="w-48 xl:w-64" />
                             </Suspense>
+
+                            {/* Bookmarks Button */}
+                            <Link
+                                href={user ? routes.saved : "/login"}
+                                className="p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface text-gray-700 dark:text-gray-300 transition-colors group"
+                                title="Saved Articles"
+                            >
+                                <Bookmark className="w-5 h-5 group-hover:text-brand transition-colors" />
+                            </Link>
 
                             {/* Write Button - Admin Only */}
                             {role === 'admin' && (

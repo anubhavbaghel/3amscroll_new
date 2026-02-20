@@ -28,7 +28,7 @@ export default async function SavedPage() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black pb-20">
             {/* Header */}
-            <div className="pt-44 lg:pt-40 pb-8 md:pb-12 px-4 md:px-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-dark-surface">
+            <div className="pt-32 lg:pt-12 pb-8 md:pb-12 px-4 md:px-8 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-dark-surface">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-center gap-3 text-brand mb-4">
                         <Bookmark className="w-5 h-5 md:w-6 md:h-6" />
