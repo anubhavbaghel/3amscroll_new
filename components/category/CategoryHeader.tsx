@@ -29,6 +29,7 @@ export function CategoryHeader({ category, count, featuredArticle }: CategoryHea
             case "gaming": return "from-purple-600 via-pink-600 to-rose-900";
             case "finance": return "from-emerald-600 via-teal-600 to-cyan-900";
             case "lifestyle": return "from-orange-500 via-amber-500 to-yellow-900";
+            case "creative": return "from-pink-500 via-rose-500 to-red-900";
             default: return "from-gray-700 via-gray-800 to-black";
         }
     };
@@ -101,7 +102,10 @@ export function CategoryHeader({ category, count, featuredArticle }: CategoryHea
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                        <h1 className="text-[15vw] lg:text-[12rem] font-black uppercase leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 font-display transform -ml-[0.5vw] lg:-ml-4 break-words">
+                        <h1 className={`font-black uppercase leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 font-display transform -ml-[0.5vw] lg:-ml-4 whitespace-nowrap ${categoryName.length > 10
+                            ? 'text-[10vw] lg:text-[9rem]'
+                            : 'text-[15vw] lg:text-[12rem]'
+                            }`}>
                             {categoryName}
                         </h1>
                     </motion.div>

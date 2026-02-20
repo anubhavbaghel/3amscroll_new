@@ -16,6 +16,8 @@ import { getComments } from "@/app/actions/comment";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 interface ArticlePageProps {
     params: Promise<{
@@ -102,13 +104,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         "datePublished": article.publishedAt,
         "dateModified": article.updatedAt || article.publishedAt,
         "author": [{ "@type": "Person", "name": article.author.name, "url": `${baseUrl}/author/${article.author.id}` }],
-        "publisher": { "@type": "Organization", "name": "3AM SCROLL" },
+        "publisher": {
+            "@type": "Organization",
+            "name": "3AM SCROLL",
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${baseUrl}/icon-512.png`
+            }
+        },
         "mainEntityOfPage": { "@type": "WebPage", "@id": `${baseUrl}/article/${article.slug}` }
     };
+
+    const breadcrumbItems = [
+        { name: "Articles", item: `${baseUrl}/trending` }, // Or appropriate parent
+        { name: article.category, item: `${baseUrl}/${article.category.toLowerCase()}` },
+        { name: article.title, item: `${baseUrl}/article/${article.slug}` }
+    ];
 
     return (
         <div className="min-h-screen bg-white dark:bg-dark-bg">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+            <BreadcrumbJsonLd items={breadcrumbItems} />
 
             <ArticleNavbar
                 user={user}
@@ -141,6 +157,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
             <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
+
+                {/* Breadcrumbs */}
+                <div className="mb-8">
+                    <Breadcrumbs
+                        items={[
+                            { label: article.category, href: `/${article.category.toLowerCase()}` },
+                            { label: article.title, href: `/article/${article.slug}`, active: true }
+                        ]}
+                    />
+                </div>
 
                 {/* Article text content */}
                 <ArticleContent article={article} />

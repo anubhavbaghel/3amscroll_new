@@ -14,7 +14,7 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
             {/* Category pill */}
             {article.category && (
                 <Link
-                    href={`/category/${article.category.toLowerCase()}`}
+                    href={`/${article.category.toLowerCase()}`}
                     className="inline-flex items-center gap-2 text-[0.75rem] font-bold uppercase tracking-widest text-brand mb-6 hover:opacity-70 transition-opacity"
                 >
                     <span className="w-[6px] h-[6px] rounded-full bg-brand" />

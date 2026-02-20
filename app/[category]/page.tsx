@@ -4,6 +4,10 @@ import { ArticleCard } from "@/components/article/ArticleCard";
 import { getArticles } from "@/lib/data";
 import { CategoryHeader } from "@/components/category/CategoryHeader";
 import { Metadata } from "next";
+import { siteConfig, Category } from "@/config/site";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
+import { baseUrl } from "@/app/sitemap";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -49,7 +53,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         article => article.category.toLowerCase() === category.toLowerCase()
     );
 
-    const validCategories = ['tech', 'gaming', 'finance', 'lifestyle', 'travel', 'creative', 'world', 'career', 'entertainment'];
+    const validCategories = siteConfig.categories.map((cat: Category) => cat.slug) as string[];
 
     // Allow any category that has articles, OR is in our valid list (even if empty)
     if (categoryArticles.length === 0 && !validCategories.includes(category.toLowerCase())) {
@@ -58,8 +62,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     const categoryName = formatCategory(category);
 
+    const breadcrumbItems = [
+        { name: categoryName, item: `${baseUrl}/${category}` }
+    ];
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-black">
+            <BreadcrumbJsonLd items={breadcrumbItems} />
             <CategoryHeader
                 category={categoryName}
                 count={categoryArticles.length}
@@ -67,6 +76,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-10 relative z-20">
+                <Breadcrumbs
+                    items={[
+                        { label: categoryName, href: `/${category}`, active: true }
+                    ]}
+                />
                 {categoryArticles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {categoryArticles.map((article) => (

@@ -1,7 +1,8 @@
 import { getArticles } from "@/lib/data";
 import { MetadataRoute } from "next";
+import { siteConfig } from "@/config/site";
 
-export const baseUrl = "https://3amscroll.com"; // Replace with actual domain in production
+export const baseUrl = "https://3amscroll.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const articles = await getArticles();
@@ -29,18 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Category pages - high priority for SEO
-    const categories = [
-        "tech",
-        "gaming",
-        "finance",
-        "lifestyle",
-        "travel",
-        "entertainment",
-        "creative",
-        "world",
-        "career",
-    ].map((category) => ({
-        url: `${baseUrl}/${category}`,
+    const categories = siteConfig.categories.map((category) => ({
+        url: `${baseUrl}/${category.slug}`,
         lastModified: new Date().toISOString(),
         changeFrequency: "daily" as const,
         priority: 0.9,

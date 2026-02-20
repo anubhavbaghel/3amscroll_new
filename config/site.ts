@@ -39,9 +39,9 @@ export const siteConfig = {
             description: "Global news and current events"
         },
         {
-            id: "creativity",
-            name: "Creativity & Art",
-            slug: "creativity",
+            id: "creative",
+            name: "Creatives & Arts",
+            slug: "creative",
             description: "Art, design, and creative inspiration"
         },
         {
