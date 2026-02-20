@@ -103,14 +103,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         "image": [article.coverImage],
         "datePublished": article.publishedAt,
         "dateModified": article.updatedAt || article.publishedAt,
-        "author": [{ "@type": "Person", "name": article.author.name, "url": `${baseUrl}/author/${article.author.id}` }],
+        "author": [{
+            "@type": "Person",
+            "name": article.author.name,
+            "url": `${baseUrl}/author/${article.author.id}`,
+            "description": article.author.bio
+        }],
         "publisher": {
             "@type": "Organization",
             "name": "3AM SCROLL",
             "logo": {
                 "@type": "ImageObject",
                 "url": `${baseUrl}/icon-512.png`
-            }
+            },
+            "description": "Your late-night scroll companion - News, articles, and stories for Gen Z"
         },
         "mainEntityOfPage": { "@type": "WebPage", "@id": `${baseUrl}/article/${article.slug}` }
     };

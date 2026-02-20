@@ -9,12 +9,12 @@ VALUES
     'The Future of AI: Beyond ChatGPT and LLMs',
     'future-of-ai-beyond-chatgpt',
     'As we move past the initial hype of generative AI, what comes next? We explore autonomous agents, reasoning models, and the "physical intelligence" of robots.',
-    '<h2>The Next Phase of AI</h2><p>While Large Language Models (LLMs) like GPT-4 have revolutionized text generation, the next frontier lies in <strong>action-oriented AI</strong>. Imagine agents that not only write emails but book flights, negotiate contracts, and manage your entire digital life.</p><h3>Physical Intelligence</h3><p>Robotics is catching up. Startups like Figure and Tesla are embedding multimodal AI into humanoid forms. The interaction between digital reasoning and physical actuation is where the magic happens.</p>',
+    '<h2>The Next Phase of AI</h2><p>Let''s be real: the honeymoon phase with ChatGPT is over. We''ve all felt that slight burnout from seeing the same AI-generated "I hope this email finds you well" template. But while the hype cycle might be cooling, the actual technology is entering its most disruptive phase yet. We''re moving beyond chatbots that just "talk" and into an era of agents that "do."</p><h3>From Chatbots to Agentic Workflows</h3><p>While Large Language Models (LLMs) like GPT-4 have revolutionized text generation, the next frontier lies in <strong>action-oriented AI</strong>. This is what we call agentic workflows. Instead of you prompting an AI to write a plan, the AI is given a goal—like "organize a 10-city launch event"—and it breaks that down into sub-tasks: booking flights, negotiating contracts with vendors, and managing the entire digital lifestyle loop. This isn''t science fiction; it''s the architecture being built right now by companies like OpenAI and Anthropic.</p><h3>Reasoning Models: The "Slow Thinking" Revolution</h3><p>The introduction of models like OpenAI''s o1 marks a shift toward reasoning models. These systems don''t just predict the next word; they "think" before they speak, utilizing chain-of-thought processing to solve complex math and coding problems. Speaking of coding, if you''re curious how this affects your dev setup, check out our comparison on <a href="/vs-code-vs-zed-editor">VS Code vs Zed</a> where we dive into how AI performance is changing the tools we use daily.</p><h3>Physical Intelligence: The World of Humanoids</h3><p>Robotics is finally catching up. Startups like Figure and Tesla are embedding multimodal AI into humanoid forms. The interaction between digital reasoning and physical actuation is the "physical intelligence" breakthrough we''ve been waiting for. These robots are learning from human video data, translating pixels into precise motor movements. We aren''t just looking at smarter screens; we''re looking at machines that can navigate the physical world with the same fluidity we do.</p>',
     'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1632&auto=format&fit=crop',
     'Tech',
     'd0ec9c36-0001-4444-8888-000000000001', 'Alex Chen', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
     NOW() - INTERVAL '2 days',
-    6, 1250, 45
+    8, 1250, 45
 ),
 (
     uuid_generate_v4(),
@@ -47,12 +47,12 @@ VALUES
     'GTA VI: Everything We Know So Far',
     'gta-6-leaks-release-date',
     'From the Vice City setting to the Bonnie & Clyde dynamic, Rockstar is cooking up something massive. Here is the definitive breakdown of all leaks.',
-    '<h2>Return to Vice City</h2><p>The neon-soaked streets are back. But this isn''t the 80s anymore. Modern day Vice City is a satire of social media culture, influencers, and Florida Man energy.</p>',
+    '<h2>Return to Vice City</h2><p>Remember that feeling of cruising down Ocean Drive in 2002? Rockstar knows you do. But <em>GTA VI</em> isn''t just a nostalgia trip; it''s a brutal, high-definition mirror pointed directly at 2020s Floridian chaos. Every leak, every trailer frame, and every rumor points toward a world that is more alive—and more unhinged—than anything we''ve ever played.</p><h3>The Vice City Meta</h3><p>The neon-soaked streets are back, but modern-day Vice City is obsessed with the social media era. Leaks suggest an in-game social network that mirrors the viral "Florida Man" energy we see on TikTok daily. It''s a satire of influencer culture, where your crimes might just go viral before the cops even arrive. Rockstar is evolving the "Bonnie & Clyde" dynamic with dual protagonists Jason and Lucia, promising a narrative depth that challenges the cynical humor the series is known for.</p><h3>Performance and Tech</h3><p>The technical scale is staggering. From specialized water physics to the AI density of crowds, this game is built to push next-gen hardware to its absolute limit. Whether you''re wondering if <a href="/steam-deck-vs-rog-ally">handheld PCs</a> like the ROG Ally X can even hope to run this beast, or if it''s strictly a desktop-class experience, the industry is bracing for a new benchmark in open-world realism.</p><h3>Why the Wait?</h3><p> Rockstar is perfectionist. They aren''t just building a game; they''re building a decade-long ecosystem. Following the blueprint of GTA Online, the new Vice City will likely be a living, breathing social hub for the next two console generations. The weight of expectation is heavy, but if history is any indication, Rockstar usually delivers on the hype.</p>',
     'https://images.unsplash.com/photo-1518005052304-a32d180425f5?q=80&w=1632&auto=format&fit=crop',
     'Gaming',
     'd0ec9c36-0001-4444-8888-000000000003', 'Mike Ross', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
     NOW() - INTERVAL '1 day',
-    4, 5600, 410
+    9, 5600, 410
 ),
 (
     uuid_generate_v4(),
@@ -85,12 +85,12 @@ VALUES
     'Dune: Part Two - A Cinematic Masterpiece',
     'dune-part-two-review',
     'Denis Villeneuve delivers a sci-fi epic that rivals Lord of the Rings. Visually stunning and emotionally devastating.',
-    '<h2>The Spice Must Flow</h2><p>Timothée Chalamet''s evolution from boy to Messiah-warlord is chilling. The scale of the sandworm rides alone is worth the IMAX ticket.</p>',
+    '<h2>The Spice Must Flow</h2><p>There is a specific kind of silence that falls over a theater when a truly epic cinematic moment happens. In <em>Dune: Part Two</em>, that silence is constant. Denis Villeneuve hasn''t just made a sequel; he''s delivered a masterclass in "Cinematic Brutalism," where the architecture of the world feels as heavy and oppressive as the fate of its characters.</p><h3>The Messiah Archetype Deconstructed</h3><p>Timothée Chalamet''s evolution from the displaced boy of Arrakis to a Messiah-warlord is chilling. This isn''t a typical hero''s journey; it''s a deconstruction of one. The film asks us: at what cost do we follow greatness? The emotional weight of Paul Atreides knowing the path he is on leads to holy war is handled with a devastating nuance that sets it apart from typical blockbuster fare.</p><h3>Visuals and Sound</h3><p>The scale of the sandworm rides alone is worth the IMAX ticket. Greig Fraser''s cinematography uses every inch of the frame to emphasize the vastness of the desert and the insignificance of man within it. Combined with Hans Zimmer''s alien, percussive score, it creates an atmosphere that is both awe-inspiring and terrifying. This is the rare kind of sci-fi epic that rivals the status of <em>Lord of the Rings</em> for our generation.</p>',
     'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=1470&auto=format&fit=crop',
     'Entertainment',
     'd0ec9c36-0001-4444-8888-000000000004', 'Emily Blunt', 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emily',
     NOW(),
-    5, 3100, 180
+    7, 3100, 180
 ),
 (
     uuid_generate_v4(),
