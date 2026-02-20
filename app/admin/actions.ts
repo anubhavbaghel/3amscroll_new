@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 async function isAdmin(supabase: any) {
     const { data: { user } } = await supabase.auth.getUser();
@@ -79,6 +80,12 @@ export async function createArticle(formData: FormData) {
 
     revalidatePath("/admin");
     revalidatePath("/");
+
+    // Ping IndexNow if published
+    if (status === 'published') {
+        submitToIndexNow([`https://3amscroll.com/article/${formattedSlug}`]);
+    }
+
     return { success: true };
 }
 
@@ -146,6 +153,12 @@ export async function updateArticle(formData: FormData) {
 
     revalidatePath("/admin");
     revalidatePath(`/article/${slug}`);
+
+    // Ping IndexNow if published
+    if (status === 'published') {
+        submitToIndexNow([`https://3amscroll.com/article/${slug}`]);
+    }
+
     return { success: true };
 }
 
@@ -197,5 +210,14 @@ export async function updateArticleStatus(id: string, status: string) {
 
     revalidatePath("/admin");
     revalidatePath("/");
+
+    // Ping IndexNow if published
+    if (status === 'published') {
+        const { data: article } = await supabase.from("articles").select("slug").eq("id", id).single();
+        if (article?.slug) {
+            submitToIndexNow([`https://3amscroll.com/article/${article.slug}`]);
+        }
+    }
+
     return { success: true };
 }
