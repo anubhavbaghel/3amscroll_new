@@ -20,13 +20,10 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
     // Use current URL if not provided
     const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
 
-    // Premium formatting: *Bold Title* \n\n Excerpt
+    // Premium formatting: *Bold Title* \n\n Excerpt \n\n Read full story here:
     const shareText = excerpt
-        ? `*${title}*\n\n${excerpt}`
-        : `*${title}*`;
-
-    // WhatsApp logic uses the same formatting plus a CTA
-    const whatsappMessage = `${shareText}\n\nRead the full story here:\n${shareUrl}`;
+        ? `*${title}*\n\n${excerpt}\n\nRead the full story here:\n${shareUrl}`
+        : `*${title}*\n\nRead the full story here:\n${shareUrl}`;
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -48,8 +45,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
             try {
                 await navigator.share({
                     title,
-                    text: shareText, // Use formatted text
-                    url: shareUrl,
+                    text: shareText, // Now includes title, excerpt, CTA, and URL
                 });
             } catch (err) {
                 // User cancelled — not an error
@@ -83,7 +79,8 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
     const shareToTwitter = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+        // Twitter doesn't like forced bolding/newlines as much, but we'll stick to a cleaner version
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
         window.open(twitterUrl, "_blank", "noopener,noreferrer");
         setIsOpen(false);
     };
@@ -92,7 +89,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
         e.preventDefault();
         e.stopPropagation();
 
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
         setIsOpen(false);
     };
