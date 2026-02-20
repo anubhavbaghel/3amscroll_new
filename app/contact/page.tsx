@@ -1,6 +1,10 @@
 import { Footer } from "@/components/layout/Footer";
-import { ContactForm } from "@/components/contact/ContactForm";
+import dynamic from "next/dynamic";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
+
+const ContactForm = dynamic(() => import("@/components/contact/ContactForm").then(mod => mod.ContactForm), {
+    loading: () => <div className="animate-pulse h-80 bg-gray-100 dark:bg-white/5 rounded-3xl w-full" />,
+});
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

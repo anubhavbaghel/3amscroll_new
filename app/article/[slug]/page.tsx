@@ -10,7 +10,11 @@ import { ShareButton } from "@/components/article/ShareButton";
 import { MobileArticleBar } from "@/components/article/MobileArticleBar";
 import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
-import { Comments } from "@/components/article/Comments";
+import dynamic from "next/dynamic";
+
+const Comments = dynamic(() => import("@/components/article/Comments").then(mod => mod.Comments), {
+    loading: () => <div className="animate-pulse h-40 bg-gray-100 dark:bg-white/5 rounded-2xl w-full" />,
+});
 import { getArticleBySlug, getSavedArticleIds, getLikedArticleIds, getRelatedArticles } from "@/lib/data";
 import { getComments } from "@/app/actions/comment";
 import { createClient } from "@/lib/supabase/server";

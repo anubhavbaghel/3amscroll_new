@@ -1,7 +1,12 @@
 "use strict";
 "use client";
 
-import { Editor } from "@/components/admin/Editor";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("@/components/admin/Editor").then(mod => mod.Editor), {
+    ssr: false,
+    loading: () => <div className="animate-pulse h-96 bg-gray-50 dark:bg-gray-800 rounded-lg w-full border border-gray-200 dark:border-gray-700" />,
+});
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createArticle, updateArticle } from "@/app/admin/actions";
 import { useState, useTransition, useEffect } from "react";
