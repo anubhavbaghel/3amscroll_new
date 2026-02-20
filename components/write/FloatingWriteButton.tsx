@@ -6,9 +6,12 @@ import { User } from "@supabase/supabase-js";
 
 interface FloatingWriteButtonProps {
     user: User | null;
+    role?: string | null;
 }
 
-export function FloatingWriteButton({ user }: FloatingWriteButtonProps) {
+export function FloatingWriteButton({ user, role }: FloatingWriteButtonProps) {
+    if (role !== 'admin') return null;
+
     return (
         <div className="fixed bottom-24 right-4 z-40 lg:hidden">
             <WriteArticleButton

@@ -9,12 +9,13 @@ import { CategoryNav } from "./CategoryNav";
 
 interface MobileHeaderProps {
     user?: User | null;
+    role?: string | null;
 }
 
 import { usePathname } from "next/navigation";
 import { Settings, Bell } from "lucide-react";
 
-export function MobileHeader({ user = null }: MobileHeaderProps) {
+export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
     const pathname = usePathname();
     const isProfilePage = pathname?.startsWith("/profile");
     const isSettingsPage = pathname?.startsWith("/settings");

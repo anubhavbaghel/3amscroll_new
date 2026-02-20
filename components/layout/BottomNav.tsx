@@ -8,9 +8,10 @@ import { User } from "@supabase/supabase-js";
 
 interface BottomNavProps {
     user: User | null;
+    role?: string | null;
 }
 
-export function BottomNav({ user }: BottomNavProps) {
+export function BottomNav({ user, role }: BottomNavProps) {
     const pathname = usePathname();
 
     const isActive = (path: string) => pathname === path;

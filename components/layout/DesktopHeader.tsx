@@ -14,9 +14,10 @@ import { usePathname } from "next/navigation";
 
 interface DesktopHeaderProps {
     user?: User | null;
+    role?: string | null;
 }
 
-export function DesktopHeader({ user = null }: DesktopHeaderProps) {
+export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) {
     const pathname = usePathname();
     const isArticlePage = pathname?.startsWith("/article");
 
@@ -86,11 +87,13 @@ export function DesktopHeader({ user = null }: DesktopHeaderProps) {
                                 <SearchBar className="w-48 xl:w-64" />
                             </Suspense>
 
-                            {/* Write Button */}
-                            <WriteArticleButton
-                                user={user}
-                                className="px-5 py-2.5 rounded-full bg-brand hover:bg-brand-dark text-white font-semibold transition-colors flex items-center gap-2 text-sm"
-                            />
+                            {/* Write Button - Admin Only */}
+                            {role === 'admin' && (
+                                <WriteArticleButton
+                                    user={user}
+                                    className="px-5 py-2.5 rounded-full bg-brand hover:bg-brand-dark text-white font-semibold transition-colors flex items-center gap-2 text-sm"
+                                />
+                            )}
 
                             {/* User Menu */}
                             <AuthButton user={user} />

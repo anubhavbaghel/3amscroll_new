@@ -100,6 +100,16 @@ export default async function RootLayout({
     const { data } = await supabase.auth.getUser();
     const user = data?.user;
 
+    let role = null;
+    if (user) {
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+        role = profile?.role || null;
+    }
+
     return (
         <html lang="en" className={`${inter.variable}`}>
             <head>
@@ -157,11 +167,11 @@ export default async function RootLayout({
                 />
             </head>
             <body className="antialiased font-sans pb-16 lg:pb-0" suppressHydrationWarning>
-                <MobileHeader user={user} />
-                <DesktopHeader user={user} />
+                <MobileHeader user={user} role={role} />
+                <DesktopHeader user={user} role={role} />
                 {children}
-                <BottomNav user={user} />
-                <FloatingWriteButton user={user} />
+                <BottomNav user={user} role={role} />
+                <FloatingWriteButton user={user} role={role} />
                 <Toaster position="top-right" richColors />
             </body>
         </html >
