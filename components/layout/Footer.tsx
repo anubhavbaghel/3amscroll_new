@@ -11,7 +11,7 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                     {/* Brand & Description */}
                     <div className="lg:col-span-1">
-                        <Link href={routes.home} className="font-bold text-xl tracking-tight inline-block mb-3">
+                        <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 drop-shadow-sm inline-block mb-3">
                             3AM SCROLL
                         </Link>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
