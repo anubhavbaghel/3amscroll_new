@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { toggleBookmark } from "@/app/actions/bookmark";
 import { useRouter } from "next/navigation";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface BookmarkButtonProps {
     articleId: string;
@@ -33,10 +34,10 @@ export function BookmarkButton({ articleId, initialIsBookmarked = false, classNa
                     router.push("/login");
                 }
             } else {
-                // Sync with server result just in case
-                // setIsBookmarked(result.isBookmarked); 
-                // Actually result.isBookmarked might be undefined if I didn't return it strictly correct in complex cases, 
-                // but !existing logic in actions was fine.
+                // Track bookmark event
+                if (!previousState) {
+                    sendGAEvent({ event: 'bookmark_article', value: articleId });
+                }
             }
         });
     };

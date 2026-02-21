@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Share2, Link2, Twitter, MessageCircle, Check } from "lucide-react";
 import { toast } from "sonner";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface ShareButtonProps {
     title: string;
@@ -47,6 +48,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
                     title,
                     text: shareText, // Now includes title, excerpt, CTA, and URL
                 });
+                sendGAEvent({ event: 'share_article', value: 'native', label: title });
             } catch (err) {
                 // User cancelled — not an error
                 if ((err as Error).name !== "AbortError") {
@@ -67,6 +69,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
             await navigator.clipboard.writeText(shareUrl);
             setCopied(true);
             toast.success("Link copied to clipboard!");
+            sendGAEvent({ event: 'share_article', value: 'copy_link', label: title });
             setTimeout(() => {
                 setCopied(false);
                 setIsOpen(false);
@@ -82,6 +85,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
         // Twitter doesn't like forced bolding/newlines as much, but we'll stick to a cleaner version
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
         window.open(twitterUrl, "_blank", "noopener,noreferrer");
+        sendGAEvent({ event: 'share_article', value: 'twitter', label: title });
         setIsOpen(false);
     };
 
@@ -91,6 +95,7 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
 
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+        sendGAEvent({ event: 'share_article', value: 'whatsapp', label: title });
         setIsOpen(false);
     };
 

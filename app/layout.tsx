@@ -97,9 +97,7 @@ export const metadata: Metadata = {
     },
     manifest: '/manifest.json',
     verification: {
-        // google: 'your-google-verification-code', // Add after setting up Google Search Console
-        // yandex: 'your-yandex-verification-code',
-        // bing: 'your-bing-verification-code',
+        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     },
     alternates: {
         canonical: 'https://3amscroll.com',
@@ -178,8 +176,8 @@ export default async function RootLayout({
                 <BottomNav user={user} role={role} />
                 <FloatingWriteButton user={user} role={role} />
                 <Toaster position="top-right" richColors />
-                <GoogleAnalytics gaId="G-3PVH4N2F01" />
+                {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
             </body>
-        </html >
+        </html>
     );
 }

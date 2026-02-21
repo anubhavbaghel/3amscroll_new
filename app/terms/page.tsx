@@ -16,22 +16,22 @@ export default function TermsPage() {
 
                 <h2>1. Acceptance of Terms</h2>
                 <p>
-                    By accessing or using our service, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the service.
+                    3AM SCROLL provides a platform for news and community-driven content. By creating an account or browsing the site, you acknowledge that you have read, understood, and agreed to be bound by these Terms of Service.
                 </p>
 
-                <h2>2. User Content</h2>
+                <h2>2. User Content & Conduct</h2>
                 <p>
-                    You retain ownership of the content you post, but you grant us a license to use, reproduce, and display it in connection with the service.
+                    You are responsible for any content you post. We reserve the right to remove content that violates our community standards, including but not limited to harassment, hate speech, or intellectual property infringement.
                 </p>
 
-                <h2>3. Prohibited Conduct</h2>
+                <h2>3. Intellectual Property</h2>
                 <p>
-                    You agree not to use the service for any unlawful purpose or to violate any laws in your jurisdiction.
+                    The design, logo, and original content of 3AM SCROLL are protected by copyright and trademark laws. User-submitted content remain the property of their respective authors.
                 </p>
 
-                <h2>4. Termination</h2>
+                <h2>4. Limitation of Liability</h2>
                 <p>
-                    We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever.
+                    3AM SCROLL is provided "as is" without any warranties. We are not liable for any damages arising from your use of the service.
                 </p>
             </div>
         </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { MessageSquare, Bookmark, Share2 } from "lucide-react";
 import { toggleBookmark } from "@/app/actions/bookmark";
 import { ShareButton } from "@/components/article/ShareButton";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface MobileArticleBarProps {
     articleId: string;
@@ -34,6 +35,10 @@ export function MobileArticleBar({
             if (result.error) {
                 setIsBookmarked(prev);
                 if (result.error.includes("logged in")) router.push("/login");
+            } else {
+                if (!prev) {
+                    sendGAEvent({ event: 'bookmark_article', value: articleId });
+                }
             }
         });
     };
