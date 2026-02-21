@@ -92,8 +92,8 @@ export const metadata: Metadata = {
         },
     },
     icons: {
-        icon: '/favicon.svg',
-        apple: '/favicon.svg',
+        icon: '/favicon.png',
+        apple: '/apple-touch-icon.png',
     },
     manifest: '/manifest.json',
     verification: {
