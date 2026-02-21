@@ -58,8 +58,6 @@ export async function searchArticles(query: string) {
                     publishedAt: article.published_at,
                     readTime: article.read_time || 5,
                     views: article.views,
-                    likes: article.likes_count || 0,
-                    comments: article.comments_count || 0,
                     tags: [],
                 };
             });
@@ -120,8 +118,6 @@ export async function getArticlesByCategory(category: string) {
                     publishedAt: article.published_at,
                     readTime: article.read_time || 5,
                     views: article.views,
-                    likes: article.likes_count || 0,
-                    comments: article.comments_count || 0,
                     tags: [],
                 };
             });
