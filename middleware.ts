@@ -58,7 +58,7 @@ export async function middleware(request: NextRequest) {
                 .eq("id", user.id)
                 .single();
 
-            if (profile?.role !== 'admin') {
+            if (profile?.role !== 'admin' && profile?.role !== 'editor') {
                 return NextResponse.redirect(new URL("/", request.url));
             }
         }

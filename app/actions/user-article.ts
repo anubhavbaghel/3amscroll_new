@@ -86,6 +86,18 @@ export async function createUserArticle(data: CreateUserArticleData) {
             return { error: "You must be logged in to create articles" };
         }
 
+        // Fetch user role
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+        const userRole = profile?.role || 'user';
+
+        // Force draft status for writers
+        const status = userRole === 'writer' ? 'draft' : data.status;
+
         // Validate content
         const validationErrors = validateArticleContent(data);
         if (validationErrors.length > 0) {
@@ -123,7 +135,7 @@ export async function createUserArticle(data: CreateUserArticleData) {
                 content: data.content,
                 cover_image: data.coverImage,
                 category: data.category,
-                status: data.status,
+                status: status,
                 seo_title: data.seo_title,
                 seo_description: data.seo_description,
                 focus_keyword: data.focus_keyword,
@@ -131,7 +143,7 @@ export async function createUserArticle(data: CreateUserArticleData) {
                 author_uuid: user.id,
                 created_by: user.id,
                 read_time: readTime,
-                published_at: data.status === 'published' ? new Date().toISOString() : null,
+                published_at: status === 'published' ? new Date().toISOString() : null,
             })
             .select()
             .single();
@@ -144,7 +156,7 @@ export async function createUserArticle(data: CreateUserArticleData) {
         // Revalidate paths
         revalidatePath('/');
         revalidatePath('/my-articles');
-        if (data.status === 'published') {
+        if (status === 'published') {
             revalidatePath(`/article/${data.slug}`);
         }
 
@@ -166,6 +178,15 @@ export async function updateUserArticle(articleId: string, data: CreateUserArtic
             return { error: "You must be logged in to update articles" };
         }
 
+        // Fetch user role
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+        const userRole = profile?.role || 'user';
+
         // Validate content
         const validationErrors = validateArticleContent(data);
         if (validationErrors.length > 0) {
@@ -182,9 +203,12 @@ export async function updateUserArticle(articleId: string, data: CreateUserArtic
             .eq('id', articleId)
             .single();
 
-        if (!existingArticle || existingArticle.author_uuid !== user.id) {
+        if (!existingArticle || (existingArticle.author_uuid !== user.id && userRole !== 'admin' && userRole !== 'editor')) {
             return { error: "You don't have permission to edit this article" };
         }
+
+        // Force draft status for writers
+        const status = userRole === 'writer' ? 'draft' : data.status;
 
         // Calculate read time
         const wordCount = data.content.split(/\s+/).filter(word => word.length > 0).length;
@@ -200,13 +224,13 @@ export async function updateUserArticle(articleId: string, data: CreateUserArtic
                 content: data.content,
                 cover_image: data.coverImage,
                 category: data.category,
-                status: data.status,
+                status: status,
                 seo_title: data.seo_title,
                 seo_description: data.seo_description,
                 focus_keyword: data.focus_keyword,
                 cover_image_alt: data.cover_image_alt,
                 read_time: readTime,
-                published_at: data.status === 'published' && !existingArticle ? new Date().toISOString() : undefined,
+                published_at: status === 'published' && !existingArticle ? new Date().toISOString() : undefined,
             })
             .eq('id', articleId)
             .select()

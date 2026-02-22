@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
         .eq("id", user.id)
         .single();
 
-    if (!profile || profile.role !== "admin") {
+    if (!profile || (profile.role !== "admin" && profile.role !== "editor")) {
         // If logged in but not admin, maybe redirect to logic with error
         // For now, force them to the admin login (which might show they are logged in as user, 
         // but since auth is shared, they are technically logged in. 
