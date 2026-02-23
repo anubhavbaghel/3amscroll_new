@@ -22,7 +22,7 @@ export async function TeamGrid() {
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Meet the Team</h2>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">
-                        The voices behind the scroll. We're a diverse group of creators, techies, and culture enthusiasts who never sleep.
+                        The voices behind the scroll. We&apos;re a diverse group of creators, techies, and culture enthusiasts who never sleep.
                     </p>
                 </div>
 
