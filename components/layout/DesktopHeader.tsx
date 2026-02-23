@@ -21,6 +21,7 @@ interface DesktopHeaderProps {
 export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) {
     const pathname = usePathname();
     const isArticlePage = pathname?.startsWith("/article");
+    const isIntroPage = pathname === "/intro";
 
     if (isArticlePage) return null;
 
@@ -48,6 +49,12 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
                                 className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors text-sm text-gray-700 dark:text-gray-300 hover:text-brand"
                             >
                                 Trending
+                            </Link>
+                            <Link
+                                href="/intro"
+                                className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors text-sm text-brand animate-pulse-slow font-semibold"
+                            >
+                                Start Here
                             </Link>
 
                             {/* Categories Dropdown */}
@@ -112,13 +119,15 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
             </div>
 
             {/* Category Pills Bar */}
-            <div className="relative z-10 py-3">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="py-1 -mx-6 px-6">
-                        <CategoryNav className="w-full" />
+            {!isIntroPage && (
+                <div className="relative z-10 py-3">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="py-1 -mx-6 px-6">
+                            <CategoryNav className="w-full" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </header>
     );
 }

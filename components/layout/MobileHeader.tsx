@@ -20,6 +20,7 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
     const isProfilePage = pathname?.startsWith("/profile");
     const isSettingsPage = pathname?.startsWith("/settings");
     const isArticlePage = pathname?.startsWith("/article");
+    const isIntroPage = pathname === "/intro";
 
     if (isArticlePage) return null;
 
@@ -27,9 +28,14 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
         <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-sm border-b border-gray-100 dark:border-dark-border transition-colors lg:hidden">
             <div className="flex items-center justify-between h-16 px-4">
                 {!isSettingsPage ? (
-                    <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-                        3AM SCROLL
-                    </Link>
+                    <div className="flex items-center gap-3 min-w-0">
+                        <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 truncate">
+                            3AM SCROLL
+                        </Link>
+                        <Link href="/intro" className="hidden xs:block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand/10 text-brand dark:bg-brand/20 dark:text-brand-glow whitespace-nowrap shrink-0">
+                            Start Here
+                        </Link>
+                    </div>
                 ) : (
                     <span className="font-bold text-xl text-gray-900 dark:text-white">
                         Settings
@@ -60,8 +66,8 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
                 </div>
             </div>
 
-            {/* Category Pills (Horizontal Scroll) - Hide on Profile & Settings Page */}
-            {!isProfilePage && !isSettingsPage && (
+            {/* Category Pills (Horizontal Scroll) - Hide on Profile, Settings & Intro Page */}
+            {!isProfilePage && !isSettingsPage && !isIntroPage && (
                 <div className="pt-2 pb-3">
                     <CategoryNav />
                 </div>
