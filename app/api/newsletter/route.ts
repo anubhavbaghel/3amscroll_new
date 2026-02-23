@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 export async function POST(request: Request) {
     try {
@@ -50,6 +51,35 @@ export async function POST(request: Request) {
             }
             console.error("Supabase insert error:", error);
             return NextResponse.json({ success: false, error: `Database Error: ${error.message}` }, { status: 500 });
+        }
+
+        // 3. Sync to Resend (if API key exists)
+        const resendApiKey = process.env.RESEND_API_KEY;
+        if (resendApiKey) {
+            try {
+                const resend = new Resend(resendApiKey);
+
+                const resendAudienceId = process.env.RESEND_AUDIENCE_ID;
+
+                // Add contact to Resend Audience. If you don't provide an Audience ID,
+                // Resend by default adds them to the "All Contacts" list in the dashboard.
+                if (resendAudienceId) {
+                    await resend.contacts.create({
+                        email: email,
+                        unsubscribed: false,
+                        audienceId: resendAudienceId,
+                    });
+                } else {
+                    await resend.contacts.create({
+                        email: email,
+                        unsubscribed: false,
+                        audienceId: "", // Or omit entirely if the SDK permits 
+                    } as any);
+                }
+            } catch (resendError) {
+                console.error("Resend Sync Error:", resendError);
+                // We don't return an error to the user here, since the Supabase insert was successful.
+            }
         }
 
         return NextResponse.json({ success: true, message: "Subscribed successfully!" }, { status: 200 });
