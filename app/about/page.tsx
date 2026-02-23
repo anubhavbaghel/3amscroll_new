@@ -1,6 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
-import { TeamGrid } from "@/components/about/TeamGrid";
 import { Metadata } from "next";
+import { Zap, Rocket, Users } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "About Us - Meet the Team",
@@ -82,6 +82,37 @@ export default function AboutPage() {
                     </div>
                 </section>
 
+                {/* Our Story Section */}
+                <section className="py-24 border-t border-gray-100 dark:border-white/5 relative bg-gray-50/30 dark:bg-white/[0.02]">
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex flex-col md:flex-row gap-12 items-center">
+                            <div className="flex-1 space-y-6">
+                                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">How it started.</h2>
+                                <div className="space-y-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    <p>
+                                        It began exactly as you&apos;d expect: diving down a digital rabbit hole at 3:00 AM. We realized that the internet had become incredibly noisy, filled with clickbait, corporate jargon, and endless algorithmic fluff.
+                                    </p>
+                                    <p>
+                                        We didn&apos;t just want to endlessly scroll anymore; we wanted to consume content that actually respected our intelligence and matched our pace.
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        So, we built the sanctuary we couldn&apos;t find.
+                                    </p>
+                                    <p>
+                                        3AM SCROLL is for the makers, the nocturnal thinkers, and the permanently curious. We filter out the static so you can focus on the signal.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex-1 relative w-full aspect-square md:aspect-auto md:h-[400px] rounded-3xl overflow-hidden shadow-2xl shadow-brand/10 border border-white/10 group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-brand/20 to-purple-600/20 mix-blend-overlay z-10" />
+                                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500 z-0" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Values Section */}
                 <section className="py-24 relative">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,28 +130,31 @@ export default function AboutPage() {
                                     desc: "No corporate fluff. We speak your language and cover stories with the authenticity you deserve.",
                                     bg: "bg-blue-500/10",
                                     border: "hover:border-blue-500/30",
-                                    glow: "group-hover:bg-blue-500/10"
+                                    glow: "group-hover:bg-blue-500/10",
+                                    icon: <Zap className="w-6 h-6 text-blue-500" />
                                 },
                                 {
                                     title: "Future-Focused",
                                     desc: "From AI to climate tech, we're obsessed with what's next and how it shapes our reality.",
                                     bg: "bg-purple-500/10",
                                     border: "hover:border-purple-500/30",
-                                    glow: "group-hover:bg-purple-500/10"
+                                    glow: "group-hover:bg-purple-500/10",
+                                    icon: <Rocket className="w-6 h-6 text-purple-500" />
                                 },
                                 {
                                     title: "Community-Driven",
                                     desc: "We're not just a platform; we're a collective. Your voice shapes exactly what we cover.",
                                     bg: "bg-brand/10",
                                     border: "hover:border-brand/30",
-                                    glow: "group-hover:bg-brand/10"
+                                    glow: "group-hover:bg-brand/10",
+                                    icon: <Users className="w-6 h-6 text-brand" />
                                 }
                             ].map((val, i) => (
                                 <div key={i} className={`group relative p-8 rounded-3xl bg-gray-50/50 dark:bg-dark-surface/50 border border-gray-100 dark:border-white/5 ${val.border} transition-all duration-300 overflow-hidden`}>
                                     <div className={`absolute inset-0 transition-colors duration-500 ${val.glow} opacity-0 group-hover:opacity-100`} />
                                     <div className="relative z-10">
                                         <div className={`w-14 h-14 rounded-2xl ${val.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                                            <div className="w-6 h-6 bg-current opacity-50 rounded-lg" />
+                                            {val.icon}
                                         </div>
                                         <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{val.title}</h3>
                                         <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
@@ -133,8 +167,6 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                {/* Team Section */}
-                <TeamGrid />
             </main>
 
             <Footer />
