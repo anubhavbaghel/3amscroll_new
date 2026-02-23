@@ -4,10 +4,8 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useState } from "react";
 
 export function NewsletterForm() {
-    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
-    // Prevent GitGuardian from flagging by not hardcoding the dummy key
-    const isDummy = siteKey.startsWith("0x4AAAAAA") || siteKey.includes("your_site_key");
-    const isTurnstileEnabled = siteKey.length > 5 && !isDummy;
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    const isTurnstileEnabled = !!siteKey && siteKey.length > 5;
 
     const [token, setToken] = useState<string>(isTurnstileEnabled ? "" : "skipped");
     const [email, setEmail] = useState("");

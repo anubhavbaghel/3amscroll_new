@@ -4,11 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 export async function POST(request: Request) {
     try {
         const { email, token } = await request.json();
-        const secretKeyRaw = process.env.TURNSTILE_SECRET_KEY || "";
-        // Prevent GitGuardian from flagging by not hardcoding the dummy key
-        const isDummy = secretKeyRaw.startsWith("0x4AAAAAA") || secretKeyRaw.includes("your_secret_key");
-        const isTurnstileEnabled = secretKeyRaw.length > 5 && !isDummy;
-        const secretKey = isTurnstileEnabled ? secretKeyRaw : undefined;
+        const secretKey = process.env.TURNSTILE_SECRET_KEY;
+        const isTurnstileEnabled = !!secretKey && secretKey.length > 5;
 
         if (!email) {
             return NextResponse.json({ success: false, error: "Email is required" }, { status: 400 });
@@ -24,7 +21,7 @@ export async function POST(request: Request) {
 
             const res = await fetch(verifyEndpoint, {
                 method: "POST",
-                body: `secret=${encodeURIComponent(secretKeyRaw)}&response=${encodeURIComponent(token)}`,
+                body: `secret=${encodeURIComponent(secretKey!)}&response=${encodeURIComponent(token)}`,
                 headers: {
                     "content-type": "application/x-www-form-urlencoded",
                 },
