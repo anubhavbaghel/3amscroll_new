@@ -3,7 +3,7 @@
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useState } from "react";
 
-export function NewsletterForm() {
+export function SidebarNewsletterForm() {
     const defaultToken = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? "" : "skipped";
     const [token, setToken] = useState<string>(defaultToken);
     const [email, setEmail] = useState("");
@@ -46,24 +46,24 @@ export function NewsletterForm() {
     };
 
     return (
-        <form className="space-y-2" onSubmit={handleSubscribe}>
+        <div className="space-y-3">
             {status === "success" ? (
-                <div className="p-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm rounded-lg border border-green-200 dark:border-green-800/30">
+                <div className="p-4 bg-white/10 border border-white/20 rounded-lg text-white font-medium text-center">
                     {message}
                 </div>
             ) : (
-                <>
+                <form onSubmit={handleSubscribe} className="space-y-3">
                     <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Your email"
-                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm"
+                        placeholder="Enter your email"
+                        className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                         disabled={status === "loading"}
                     />
                     {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-                        <div className="flex justify-center min-h-[65px] items-center">
+                        <div className="flex justify-center bg-white/20 rounded-lg overflow-hidden backdrop-blur-sm min-h-[65px] items-center">
                             <Turnstile
                                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                                 onSuccess={(token) => setToken(token)}
@@ -73,21 +73,24 @@ export function NewsletterForm() {
                         </div>
                     )}
                     {status === "error" && (
-                        <p className="text-red-500 text-xs">{message}</p>
+                        <p className="text-[#FFB3B3] text-xs font-medium">{message}</p>
                     )}
                     <button
                         type="submit"
                         disabled={!token || status === "loading" || !email}
-                        className="w-full px-4 py-2 bg-brand text-white font-medium rounded-lg hover:bg-brand-dark transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+                        className="w-full px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center h-10"
                     >
                         {status === "loading" ? (
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <div className="w-5 h-5 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
                         ) : (
                             "Subscribe"
                         )}
                     </button>
-                </>
+                </form>
             )}
-        </form>
+            <p className="text-xs text-blue-100 mt-3 text-center">
+                No spam, unsubscribe anytime.
+            </p>
+        </div>
     );
 }

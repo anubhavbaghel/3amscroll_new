@@ -3,6 +3,7 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { Article } from "@/types";
+import { SidebarNewsletterForm } from "./SidebarNewsletterForm";
 
 interface SidebarProps {
     trendingArticles?: Article[];
@@ -97,22 +98,7 @@ export function Sidebar({ trendingArticles = [] }: SidebarProps) {
                     <p className="text-sm text-blue-100 mb-4">
                         Get the latest stories delivered to your inbox every week.
                     </p>
-                    <form className="space-y-3">
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
-                        />
-                        <button
-                            type="submit"
-                            className="w-full px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors"
-                        >
-                            Subscribe
-                        </button>
-                    </form>
-                    <p className="text-xs text-blue-100 mt-3">
-                        No spam, unsubscribe anytime.
-                    </p>
+                    <SidebarNewsletterForm />
                 </div>
 
                 {/* Quick Links */}
