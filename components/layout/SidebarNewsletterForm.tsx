@@ -11,6 +11,7 @@ export function SidebarNewsletterForm() {
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
+    const [turnstileStatus, setTurnstileStatus] = useState<"loading" | "ready" | "error">("loading");
 
     const handleSubscribe = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -65,13 +66,26 @@ export function SidebarNewsletterForm() {
                         disabled={status === "loading"}
                     />
                     {isTurnstileEnabled && (
-                        <div className="flex justify-center bg-white/20 rounded-lg overflow-hidden backdrop-blur-sm min-h-[65px] items-center">
+                        <div className="flex flex-col justify-center bg-white/20 rounded-lg overflow-hidden backdrop-blur-sm min-h-[65px] items-center text-center">
                             <Turnstile
-                                siteKey={siteKey}
-                                onSuccess={(token) => setToken(token)}
-                                onError={() => setToken("")}
+                                siteKey={siteKey as string}
+                                onLoad={() => setTurnstileStatus("ready")}
+                                onSuccess={(token) => {
+                                    setToken(token);
+                                    setTurnstileStatus("ready");
+                                }}
+                                onError={() => {
+                                    setToken("");
+                                    setTurnstileStatus("error");
+                                }}
                                 onExpire={() => setToken("")}
+                                options={{
+                                    theme: 'auto',
+                                }}
                             />
+                            {turnstileStatus === "error" && (
+                                <span className="text-xs text-[#FFB3B3] p-1">Captcha completely blocked by Ad-Blocker/Privacy Shield.</span>
+                            )}
                         </div>
                     )}
                     {status === "error" && (
