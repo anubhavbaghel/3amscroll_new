@@ -1,6 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { Metadata } from "next";
-import { Zap, Rocket, Users } from "lucide-react";
+import { Zap, Rocket, Users, Shield, Eye, Flame, X } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "About Us - Meet the Team",
@@ -163,6 +163,99 @@ export default function AboutPage() {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* The Manifesto Section */}
+                <section className="py-24 relative">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">The Manifesto</h2>
+                            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+                                We drew a line in the digital sand. Here is exactly what we stand for.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                            {/* What we believe */}
+                            <div className="p-8 md:p-12 rounded-3xl bg-gray-50 dark:bg-dark-surface/30 border border-gray-100 dark:border-white/5 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <Flame className="w-24 h-24 text-brand" />
+                                </div>
+                                <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                                    <Shield className="w-6 h-6 text-brand" />
+                                    We Believe In
+                                </h3>
+                                <ul className="space-y-4 text-gray-600 dark:text-gray-400 text-lg relative z-10">
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand mt-2.5 flex-shrink-0" />
+                                        <span>Deep dives over surface-level skimming.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand mt-2.5 flex-shrink-0" />
+                                        <span>Authentic voices, not perfectly polished PR speak.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand mt-2.5 flex-shrink-0" />
+                                        <span>Respecting your time and your intelligence.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-brand mt-2.5 flex-shrink-0" />
+                                        <span>Building a community of curious, nocturnal thinkers.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            {/* What we reject */}
+                            <div className="p-8 md:p-12 rounded-3xl bg-gray-50 dark:bg-dark-surface/30 border border-gray-100 dark:border-white/5 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <X className="w-24 h-24 text-red-500" />
+                                </div>
+                                <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-red-500">
+                                    <Eye className="w-6 h-6" />
+                                    We Reject
+                                </h3>
+                                <ul className="space-y-4 text-gray-600 dark:text-gray-400 text-lg relative z-10">
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2.5 flex-shrink-0" />
+                                        <span>Rage-bait algorithms designed to make you angry.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2.5 flex-shrink-0" />
+                                        <span>Clickbait headlines that don&apos;t deliver.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2.5 flex-shrink-0" />
+                                        <span>Mindless, doom-scrolling content loops.</span>
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2.5 flex-shrink-0" />
+                                        <span>Corporate jargon and sponsored stealth-ads.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* The Process Section */}
+                <section className="py-24 border-t border-gray-100 dark:border-white/5 relative bg-gradient-to-b from-transparent to-gray-50/50 dark:to-brand/5">
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand/10 text-brand mb-8">
+                            <Eye className="w-8 h-8" />
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">Our Process is Simple.</h2>
+                        <div className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed space-y-6 max-w-3xl mx-auto">
+                            <p>
+                                We don&apos;t use automated bots to scrape the internet. Every single article, guide, and story you see on 3AM SCROLL has been read, vetted, and hand-selected by a human who cares about the culture just as much as you do.
+                            </p>
+                            <p className="font-medium text-gray-900 dark:text-white">
+                                If we wouldn&apos;t send it to our own group chat at 3:00 AM, we won&apos;t put it on the site.
+                            </p>
+                            <p>
+                                Welcome to the sanctuary.
+                            </p>
                         </div>
                     </div>
                 </section>
