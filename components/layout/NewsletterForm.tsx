@@ -84,7 +84,7 @@ export function NewsletterForm() {
                                 }}
                             />
                             {turnstileStatus === "error" && (
-                                <span className="text-xs text-red-500 mt-2">Captcha blocked. Please disable Ad-Blocker for localhost.</span>
+                                <span className="text-xs text-red-500 mt-2">Captcha blocked. Please disable your Ad-Blocker/Privacy Shield.</span>
                             )}
                         </div>
                     )}
