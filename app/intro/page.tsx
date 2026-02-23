@@ -4,9 +4,12 @@ import Link from "next/link";
 import { ArrowRight, Zap, Gamepad2, Globe2, Moon } from "lucide-react";
 
 export default function IntroPage() {
-    const handleStart = () => {
+    const handleStart = (e: React.MouseEvent) => {
+        e.preventDefault();
         // Set a cookie that lasts for 1 year (365 days)
         document.cookie = "has_visited_3amscroll=true; path=/; max-age=31536000; SameSite=Lax";
+        // Force a hard reload to ensure the middleware receives the newly minted cookie
+        window.location.href = "/";
     };
 
     return (
@@ -35,13 +38,12 @@ export default function IntroPage() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-                        <Link
-                            href="/"
+                        <button
                             onClick={handleStart}
                             className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-lg hover:scale-105 transition-transform gap-2 w-full sm:w-auto hover:shadow-xl hover:shadow-brand/20"
                         >
                             Start Scrolling <ArrowRight className="w-5 h-5" />
-                        </Link>
+                        </button>
                         <Link
                             href="/about"
                             className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-white font-semibold text-lg hover:bg-gray-200 dark:hover:bg-white/10 transition-colors w-full sm:w-auto"
@@ -98,13 +100,12 @@ export default function IntroPage() {
                         <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-lg mx-auto">
                             Join thousands of others getting their late-night dopamine fix the right way.
                         </p>
-                        <Link
-                            href="/"
+                        <button
                             onClick={handleStart}
                             className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand text-white font-semibold text-lg hover:bg-brand-dark transition-colors gap-2 hover:shadow-lg hover:shadow-brand/30"
                         >
                             Go to Homepage <ArrowRight className="w-5 h-5" />
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>
