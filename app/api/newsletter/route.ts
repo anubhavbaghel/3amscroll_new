@@ -4,23 +4,25 @@ import { createClient } from "@supabase/supabase-js";
 export async function POST(request: Request) {
     try {
         const { email, token } = await request.json();
-        const secretKey = process.env.TURNSTILE_SECRET_KEY;
+        const secretKeyRaw = process.env.TURNSTILE_SECRET_KEY || "";
+        const isTurnstileEnabled = secretKeyRaw.length > 5 && !secretKeyRaw.includes("0x4AAAAAACdNDGBQtzQMzP5qyzNPZrVRwH4") && !secretKeyRaw.includes("your_secret_key_here");
+        const secretKey = isTurnstileEnabled ? secretKeyRaw : undefined;
 
         if (!email) {
             return NextResponse.json({ success: false, error: "Email is required" }, { status: 400 });
         }
 
-        if (secretKey && !token) {
+        if (isTurnstileEnabled && !token) {
             return NextResponse.json({ success: false, error: "Captcha token is required" }, { status: 400 });
         }
 
         // 1. Validate Turnstile Token (if enabled)
-        if (secretKey && token) {
+        if (isTurnstileEnabled && token) {
             const verifyEndpoint = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
             const res = await fetch(verifyEndpoint, {
                 method: "POST",
-                body: `secret=${encodeURIComponent(secretKey)}&response=${encodeURIComponent(token)}`,
+                body: `secret=${encodeURIComponent(secretKeyRaw)}&response=${encodeURIComponent(token)}`,
                 headers: {
                     "content-type": "application/x-www-form-urlencoded",
                 },
