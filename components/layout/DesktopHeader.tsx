@@ -50,12 +50,6 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
                             >
                                 Trending
                             </Link>
-                            <Link
-                                href="/intro"
-                                className="px-5 py-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-dark-surface font-medium transition-colors text-sm text-brand animate-pulse-slow font-semibold"
-                            >
-                                Start Here
-                            </Link>
 
                             {/* Categories Dropdown */}
                             <div className="relative group">

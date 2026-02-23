@@ -32,9 +32,6 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
                         <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 truncate">
                             3AM SCROLL
                         </Link>
-                        <Link href="/intro" className="hidden xs:block text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-brand/10 text-brand dark:bg-brand/20 dark:text-brand-glow whitespace-nowrap shrink-0">
-                            Start Here
-                        </Link>
                     </div>
                 ) : (
                     <span className="font-bold text-xl text-gray-900 dark:text-white">
