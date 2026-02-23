@@ -4,8 +4,9 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useState } from "react";
 
 export function NewsletterForm() {
-    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-    const isTurnstileEnabled = siteKey && siteKey !== "0x4AAAAAACdNDMqa-IQM-RG0" && siteKey !== "your_site_key_here";
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+    // Robust check ignoring whitespace or quotes
+    const isTurnstileEnabled = siteKey.length > 5 && !siteKey.includes("0x4AAAAAACdNDMqa-IQM-RG0") && !siteKey.includes("your_site_key_here");
 
     const [token, setToken] = useState<string>(isTurnstileEnabled ? "" : "skipped");
     const [email, setEmail] = useState("");
@@ -84,6 +85,8 @@ export function NewsletterForm() {
                     >
                         {status === "loading" ? (
                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : !email ? (
+                            "Enter email"
                         ) : (
                             "Subscribe"
                         )}
