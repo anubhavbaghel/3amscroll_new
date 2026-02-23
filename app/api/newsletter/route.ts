@@ -73,8 +73,7 @@ export async function POST(request: Request) {
                     await resend.contacts.create({
                         email: email,
                         unsubscribed: false,
-                        audienceId: "", // Or omit entirely if the SDK permits 
-                    } as any);
+                    });
                 }
             } catch (resendError) {
                 console.error("Resend Sync Error:", resendError);
