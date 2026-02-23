@@ -9,6 +9,7 @@ import { ShareButton } from "@/components/article/ShareButton";
 import { MobileArticleBar } from "@/components/article/MobileArticleBar";
 import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
+import { FocusModeProvider } from "@/context/FocusModeContext";
 import "../../article-styles.css";
 import dynamic from "next/dynamic";
 
@@ -125,98 +126,100 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     ];
 
     return (
-        <div className="min-h-screen bg-white dark:bg-dark-bg">
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-            <BreadcrumbJsonLd items={breadcrumbItems} />
+        <FocusModeProvider>
+            <div className="min-h-screen bg-white dark:bg-dark-bg">
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+                <BreadcrumbJsonLd items={breadcrumbItems} />
 
-            <ArticleNavbar
-                user={user}
-                articleId={article.id}
-                articleTitle={article.title}
-                articleSlug={article.slug}
-                initialIsBookmarked={isBookmarked}
-            />
-
-            {/* ─── ARTICLE HEADER ─────────────────────────────────────
-                Order: category → title → date/readtime → author+follow → excerpt
-            ──────────────────────────────────────────────────────── */}
-            <ArticleHeader article={article} />
-
-            {/* ─── COVER IMAGE — wider than text column ─────────────── */}
-            {article.coverImage && (
-                <div className="max-w-[680px] mx-auto px-4 sm:px-6 mt-8 mb-10">
-                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
-                        <Image
-                            src={article.coverImage}
-                            alt={article.title}
-                            fill
-                            className="object-cover"
-                            priority
-                            sizes="(max-width: 768px) 100vw, 860px"
-                        />
-                    </div>
-                </div>
-            )}
-
-            {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
-            <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
-
-                {/* Breadcrumbs */}
-                <div className="mb-8">
-                    <Breadcrumbs
-                        items={[
-                            { label: article.category, href: `/${article.category.toLowerCase()}` },
-                            { label: article.title, href: `/article/${article.slug}`, active: true }
-                        ]}
-                    />
-                </div>
-
-                {/* Article text content */}
-                <ArticleContent article={article} />
-
-                <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
-                    <div className="flex items-center gap-6">
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <BookmarkButton
-                            articleId={article.id}
-                            initialIsBookmarked={isBookmarked}
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                        />
-                        <ShareButton
-                            title={article.title}
-                            excerpt={article.excerpt}
-                            url={`${baseUrl}/article/${article.slug}`}
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                        />
-                    </div>
-                </div>
-
-                {/* ─── DETAILED AUTHOR CARD ─────────────────────────── */}
-                <AuthorCardDetailed
-                    author={article.author}
-                    followersCount={0}
+                <ArticleNavbar
+                    user={user}
+                    articleId={article.id}
+                    articleTitle={article.title}
+                    articleSlug={article.slug}
+                    initialIsBookmarked={isBookmarked}
                 />
 
+                {/* ─── ARTICLE HEADER ─────────────────────────────────────
+                    Order: category → title → date/readtime → author+follow → excerpt
+                ──────────────────────────────────────────────────────── */}
+                <ArticleHeader article={article} />
 
-                {/* ─── RELATED ARTICLES ─────────────────────────────── */}
-                <div className="mt-12">
-                    <RelatedArticles articles={relatedArticles} />
-                </div>
-            </main>
+                {/* ─── COVER IMAGE — wider than text column ─────────────── */}
+                {article.coverImage && (
+                    <div className="max-w-[680px] mx-auto px-4 sm:px-6 mt-8 mb-10">
+                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
+                            <Image
+                                src={article.coverImage}
+                                alt={article.title}
+                                fill
+                                className="object-cover"
+                                priority
+                                sizes="(max-width: 768px) 100vw, 860px"
+                            />
+                        </div>
+                    </div>
+                )}
 
-            {/* ─── MOBILE BOTTOM BAR ────────────────────────────────
-                Applaud · Comment · Bookmark · Share — mobile only
-            ──────────────────────────────────────────────────────── */}
-            <MobileArticleBar
-                articleId={article.id}
-                articleTitle={article.title}
-                articleExcerpt={article.excerpt}
-                articleSlug={article.slug}
-                initialIsBookmarked={isBookmarked}
-            />
+                {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
+                <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
 
-            <Footer />
-        </div>
+                    {/* Breadcrumbs */}
+                    <div className="mb-8">
+                        <Breadcrumbs
+                            items={[
+                                { label: article.category, href: `/${article.category.toLowerCase()}` },
+                                { label: article.title, href: `/article/${article.slug}`, active: true }
+                            ]}
+                        />
+                    </div>
+
+                    {/* Article text content */}
+                    <ArticleContent article={article} />
+
+                    <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
+                        <div className="flex items-center gap-6">
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <BookmarkButton
+                                articleId={article.id}
+                                initialIsBookmarked={isBookmarked}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            />
+                            <ShareButton
+                                title={article.title}
+                                excerpt={article.excerpt}
+                                url={`${baseUrl}/article/${article.slug}`}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            />
+                        </div>
+                    </div>
+
+                    {/* ─── DETAILED AUTHOR CARD ─────────────────────────── */}
+                    <AuthorCardDetailed
+                        author={article.author}
+                        followersCount={0}
+                    />
+
+
+                    {/* ─── RELATED ARTICLES ─────────────────────────────── */}
+                    <div className="mt-12">
+                        <RelatedArticles articles={relatedArticles} />
+                    </div>
+                </main>
+
+                {/* ─── MOBILE BOTTOM BAR ────────────────────────────────
+                    Applaud · Comment · Bookmark · Share — mobile only
+                ──────────────────────────────────────────────────────── */}
+                <MobileArticleBar
+                    articleId={article.id}
+                    articleTitle={article.title}
+                    articleExcerpt={article.excerpt}
+                    articleSlug={article.slug}
+                    initialIsBookmarked={isBookmarked}
+                />
+
+                <Footer />
+            </div>
+        </FocusModeProvider>
     );
 }

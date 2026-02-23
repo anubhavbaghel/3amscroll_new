@@ -39,9 +39,9 @@ const mapDBArticleToAppArticle = (dbArticle: any, profileMap: Map<string, any>):
         category: dbArticle.category,
         author: {
             id: authorId || "unknown",
-            name: authorProfile?.name || dbArticle.author_name || "Unknown Author",
-            avatar: authorProfile?.avatar || dbArticle.author_avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(authorProfile?.name || dbArticle.author_name || "User")}&background=random`,
-            bio: authorProfile?.bio || "",
+            name: "3AM SCROLL Team",
+            avatar: "/icon-512.png",
+            bio: "Curating the internet's noise into signals for the sleepless generation.",
         },
         publishedAt: dbArticle.published_at,
         readTime: dbArticle.read_time || Math.ceil((dbArticle.content?.split(/\s+/).length || 0) / 200) || 5,
@@ -175,9 +175,9 @@ const getCachedAuthor = (authorId: string) => unstable_cache(
 
         return {
             id: data.id,
-            name: data.name || "Unknown Author",
-            avatar: data.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "User")}&background=random`,
-            bio: data.bio || "",
+            name: "3AM SCROLL Team",
+            avatar: "/icon-512.png",
+            bio: "Curating the internet's noise into signals for the sleepless generation.",
         };
     },
     ["author-profile", authorId],
