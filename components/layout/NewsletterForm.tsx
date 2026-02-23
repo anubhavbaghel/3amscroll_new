@@ -4,8 +4,10 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useState } from "react";
 
 export function NewsletterForm() {
-    const defaultToken = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? "" : "skipped";
-    const [token, setToken] = useState<string>(defaultToken);
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    const isTurnstileEnabled = siteKey && siteKey !== "0x4AAAAAACdNDMqa-IQM-RG0" && siteKey !== "your_site_key_here";
+
+    const [token, setToken] = useState<string>(isTurnstileEnabled ? "" : "skipped");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
@@ -62,10 +64,10 @@ export function NewsletterForm() {
                         className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent text-sm"
                         disabled={status === "loading"}
                     />
-                    {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                    {isTurnstileEnabled && (
                         <div className="flex justify-center min-h-[65px] items-center">
                             <Turnstile
-                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                                siteKey={siteKey}
                                 onSuccess={(token) => setToken(token)}
                                 onError={() => setToken("")}
                                 onExpire={() => setToken("")}

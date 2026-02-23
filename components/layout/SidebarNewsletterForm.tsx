@@ -4,8 +4,10 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { useState } from "react";
 
 export function SidebarNewsletterForm() {
-    const defaultToken = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? "" : "skipped";
-    const [token, setToken] = useState<string>(defaultToken);
+    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+    const isTurnstileEnabled = siteKey && siteKey !== "0x4AAAAAACdNDMqa-IQM-RG0" && siteKey !== "your_site_key_here";
+
+    const [token, setToken] = useState<string>(isTurnstileEnabled ? "" : "skipped");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
@@ -62,10 +64,10 @@ export function SidebarNewsletterForm() {
                         className="w-full px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 text-white"
                         disabled={status === "loading"}
                     />
-                    {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+                    {isTurnstileEnabled && (
                         <div className="flex justify-center bg-white/20 rounded-lg overflow-hidden backdrop-blur-sm min-h-[65px] items-center">
                             <Turnstile
-                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                                siteKey={siteKey}
                                 onSuccess={(token) => setToken(token)}
                                 onError={() => setToken("")}
                                 onExpire={() => setToken("")}
