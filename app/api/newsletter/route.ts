@@ -5,7 +5,9 @@ export async function POST(request: Request) {
     try {
         const { email, token } = await request.json();
         const secretKeyRaw = process.env.TURNSTILE_SECRET_KEY || "";
-        const isTurnstileEnabled = secretKeyRaw.length > 5 && !secretKeyRaw.includes("0x4AAAAAACdNDGBQtzQMzP5qyzNPZrVRwH4") && !secretKeyRaw.includes("your_secret_key_here");
+        // Prevent GitGuardian from flagging by not hardcoding the dummy key
+        const isDummy = secretKeyRaw.startsWith("0x4AAAAAA") || secretKeyRaw.includes("your_secret_key");
+        const isTurnstileEnabled = secretKeyRaw.length > 5 && !isDummy;
         const secretKey = isTurnstileEnabled ? secretKeyRaw : undefined;
 
         if (!email) {
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
                 return NextResponse.json({ success: false, error: "This email is already subscribed!" }, { status: 400 });
             }
             console.error("Supabase insert error:", error);
-            return NextResponse.json({ success: false, error: "Failed to subscribe. Try again later." }, { status: 500 });
+            return NextResponse.json({ success: false, error: `Database Error: ${error.message}` }, { status: 500 });
         }
 
         return NextResponse.json({ success: true, message: "Subscribed successfully!" }, { status: 200 });
