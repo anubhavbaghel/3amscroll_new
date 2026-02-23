@@ -59,40 +59,76 @@ export default function AboutPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
+            {/* Ambient Background Glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-brand/10 dark:bg-brand/20 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen pointer-events-none opacity-50 dark:opacity-30" />
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen pointer-events-none" />
 
-            <main>
+            <main className="relative z-10">
                 {/* Hero Section */}
-                <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 text-center max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 font-display">
-                        We are <span className="text-blue-600 dark:text-blue-500">3AM SCROLL</span>.
-                    </h1>
-                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                        A digital sanctuary for the sleepless generation. We curate the internet&apos;s noise into signals that matter.
-                    </p>
+                <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
+                    <div className="animate-fade-in-up">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-brand dark:text-blue-400 mb-8">
+                            <span>Our Story</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 font-display leading-[1.1]">
+                            We are <br className="hidden md:block" />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-purple-600 dark:to-purple-400">
+                                3AM SCROLL.
+                            </span>
+                        </h1>
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                            A digital sanctuary for the sleepless generation. We curate the internet&apos;s noise into signals that matter.
+                        </p>
+                    </div>
                 </section>
 
                 {/* Values Section */}
-                <section className="py-20 border-t border-gray-100 dark:border-gray-900">
+                <section className="py-24 relative">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                            <div>
-                                <h3 className="text-2xl font-bold mb-4">Unfiltered</h3>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                    No corporate fluff. We speak your language and cover stories with the authenticity you deserve.
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold mb-4">Future-Focused</h3>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                    From AI to climate tech, we&apos;re obsessed with what&apos;s next and how it shapes our reality.
-                                </p>
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold mb-4">Community-Driven</h3>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                    We&apos;re not just a platform; we&apos;re a collective. Your voice shapes what we cover.
-                                </p>
-                            </div>
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">Built Different</h2>
+                            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+                                We're ripping up the playbook of traditional media to bring you news you actually care about.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[
+                                {
+                                    title: "Unfiltered",
+                                    desc: "No corporate fluff. We speak your language and cover stories with the authenticity you deserve.",
+                                    bg: "bg-blue-500/10",
+                                    border: "hover:border-blue-500/30",
+                                    glow: "group-hover:bg-blue-500/10"
+                                },
+                                {
+                                    title: "Future-Focused",
+                                    desc: "From AI to climate tech, we're obsessed with what's next and how it shapes our reality.",
+                                    bg: "bg-purple-500/10",
+                                    border: "hover:border-purple-500/30",
+                                    glow: "group-hover:bg-purple-500/10"
+                                },
+                                {
+                                    title: "Community-Driven",
+                                    desc: "We're not just a platform; we're a collective. Your voice shapes exactly what we cover.",
+                                    bg: "bg-brand/10",
+                                    border: "hover:border-brand/30",
+                                    glow: "group-hover:bg-brand/10"
+                                }
+                            ].map((val, i) => (
+                                <div key={i} className={`group relative p-8 rounded-3xl bg-gray-50/50 dark:bg-dark-surface/50 border border-gray-100 dark:border-white/5 ${val.border} transition-all duration-300 overflow-hidden`}>
+                                    <div className={`absolute inset-0 transition-colors duration-500 ${val.glow} opacity-0 group-hover:opacity-100`} />
+                                    <div className="relative z-10">
+                                        <div className={`w-14 h-14 rounded-2xl ${val.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                            <div className="w-6 h-6 bg-current opacity-50 rounded-lg" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{val.title}</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+                                            {val.desc}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
