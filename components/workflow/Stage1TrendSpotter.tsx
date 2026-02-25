@@ -45,16 +45,41 @@ Respond ONLY in the following format:
             {/* Step 1: Input */}
             <div className="space-y-3">
                 <label className="block text-sm font-medium text-gray-300">1. What broad topic do you want to write about today?</label>
-                <input
-                    type="text"
-                    value={topicInput}
-                    onChange={(e) => {
-                        setTopicInput(e.target.value);
-                        updateData({ topicIdea: e.target.value });
-                    }}
-                    placeholder="e.g. Creator Economy, Dating Apps, Loneliness, Tech Layoffs"
-                    className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
-                />
+                <div className="relative">
+                    <input
+                        type="text"
+                        value={topicInput}
+                        onChange={(e) => {
+                            setTopicInput(e.target.value);
+                            updateData({ topicIdea: e.target.value });
+                        }}
+                        placeholder="e.g. Creator Economy, Dating Apps, Loneliness, Tech Layoffs"
+                        className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
+                    />
+                </div>
+
+                {/* Quick Select Trendy Topics */}
+                <div className="flex flex-wrap gap-2 pt-2">
+                    {[
+                        "Creator Economy", "Dating Apps", "Mental Health",
+                        "AI & Brainrot", "Tech Layoffs", "Hustle Culture",
+                        "Social Media", "Remote Work", "Gen-Z Finance"
+                    ].map((topic) => (
+                        <button
+                            key={topic}
+                            onClick={() => {
+                                setTopicInput(topic);
+                                updateData({ topicIdea: topic });
+                            }}
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${topicInput === topic
+                                    ? "bg-brand/20 border-brand text-brand-light"
+                                    : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+                                }`}
+                        >
+                            {topic}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Step 2: The Generated Prompt */}
@@ -113,8 +138,8 @@ Respond ONLY in the following format:
                     onClick={onNext}
                     disabled={!isReadyForNext}
                     className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                            ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
-                            : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
+                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     Proceed to Writer Stage
