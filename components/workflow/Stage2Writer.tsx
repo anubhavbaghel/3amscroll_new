@@ -19,11 +19,12 @@ I need you to write a full-length, highly engaging article based on the followin
 **Title:** ${data.workingTitle}
 **Target SEO Keyword:** ${data.seoKeyword}
 
-**THE BRAND VOICE (CRITICAL):**
+**THE BRAND VOICE & E-E-A-T (CRITICAL):**
 - Conversational, sharp, slightly chaotic but deeply intellectual.
 - Use current Gen-Z internet slang naturally (e.g., 'brainrot', 'chronically online', 'coded', 'era', 'canon'), but DO NOT overdo it to the point of cringe. Be authentic.
 - Talk directly to the reader like you are in a FaceTime call at 3 AM.
 - Absolutely NO robot-speak. No "In conclusion," "Furthermore," or "Delving into."
+- **GOOGLE E-E-A-T COMPLIANCE:** You must write from a place of strong First-Hand Experience. Inject personal anecdotes or "we experienced this" framing to establish Expertise, Authoritativeness, and Trustworthiness. Do not sound like an AI summarizing a Wikipedia page; sound like an expert giving an insider take.
 
 **FORMATTING RULES:**
 - Write entirely in valid GitHub Flavored Markdown.
@@ -95,8 +96,8 @@ Write the full 800-word article now:`;
                     onClick={onNext}
                     disabled={!isReadyForNext}
                     className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                            ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
-                            : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
+                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     Proceed to Anti-AI Engine
