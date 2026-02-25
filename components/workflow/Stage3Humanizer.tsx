@@ -1,0 +1,104 @@
+import { useState } from "react";
+import { WorkflowData } from "./WorkflowDashboard";
+import { Copy, CheckCircle2 } from "lucide-react";
+
+interface Props {
+    data: WorkflowData;
+    updateData: (updates: Partial<WorkflowData>) => void;
+    onNext: () => void;
+    onBack: () => void;
+}
+
+export function Stage3Humanizer({ data, updateData, onNext, onBack }: Props) {
+    const [copied, setCopied] = useState(false);
+
+    // The highly engineered Prompt 3: The Anti-AI Humanizer
+    const generatePrompt = () => `I am running the text below through Google's Helpful Content Update AI Detectors. It is currently failing because it has high "burstiness" and low "perplexity" - the statistical markers of LLM generated text.
+
+I need you to act as a linguistic "Scrambler" and REWRITE the entire text to pass as 100% human.
+
+**CRITICAL INSTRUCTIONS FOR REWRITING:**
+1. Drastically vary sentence length. Use 3-word fragments immediately followed by a meandering 20-word observation.
+2. Break predictable syntax patterns. Never start three sentences in a row with the same structure (e.g. "The...", "This...", "It...").
+3. Introduce minor colloquial imperfections. Use em-dashes (-), trailing thoughts (...), and conversational transitions.
+4. Remove vocabulary that AI over-utilizes: "delve", "testament", "tapestry", "crucial", "landscape", "moreover".
+5. Keep the formatting (headers, bolding, bullet points) EXACTLY the same. 
+6. Keep the SEO Keyword ("${data.seoKeyword}") exactly where it is.
+
+Output ONLY the rewritten, humanized Markdown text:
+
+***
+
+${data.rawDraft}`;
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(generatePrompt());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const isReadyForNext = data.humanizedDraft.length > 50;
+
+    return (
+        <div className="space-y-8 animate-fade-in">
+            <div>
+                <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-orange-400 mb-2">Stage 3: Anti-AI Humanizer</h2>
+                <p className="text-gray-400">Scramble the linguistic patterns to bypass Google's SEO penalties for AI text.</p>
+            </div>
+
+            {/* Step 1: The Generated Prompt */}
+            <div className="space-y-3 animate-fade-in-up">
+                <div className="flex justify-between items-end">
+                    <label className="block text-sm font-medium text-gray-300">1. Copy this Scrambler Prompt into your AI to humanize your draft:</label>
+                    <button
+                        onClick={handleCopy}
+                        className="flex items-center space-x-2 text-sm text-red-500 hover:text-red-400 transition-colors px-3 py-1 rounded-full bg-red-500/10"
+                    >
+                        {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        <span>{copied ? "Copied!" : "Copy Scrambler"}</span>
+                    </button>
+                </div>
+                <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-xl blur opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                    <pre className="relative bg-black/80 border border-white/10 text-gray-300 p-6 rounded-xl overflow-y-auto max-h-96 whitespace-pre-wrap text-sm leading-relaxed font-mono">
+                        {generatePrompt()}
+                    </pre>
+                </div>
+            </div>
+
+            {/* Step 2: Handoff */}
+            <div className="space-y-4 pt-6 border-t border-white/5">
+                <div className="flex justify-between items-end">
+                    <label className="block text-sm font-medium text-gray-300">2. Paste the final, humanized Markdown draft here:</label>
+                    <span className="text-xs text-gray-500">{data.humanizedDraft.length} characters</span>
+                </div>
+                <textarea
+                    value={data.humanizedDraft}
+                    onChange={(e) => updateData({ humanizedDraft: e.target.value })}
+                    placeholder="Paste the mathematically scrambled, SEO-safe text here..."
+                    className="w-full h-64 bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-sm resize-y"
+                />
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-between pt-4">
+                <button
+                    onClick={onBack}
+                    className="px-6 py-3 rounded-full font-semibold text-gray-400 hover:text-white transition-colors"
+                >
+                    Back
+                </button>
+                <button
+                    onClick={onNext}
+                    disabled={!isReadyForNext}
+                    className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
+                            ? "bg-gradient-to-r from-red-500 to-orange-500 text-white hover:opacity-90 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                            : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        }`}
+                >
+                    Proceed to Image Generation
+                </button>
+            </div>
+        </div>
+    );
+}
