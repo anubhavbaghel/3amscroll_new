@@ -7,11 +7,9 @@ import { createClient } from "@/lib/supabase/client";
 interface Props {
     data: WorkflowData;
     updateData: (updates: Partial<WorkflowData>) => void;
-    onNext: () => void;
-    onBack: () => void;
 }
 
-export function Stage4ImageGen({ data, updateData, onNext, onBack }: Props) {
+export function Stage4ImageGen({ data, updateData }: Props) {
     const [copied, setCopied] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState<string>("");
@@ -89,8 +87,6 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
             setUploadStatus("");
         }
     };
-
-    const isReadyForNext = data.imageUrl.length > 5;
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -182,26 +178,6 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
                         />
                     </div>
                 )}
-            </div>
-
-            {/* Navigation */}
-            <div className="flex justify-between pt-4">
-                <button
-                    onClick={onBack}
-                    className="px-6 py-3 rounded-full font-semibold text-gray-400 hover:text-white transition-colors"
-                >
-                    Back
-                </button>
-                <button
-                    onClick={onNext}
-                    disabled={!isReadyForNext}
-                    className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                        }`}
-                >
-                    Proceed to Publisher
-                </button>
             </div>
         </div>
     );

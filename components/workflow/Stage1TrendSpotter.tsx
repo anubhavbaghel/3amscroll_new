@@ -5,10 +5,9 @@ import { Copy, CheckCircle2, Loader2, Sparkles } from "lucide-react";
 interface Props {
     data: WorkflowData;
     updateData: (updates: Partial<WorkflowData>) => void;
-    onNext: () => void;
 }
 
-export function Stage1TrendSpotter({ data, updateData, onNext }: Props) {
+export function Stage1TrendSpotter({ data, updateData }: Props) {
     const [topicInput, setTopicInput] = useState(data.topicIdea || "");
     const [copied, setCopied] = useState(false);
     const [trends, setTrends] = useState<string[]>([]);
@@ -56,8 +55,6 @@ Respond ONLY in the following format:
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
-
-    const isReadyForNext = data.workingTitle.length > 5 && data.seoKeyword.length > 2;
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -157,20 +154,6 @@ Respond ONLY in the following format:
                         />
                     </div>
                 </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="flex justify-end pt-4">
-                <button
-                    onClick={onNext}
-                    disabled={!isReadyForNext}
-                    className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                        ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
-                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                        }`}
-                >
-                    Proceed to Writer Stage
-                </button>
             </div>
         </div>
     );

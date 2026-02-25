@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, Eye, FileText } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Props {
     data: WorkflowData;
     updateData: (updates: Partial<WorkflowData>) => void;
-    onNext: () => void;
-    onBack: () => void;
 }
 
-export function Stage3Humanizer({ data, updateData, onNext, onBack }: Props) {
+export function Stage3Humanizer({ data, updateData }: Props) {
     const [copied, setCopied] = useState(false);
+    const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
 
     // The highly engineered Prompt 3: The Anti-AI Humanizer
     const generatePrompt = () => `I am running the text below through Google's Helpful Content Update AI Detectors. It is currently failing because it has high "burstiness" and low "perplexity" - the statistical markers of LLM generated text.
@@ -36,8 +37,6 @@ ${data.rawDraft}`;
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
-
-    const isReadyForNext = data.humanizedDraft.length > 50;
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -70,34 +69,49 @@ ${data.rawDraft}`;
             <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between items-end">
                     <label className="block text-sm font-medium text-gray-300">2. Paste the final, humanized Markdown draft here:</label>
-                    <span className="text-xs text-gray-500">{data.humanizedDraft.length} characters</span>
+                    <div className="flex bg-white/5 rounded-lg p-1">
+                        <button
+                            onClick={() => setViewMode("edit")}
+                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${viewMode === "edit" ? "bg-red-500 text-white" : "text-gray-400 hover:text-white"
+                                }`}
+                        >
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>Raw Markdown</span>
+                        </button>
+                        <button
+                            onClick={() => setViewMode("preview")}
+                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${viewMode === "preview" ? "bg-red-500 text-white" : "text-gray-400 hover:text-white"
+                                }`}
+                        >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Preview</span>
+                        </button>
+                    </div>
                 </div>
-                <textarea
-                    value={data.humanizedDraft}
-                    onChange={(e) => updateData({ humanizedDraft: e.target.value })}
-                    placeholder="Paste the mathematically scrambled, SEO-safe text here..."
-                    className="w-full h-64 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-sm resize-y"
-                />
-            </div>
 
-            {/* Navigation */}
-            <div className="flex justify-between pt-4">
-                <button
-                    onClick={onBack}
-                    className="px-6 py-3 rounded-full font-semibold text-gray-400 hover:text-white transition-colors"
-                >
-                    Back
-                </button>
-                <button
-                    onClick={onNext}
-                    disabled={!isReadyForNext}
-                    className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                        ? "bg-gradient-to-r from-red-500 to-orange-500 text-white hover:opacity-90 shadow-[0_0_20px_rgba(239,68,68,0.3)]"
-                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                        }`}
-                >
-                    Proceed to Image Generation
-                </button>
+                {viewMode === "edit" ? (
+                    <div className="relative">
+                        <textarea
+                            value={data.humanizedDraft}
+                            onChange={(e) => updateData({ humanizedDraft: e.target.value })}
+                            placeholder="Paste the mathematically scrambled, SEO-safe text here..."
+                            className="w-full h-96 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 font-mono text-sm resize-y"
+                        />
+                        <div className="absolute bottom-3 right-4 text-xs text-gray-500 bg-dark-background/80 px-2 py-1 rounded">
+                            {data.humanizedDraft.length} characters
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full h-96 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-6 py-6 text-gray-900 dark:text-gray-300 overflow-y-auto prose prose-invert prose-red max-w-none">
+                        {data.humanizedDraft ? (
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {data.humanizedDraft}
+                            </ReactMarkdown>
+                        ) : (
+                            <p className="text-gray-500 italic text-center mt-20">No content to preview yet.</p>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

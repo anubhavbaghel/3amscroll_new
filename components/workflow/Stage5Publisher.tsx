@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
 import { CheckCircle2, Rocket, Loader2 } from "lucide-react";
 import { createUserArticle } from "@/app/actions/user-article";
@@ -6,40 +6,48 @@ import { createUserArticle } from "@/app/actions/user-article";
 interface Props {
     data: WorkflowData;
     updateData: (updates: Partial<WorkflowData>) => void;
-    onBack: () => void;
 }
 
-export function Stage5Publisher({ data, onBack }: Props) {
+export function Stage5Publisher({ data, updateData }: Props) {
     const [isPublishing, setIsPublishing] = useState(false);
     const [published, setPublished] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Auto-generate a URL-friendly slug from the title
-    const generatedSlug = data.workingTitle
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)+/g, '');
+    // Auto-generate fallbacks if fields are empty
+    useEffect(() => {
+        const generatedSlug = data.workingTitle
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
 
-    // Auto-generate a short excerpt from the first paragraph
-    const generatedExcerpt = data.humanizedDraft
-        .split('\n')
-        .find(line => line.length > 20 && !line.startsWith('#'))
-        ?.slice(0, 150) + "..." || "Read the full article...";
+        const generatedExcerpt = data.humanizedDraft
+            .split('\n')
+            .find(line => line.length > 20 && !line.startsWith('#'))
+            ?.slice(0, 150) + "..." || "Read the full article...";
+
+        // Provide defaults if the user hasn't edited them yet
+        if (!data.slug && data.workingTitle) updateData({ slug: generatedSlug });
+        if (!data.excerpt && data.humanizedDraft) updateData({ excerpt: generatedExcerpt });
+        if (!data.seoTitle && data.workingTitle) updateData({ seoTitle: data.workingTitle });
+    }, [data.workingTitle, data.humanizedDraft, data.slug, data.excerpt, data.seoTitle, updateData]);
 
     const handlePublish = async () => {
         setIsPublishing(true);
         setError(null);
 
         try {
-            // Call the existing server action which handles authentication, RLS, and formatting natively
             const result = await createUserArticle({
                 title: data.workingTitle,
-                slug: generatedSlug,
-                excerpt: generatedExcerpt,
+                slug: data.slug || data.workingTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+                excerpt: data.excerpt,
                 content: data.humanizedDraft,
                 coverImage: data.imageUrl,
-                category: "tech", // Default category
+                category: data.category || "tech",
                 status: "published",
+                seo_title: data.seoTitle,
+                seo_description: data.seoDescription,
+                focus_keyword: data.seoKeyword,
+                cover_image_alt: data.coverImageAlt || data.seoKeyword
             });
 
             if (result.error) {
@@ -67,7 +75,7 @@ export function Stage5Publisher({ data, onBack }: Props) {
                 </p>
                 <div className="pt-8">
                     <button
-                        onClick={() => window.location.href = `/article/${generatedSlug}`}
+                        onClick={() => window.location.href = `/article/${data.slug}`}
                         className="px-8 py-3 rounded-full font-semibold border border-white/20 hover:bg-white hover:text-black transition-colors"
                     >
                         View Live Article
@@ -93,33 +101,106 @@ export function Stage5Publisher({ data, onBack }: Props) {
             {/* Step 1: Metadata Review */}
             <div className="space-y-6 animate-fade-in-up bg-black/40 border border-white/5 rounded-2xl p-6">
 
-                <div className="space-y-2">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Final Title</label>
-                    <p className="text-xl font-bold text-white">{data.workingTitle}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Final Title</label>
+                        <input
+                            type="text"
+                            value={data.workingTitle}
+                            onChange={(e) => updateData({ workingTitle: e.target.value })}
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-semibold"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">URL Slug</label>
+                        <input
+                            type="text"
+                            value={data.slug}
+                            onChange={(e) => updateData({ slug: e.target.value })}
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-cyan-400 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 font-mono text-sm"
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Generated URL Slug</label>
-                    <p className="text-sm font-mono text-cyan-400 bg-cyan-400/10 px-3 py-1.5 rounded-md inline-block">
-                        3amscroll.com/article/{generatedSlug}
-                    </p>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Preview Excerpt</label>
+                    <textarea
+                        value={data.excerpt}
+                        onChange={(e) => updateData({ excerpt: e.target.value })}
+                        className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 italic"
+                        rows={2}
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Category</label>
+                        <select
+                            value={data.category}
+                            onChange={(e) => updateData({ category: e.target.value })}
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                        >
+                            <option value="tech">Tech & AI</option>
+                            <option value="culture">Internet Culture</option>
+                            <option value="lifestyle">Lifestyle & Work</option>
+                            <option value="creative">Creatives & Arts</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {/* Step 2: SEO Details */}
+            <div className="space-y-6 animate-fade-in-up bg-black/40 border border-white/5 rounded-2xl p-6">
+                <div>
+                    <h3 className="text-lg font-bold text-white mb-1">SEO Optimization</h3>
+                    <p className="text-sm text-gray-400">Ensure these are filled for proper indexing.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">SEO Meta Title</label>
+                        <input
+                            type="text"
+                            value={data.seoTitle}
+                            onChange={(e) => updateData({ seoTitle: e.target.value })}
+                            placeholder="Same as title or slightly shorter"
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Focus Keyword</label>
+                        <input
+                            type="text"
+                            value={data.seoKeyword}
+                            onChange={(e) => updateData({ seoKeyword: e.target.value })}
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-2">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Generated Excerpt (For Homepage Cards)</label>
-                    <p className="text-sm text-gray-300 italic border-l-2 border-brand pl-3">
-                        {generatedExcerpt}
-                    </p>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">SEO Meta Description</label>
+                    <textarea
+                        value={data.seoDescription}
+                        onChange={(e) => updateData({ seoDescription: e.target.value })}
+                        placeholder="Write a compelling 160 character description..."
+                        className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                        rows={2}
+                    />
                 </div>
 
                 <div className="space-y-2">
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Cover Image Link</label>
-                    <p className="text-sm text-gray-400 truncate flex items-center">
-                        <CheckCircle2 className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                        {data.imageUrl}
-                    </p>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Cover Image Alt Text</label>
+                    <input
+                        type="text"
+                        value={data.coverImageAlt}
+                        onChange={(e) => updateData({ coverImageAlt: e.target.value })}
+                        placeholder="Describe the image perfectly..."
+                        className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                    />
                 </div>
-
             </div>
 
             {error && (
@@ -129,13 +210,7 @@ export function Stage5Publisher({ data, onBack }: Props) {
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between pt-8 border-t border-white/5">
-                <button
-                    onClick={onBack}
-                    className="px-6 py-3 rounded-full font-semibold text-gray-400 hover:text-white transition-colors"
-                >
-                    Back
-                </button>
+            <div className="flex justify-end pt-8 border-t border-white/5">
                 <button
                     onClick={handlePublish}
                     disabled={isPublishing}

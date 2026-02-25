@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, Eye, FileText } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Props {
     data: WorkflowData;
     updateData: (updates: Partial<WorkflowData>) => void;
-    onNext: () => void;
-    onBack: () => void;
 }
 
-export function Stage2Writer({ data, updateData, onNext, onBack }: Props) {
+export function Stage2Writer({ data, updateData }: Props) {
     const [copied, setCopied] = useState(false);
+    const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
 
     // The highly engineered Prompt 2: The Writer
     const generatePrompt = () => `Act as the lead Senior Writer for '3AM SCROLL', a digital publication aimed at the chronically online Gen-Z audience.
@@ -40,8 +41,6 @@ Write the full 800-word article now:`;
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
-
-    const isReadyForNext = data.rawDraft.length > 50;
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -74,34 +73,49 @@ Write the full 800-word article now:`;
             <div className="space-y-4 pt-6 border-t border-white/5">
                 <div className="flex justify-between items-end">
                     <label className="block text-sm font-medium text-gray-300">2. Paste the raw Markdown article draft that the AI wrote:</label>
-                    <span className="text-xs text-gray-500">{data.rawDraft.length} characters</span>
+                    <div className="flex bg-white/5 rounded-lg p-1">
+                        <button
+                            onClick={() => setViewMode("edit")}
+                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${viewMode === "edit" ? "bg-brand text-black" : "text-gray-400 hover:text-white"
+                                }`}
+                        >
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>Raw Markdown</span>
+                        </button>
+                        <button
+                            onClick={() => setViewMode("preview")}
+                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${viewMode === "preview" ? "bg-brand text-black" : "text-gray-400 hover:text-white"
+                                }`}
+                        >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Preview</span>
+                        </button>
+                    </div>
                 </div>
-                <textarea
-                    value={data.rawDraft}
-                    onChange={(e) => updateData({ rawDraft: e.target.value })}
-                    placeholder="Paste the raw markdown text here..."
-                    className="w-full h-64 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand font-mono text-sm resize-y"
-                />
-            </div>
 
-            {/* Navigation */}
-            <div className="flex justify-between pt-4">
-                <button
-                    onClick={onBack}
-                    className="px-6 py-3 rounded-full font-semibold text-gray-400 hover:text-white transition-colors"
-                >
-                    Back
-                </button>
-                <button
-                    onClick={onNext}
-                    disabled={!isReadyForNext}
-                    className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                        ? "bg-brand text-black hover:bg-brand-light shadow-[0_0_20px_rgba(202,240,6,0.3)]"
-                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
-                        }`}
-                >
-                    Proceed to Anti-AI Engine
-                </button>
+                {viewMode === "edit" ? (
+                    <div className="relative">
+                        <textarea
+                            value={data.rawDraft}
+                            onChange={(e) => updateData({ rawDraft: e.target.value })}
+                            placeholder="Paste the raw markdown text here..."
+                            className="w-full h-96 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand font-mono text-sm resize-y"
+                        />
+                        <div className="absolute bottom-3 right-4 text-xs text-gray-500 bg-dark-background/80 px-2 py-1 rounded">
+                            {data.rawDraft.length} characters
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full h-96 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-6 py-6 text-gray-900 dark:text-gray-300 overflow-y-auto prose prose-invert prose-brand max-w-none">
+                        {data.rawDraft ? (
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {data.rawDraft}
+                            </ReactMarkdown>
+                        ) : (
+                            <p className="text-gray-500 italic text-center mt-20">No content to preview yet.</p>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
