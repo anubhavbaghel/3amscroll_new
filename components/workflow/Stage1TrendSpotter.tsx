@@ -78,7 +78,7 @@ Respond ONLY in the following format:
                             updateData({ topicIdea: e.target.value });
                         }}
                         placeholder="e.g. Creator Economy, Dating Apps, Loneliness, Tech Layoffs"
-                        className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
+                        className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
                     />
                 </div>
 
@@ -97,8 +97,8 @@ Respond ONLY in the following format:
                                     updateData({ topicIdea: topic });
                                 }}
                                 className={`flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${topicInput === topic
-                                        ? "bg-brand/20 border-brand text-brand-light"
-                                        : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+                                    ? "bg-brand/20 border-brand text-brand-light"
+                                    : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
                                     }`}
                             >
                                 <span className={i < 3 ? "text-yellow-500" : "text-gray-500"}>#{i + 1}</span>
@@ -143,7 +143,7 @@ Respond ONLY in the following format:
                             value={data.workingTitle}
                             onChange={(e) => updateData({ workingTitle: e.target.value })}
                             placeholder="e.g. Why the 'Quiet Vacation' is Gen-Z's new flex"
-                            className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                     </div>
                     <div className="space-y-2">
@@ -153,7 +153,7 @@ Respond ONLY in the following format:
                             value={data.seoKeyword}
                             onChange={(e) => updateData({ seoKeyword: e.target.value })}
                             placeholder="e.g. quiet vacationing trend"
-                            className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
+                            className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand"
                         />
                     </div>
                 </div>

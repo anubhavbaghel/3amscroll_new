@@ -70,7 +70,7 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
                         value={data.imageUrl}
                         onChange={(e) => updateData({ imageUrl: e.target.value })}
                         placeholder="https://... (URL to image)"
-                        className="w-full bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
+                        className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-sm"
                     />
                 </div>
 
@@ -99,8 +99,8 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
                     onClick={onNext}
                     disabled={!isReadyForNext}
                     className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 ${isReadyForNext
-                            ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                            : "bg-gray-800 text-gray-500 cursor-not-allowed"
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                        : "bg-gray-800 text-gray-500 cursor-not-allowed"
                         }`}
                 >
                     Proceed to Publisher

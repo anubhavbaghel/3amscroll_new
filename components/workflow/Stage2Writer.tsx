@@ -80,7 +80,7 @@ Write the full 800-word article now:`;
                     value={data.rawDraft}
                     onChange={(e) => updateData({ rawDraft: e.target.value })}
                     placeholder="Paste the raw markdown text here..."
-                    className="w-full h-64 bg-dark-background/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand font-mono text-sm resize-y"
+                    className="w-full h-64 bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand font-mono text-sm resize-y"
                 />
             </div>
 
