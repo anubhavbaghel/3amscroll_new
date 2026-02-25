@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, Loader2, Sparkles } from "lucide-react";
 
 interface Props {
     data: WorkflowData;
@@ -11,6 +11,30 @@ interface Props {
 export function Stage1TrendSpotter({ data, updateData, onNext }: Props) {
     const [topicInput, setTopicInput] = useState(data.topicIdea || "");
     const [copied, setCopied] = useState(false);
+    const [trends, setTrends] = useState<string[]>([]);
+    const [isLoadingTrends, setIsLoadingTrends] = useState(true);
+
+    useEffect(() => {
+        const fetchLiveTrends = async () => {
+            try {
+                const response = await fetch('/api/trends');
+                const result = await response.json();
+                if (result.success && result.trends.length > 0) {
+                    setTrends(result.trends);
+                } else {
+                    // Fallback if API fails
+                    setTrends(["Creator Economy", "Dating Apps", "Tech Layoffs", "Brainrot", "Hustle Culture"]);
+                }
+            } catch (error) {
+                console.error("Failed to fetch trends", error);
+                setTrends(["Creator Economy", "Dating Apps", "Tech Layoffs", "Brainrot", "Hustle Culture"]);
+            } finally {
+                setIsLoadingTrends(false);
+            }
+        };
+
+        fetchLiveTrends();
+    }, []);
 
     // The highly engineered Prompt 1
     const generatePrompt = (topic: string) => `Act as an elite Gen-Z culture journalist and SEO expert for '3AM SCROLL', a digital media platform for the chronically online generation.
@@ -59,26 +83,29 @@ Respond ONLY in the following format:
                 </div>
 
                 {/* Quick Select Trendy Topics */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                    {[
-                        "Creator Economy", "Dating Apps", "Mental Health",
-                        "AI & Brainrot", "Tech Layoffs", "Hustle Culture",
-                        "Social Media", "Remote Work", "Gen-Z Finance"
-                    ].map((topic) => (
-                        <button
-                            key={topic}
-                            onClick={() => {
-                                setTopicInput(topic);
-                                updateData({ topicIdea: topic });
-                            }}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${topicInput === topic
-                                    ? "bg-brand/20 border-brand text-brand-light"
-                                    : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
-                                }`}
-                        >
-                            {topic}
-                        </button>
-                    ))}
+                <div className="pt-2">
+                    <div className="flex items-center space-x-2 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        {isLoadingTrends ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-yellow-500" />}
+                        <span>{isLoadingTrends ? "Scanning live internet trends..." : "Live Google Trends (US):"}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {trends.map((topic, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    setTopicInput(topic);
+                                    updateData({ topicIdea: topic });
+                                }}
+                                className={`flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium transition-colors border ${topicInput === topic
+                                        ? "bg-brand/20 border-brand text-brand-light"
+                                        : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:bg-white/10"
+                                    }`}
+                            >
+                                <span className={i < 3 ? "text-yellow-500" : "text-gray-500"}>#{i + 1}</span>
+                                <span>{topic}</span>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
