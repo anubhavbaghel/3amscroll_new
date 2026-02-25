@@ -42,6 +42,10 @@ export function Stage5Publisher({ data, onBack }: Props) {
                 throw new Error("Supabase URL is missing from environment variables.");
             }
 
+            // Calculate read time
+            const wordCount = data.humanizedDraft.split(/\\s+/).filter(word => word.length > 0).length;
+            const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
             // Standardize the content insert matching the existing `articles` schema
             const { error: dbError } = await supabase
                 .from('articles')
@@ -51,10 +55,13 @@ export function Stage5Publisher({ data, onBack }: Props) {
                         slug: generatedSlug,
                         excerpt: generatedExcerpt,
                         content: data.humanizedDraft,
-                        image_url: data.imageUrl,
-                        author_id: "00000000-0000-0000-0000-000000000000", // Default Admin Author ID (Update to actual auth later)
-                        category_id: "tech", // Default category, ideally add a selector later
-                        published: true,
+                        cover_image: data.imageUrl,
+                        author_uuid: "00000000-0000-0000-0000-000000000000", // Default Admin Author ID
+                        created_by: "00000000-0000-0000-0000-000000000000",
+                        category: "tech",
+                        status: "published",
+                        read_time: readTime,
+                        published_at: new Date().toISOString(),
                     }
                 ]);
 
