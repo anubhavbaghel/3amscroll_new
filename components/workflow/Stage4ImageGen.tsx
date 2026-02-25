@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
-import { Copy, CheckCircle2 } from "lucide-react";
+import { Copy, CheckCircle2, Upload, Loader2, Image as ImageIcon } from "lucide-react";
+import { optimizeImage } from "@/lib/image-optimizer";
+import { createClient } from "@/lib/supabase/client";
 
 interface Props {
     data: WorkflowData;
@@ -11,6 +13,9 @@ interface Props {
 
 export function Stage4ImageGen({ data, updateData, onNext, onBack }: Props) {
     const [copied, setCopied] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState<string>("");
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // The highly engineered Prompt 4: The Image Prompt
     const generatePrompt = () => `Generate a highly cinematic, ultra-aesthetic cover image for an article titled "${data.workingTitle}".
@@ -29,6 +34,60 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
         navigator.clipboard.writeText(generatePrompt());
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            setUploadStatus("Optimizing image locally... (Converting to WebP)");
+
+            // 1. Optimize the image in the browser first
+            const optimizedFile = await optimizeImage(file, 1200, 0.85);
+
+            setUploadStatus("Uploading to Supabase Storage...");
+
+            // 2. Upload to Supabase Storage
+            const supabase = createClient();
+            const fileName = `article-covers/${Date.now()}-${optimizedFile.name}`;
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('images') // Assumes a standard 'images' public bucket exists
+                .upload(fileName, optimizedFile);
+
+            if (uploadError) {
+                console.error("Supabase Upload Error:", uploadError);
+                // Fallback: if bucket error, inform user to create it
+                if (uploadError.message.includes("Bucket not found")) {
+                    alert("Upload failed: The 'images' storage bucket does not exist in your Supabase project. Please create a public bucket named 'images'.");
+                } else {
+                    alert("Upload failed: " + uploadError.message);
+                }
+                setIsUploading(false);
+                return;
+            }
+
+            // 3. Get the public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('images')
+                .getPublicUrl(fileName);
+
+            updateData({ imageUrl: publicUrl });
+            setUploadStatus("Optimization & Upload Complete!");
+
+            setTimeout(() => {
+                setIsUploading(false);
+                setUploadStatus("");
+            }, 2000);
+
+        } catch (error) {
+            console.error("Image processing error:", error);
+            alert("Failed to process and upload image.");
+            setIsUploading(false);
+            setUploadStatus("");
+        }
     };
 
     const isReadyForNext = data.imageUrl.length > 5;
@@ -62,7 +121,45 @@ Create an abstract but relatable visualization of: ${data.seoKeyword}`;
 
             {/* Step 2: Handoff / Uploader Mockup */}
             <div className="space-y-4 pt-6 border-t border-white/5">
-                <label className="block text-sm font-medium text-gray-300">2. Paste the URL of your generated image (or upload to Supabase Storage):</label>
+                <label className="block text-sm font-medium text-gray-300">2. Upload your generated image (Auto-Optimized via WebP Engine):</label>
+
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <input
+                        type="file"
+                        accept="image/jpeg, image/png, image/webp"
+                        className="hidden"
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        disabled={isUploading}
+                    />
+
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading}
+                        className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all ${isUploading
+                            ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                            : "bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-brand"
+                            }`}
+                    >
+                        {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+                        <span>{isUploading ? "Processing..." : "Upload Cover Image"}</span>
+                    </button>
+
+                    {uploadStatus && (
+                        <div className="text-sm text-brand flex items-center space-x-2">
+                            <span className="animate-pulse">{uploadStatus}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="relative pt-2">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-white/10"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-dark-background text-gray-500">OR manually paste URL</span>
+                    </div>
+                </div>
 
                 <div className="space-y-2">
                     <input
