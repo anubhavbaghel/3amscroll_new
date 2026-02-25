@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Trash2 } from "lucide-react";
 import { Stage1TrendSpotter } from "./Stage1TrendSpotter";
 import { Stage2Writer } from "./Stage2Writer";
 import { Stage3Humanizer } from "./Stage3Humanizer";
@@ -29,6 +30,53 @@ export function WorkflowDashboard() {
         humanizedDraft: "",
         imageUrl: "",
     });
+    const [isMounted, setIsMounted] = useState(false);
+
+    // Hydrate state from localStorage on mount
+    useEffect(() => {
+        setIsMounted(true);
+        const savedData = localStorage.getItem("3amscroll-workflow-data");
+        const savedStage = localStorage.getItem("3amscroll-workflow-stage");
+
+        if (savedData) {
+            try {
+                setWorkflowData(JSON.parse(savedData));
+            } catch (e) {
+                console.error("Failed to parse saved workflow data");
+            }
+        }
+
+        if (savedStage) {
+            const parsedStage = parseInt(savedStage, 10);
+            if (!isNaN(parsedStage) && parsedStage >= 1 && parsedStage <= 5) {
+                setCurrentStage(parsedStage as Stage);
+            }
+        }
+    }, []);
+
+    // Persist state to localStorage whenever it changes
+    useEffect(() => {
+        if (isMounted) {
+            localStorage.setItem("3amscroll-workflow-data", JSON.stringify(workflowData));
+            localStorage.setItem("3amscroll-workflow-stage", currentStage.toString());
+        }
+    }, [workflowData, currentStage, isMounted]);
+
+    const clearWorkflow = () => {
+        if (window.confirm("Are you sure you want to clear your current progress and start over?")) {
+            localStorage.removeItem("3amscroll-workflow-data");
+            localStorage.removeItem("3amscroll-workflow-stage");
+            setWorkflowData({
+                topicIdea: "",
+                workingTitle: "",
+                seoKeyword: "",
+                rawDraft: "",
+                humanizedDraft: "",
+                imageUrl: "",
+            });
+            setCurrentStage(1);
+        }
+    };
 
     const updateData = (updates: Partial<WorkflowData>) => {
         setWorkflowData(prev => ({ ...prev, ...updates }));
@@ -40,16 +88,36 @@ export function WorkflowDashboard() {
     return (
         <div className="bg-white dark:bg-dark-surface/30 rounded-2xl border border-gray-200 dark:border-white/5 overflow-hidden shadow-xl">
             {/* Header / Progress Bar */}
-            <div className="border-b border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 p-4 sm:p-6 flex justify-between items-center">
-                <div className="flex space-x-2 w-full">
-                    {[1, 2, 3, 4, 5].map((stage) => (
-                        <div
-                            key={stage}
-                            className={`flex-1 h-2 rounded-full transition-colors ${currentStage >= stage ? 'bg-brand' : 'bg-gray-200 dark:bg-white/10'
-                                }`}
-                        />
-                    ))}
-                </div>
+            <div className="border-b border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 relative">
+
+                {/* Prevent hydration mismatch by only rendering when mounted */}
+                {!isMounted ? (
+                    <div className="flex space-x-2 w-full animate-pulse">
+                        {[1, 2, 3, 4, 5].map((stage) => (
+                            <div key={stage} className="flex-1 h-2 rounded-full bg-gray-200 dark:bg-white/10" />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex space-x-2 w-full mr-4">
+                        {[1, 2, 3, 4, 5].map((stage) => (
+                            <div
+                                key={stage}
+                                className={`flex-1 h-2 rounded-full transition-colors ${currentStage >= stage ? 'bg-brand shadow-[0_0_10px_rgba(202,240,6,0.5)]' : 'bg-gray-200 dark:bg-white/10'
+                                    }`}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {isMounted && (
+                    <button
+                        onClick={clearWorkflow}
+                        className="flex-shrink-0 flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-colors"
+                    >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Reset</span>
+                    </button>
+                )}
             </div>
 
             {/* Main Content Area */}
@@ -85,7 +153,7 @@ export function WorkflowDashboard() {
                         onBack={prevStage}
                     />
                 )}
-                {currentStage === 5 && (
+                {currentStage === 5 && isMounted && (
                     <Stage5Publisher
                         data={workflowData}
                         updateData={updateData}
@@ -93,6 +161,6 @@ export function WorkflowDashboard() {
                     />
                 )}
             </div>
-        </div>
+        </div >
     );
 }
