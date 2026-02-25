@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { WorkflowData } from "./WorkflowDashboard";
 import { CheckCircle2, Rocket, Loader2 } from "lucide-react";
-import { createClient } from '@supabase/supabase-js';
-
-// We need to use the public key for client-side publishing in this internal tool
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-);
+import { createUserArticle } from "@/app/actions/user-article";
 
 interface Props {
     data: WorkflowData;
@@ -37,35 +31,20 @@ export function Stage5Publisher({ data, onBack }: Props) {
         setError(null);
 
         try {
-            // Validate environment
-            if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-                throw new Error("Supabase URL is missing from environment variables.");
+            // Call the existing server action which handles authentication, RLS, and formatting natively
+            const result = await createUserArticle({
+                title: data.workingTitle,
+                slug: generatedSlug,
+                excerpt: generatedExcerpt,
+                content: data.humanizedDraft,
+                coverImage: data.imageUrl,
+                category: "tech", // Default category
+                status: "published",
+            });
+
+            if (result.error) {
+                throw new Error(result.error);
             }
-
-            // Calculate read time
-            const wordCount = data.humanizedDraft.split(/\\s+/).filter(word => word.length > 0).length;
-            const readTime = Math.max(1, Math.ceil(wordCount / 200));
-
-            // Standardize the content insert matching the existing `articles` schema
-            const { error: dbError } = await supabase
-                .from('articles')
-                .insert([
-                    {
-                        title: data.workingTitle,
-                        slug: generatedSlug,
-                        excerpt: generatedExcerpt,
-                        content: data.humanizedDraft,
-                        cover_image: data.imageUrl,
-                        author_uuid: "00000000-0000-0000-0000-000000000000", // Default Admin Author ID
-                        created_by: "00000000-0000-0000-0000-000000000000",
-                        category: "tech",
-                        status: "published",
-                        read_time: readTime,
-                        published_at: new Date().toISOString(),
-                    }
-                ]);
-
-            if (dbError) throw dbError;
 
             setPublished(true);
         } catch (err: any) {
