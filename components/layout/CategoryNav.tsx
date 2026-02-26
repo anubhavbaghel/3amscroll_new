@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface CategoryNavProps {
     className?: string;
@@ -16,16 +17,23 @@ function NavItem({ href, label, icon: Icon, isActive }: { href: string; label: s
         <Link
             href={href}
             className={cn(
-                "group flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative overflow-hidden flex-shrink-0",
+                "group flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium relative flex-shrink-0 transition-colors duration-200",
                 isActive
-                    ? "text-white dark:text-gray-900 bg-gray-900 dark:bg-gray-100 shadow-md transform scale-105"
-                    : "text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/50 dark:hover:bg-white/5"
+                    ? "text-white dark:text-gray-900"
+                    : "text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/30 dark:hover:bg-white/5"
             )}
         >
-            {Icon && (
-                <Icon className={cn("w-3.5 h-3.5 transition-transform duration-300", isActive ? "scale-110" : "group-hover:scale-110")} />
+            {isActive && (
+                <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 bg-gray-900 dark:bg-gray-100 rounded-full shadow-lg z-0"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
             )}
-            <span className="relative z-10">{label}</span>
+            {Icon && (
+                <Icon className={cn("w-4 h-4 relative z-10 transition-transform duration-200", isActive ? "scale-110" : "group-hover:scale-110")} />
+            )}
+            <span className="relative z-10 whitespace-nowrap">{label}</span>
         </Link>
     );
 }
@@ -36,28 +44,47 @@ export function CategoryNav({ className }: CategoryNavProps) {
     const isHome = pathname === routes.home;
 
     return (
-        <div className={cn("flex items-center gap-1 overflow-x-auto scrollbar-hide py-2 px-6 mask-linear-fade", className)}>
-            <NavItem
-                href={routes.home}
-                label="Home"
-                icon={Home}
-                isActive={isHome}
-            />
+        <div className={cn("flex justify-center w-full py-8 px-6", className)}>
+            <motion.div
+                layout
+                className="flex items-center gap-1.5 bg-gray-100/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-2 rounded-full backdrop-blur-md overflow-x-auto scrollbar-hide max-w-full relative shadow-sm"
+            >
+                <Link
+                    href={routes.home}
+                    className={cn(
+                        "flex items-center justify-center w-11 h-11 rounded-full relative flex-shrink-0 transition-colors duration-200",
+                        isHome
+                            ? "text-white dark:text-gray-900"
+                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10"
+                    )}
+                    title="Home"
+                >
+                    {isHome && (
+                        <motion.div
+                            layoutId="active-pill"
+                            className="absolute inset-0 bg-gray-900 dark:bg-gray-100 rounded-full shadow-lg z-0"
+                            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        />
+                    )}
+                    <Home className="w-5 h-5 relative z-10" />
+                </Link>
 
-            {siteConfig.categories.map((category) => {
-                const isActive = pathname === routes.category(category.slug);
-                return (
-                    <NavItem
-                        key={category.id}
-                        href={routes.category(category.slug)}
-                        label={category.name}
-                        isActive={isActive}
-                    />
-                );
-            })}
+                <div className="w-px h-5 bg-gray-300 dark:bg-white/20 mx-1.5 flex-shrink-0" />
 
-            {/* Right padding spacer */}
-            <div className="w-6 flex-shrink-0 md:hidden" />
+                <motion.div layout className="flex items-center gap-1.5 overflow-visible">
+                    {siteConfig.categories.map((category) => {
+                        const isActive = pathname === routes.category(category.slug);
+                        return (
+                            <NavItem
+                                key={category.id}
+                                href={routes.category(category.slug)}
+                                label={category.name}
+                                isActive={isActive}
+                            />
+                        );
+                    })}
+                </motion.div>
+            </motion.div>
         </div>
     );
 }
