@@ -36,8 +36,8 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
                         </Link>
 
                         {/* Integrated Category Navigation (Replaces previous Home/Trending/Categories links) */}
-                        <div className="flex-1 min-w-0 overflow-hidden flex justify-center">
-                            <CategoryNav className="w-full max-w-4xl px-2" />
+                        <div className="flex-1 min-w-0 flex justify-center">
+                            <CategoryNav className="w-full max-w-5xl px-2" />
                         </div>
 
                         {/* Right Actions */}

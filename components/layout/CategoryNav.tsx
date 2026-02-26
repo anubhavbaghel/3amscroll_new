@@ -17,7 +17,7 @@ function NavItem({ href, label, icon: Icon, isActive }: { href: string; label: s
         <Link
             href={href}
             className={cn(
-                "group flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium relative flex-shrink-0 transition-colors duration-200",
+                "group flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium relative flex-shrink-0 transition-colors duration-200",
                 isActive
                     ? "text-white dark:text-gray-900"
                     : "text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100/30 dark:hover:bg-white/5"
@@ -44,15 +44,15 @@ export function CategoryNav({ className }: CategoryNavProps) {
     const isHome = pathname === routes.home;
 
     return (
-        <div className={cn("flex justify-center w-full py-8 px-6", className)}>
+        <div className={cn("flex justify-center w-full py-4 px-6", className)}>
             <motion.div
                 layout
-                className="flex items-center gap-1.5 bg-gray-100/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-2 rounded-full backdrop-blur-md overflow-x-auto scrollbar-hide max-w-full relative shadow-sm"
+                className="flex items-center gap-1 bg-gray-100/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-1 rounded-full backdrop-blur-md relative shadow-sm"
             >
                 <Link
                     href={routes.home}
                     className={cn(
-                        "flex items-center justify-center w-11 h-11 rounded-full relative flex-shrink-0 transition-colors duration-200",
+                        "flex items-center justify-center w-10 h-10 rounded-full relative flex-shrink-0 transition-colors duration-200",
                         isHome
                             ? "text-white dark:text-gray-900"
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/10"
@@ -69,9 +69,9 @@ export function CategoryNav({ className }: CategoryNavProps) {
                     <Home className="w-5 h-5 relative z-10" />
                 </Link>
 
-                <div className="w-px h-5 bg-gray-300 dark:bg-white/20 mx-1.5 flex-shrink-0" />
+                <div className="w-px h-5 bg-gray-300 dark:bg-white/20 mx-1 flex-shrink-0" />
 
-                <motion.div layout className="flex items-center gap-1.5 overflow-visible">
+                <motion.div layout className="flex items-center gap-1 overflow-visible">
                     {siteConfig.categories.map((category) => {
                         const isActive = pathname === routes.category(category.slug);
                         return (
