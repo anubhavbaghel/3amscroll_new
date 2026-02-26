@@ -3,6 +3,20 @@ import { TrendingHero } from "@/components/trending/TrendingHero";
 import { TrendingGrid } from "@/components/trending/TrendingGrid";
 import { TrendingTicker } from "@/components/trending/TrendingTicker";
 import { getTrendingArticles, getArticles } from "@/lib/data";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Trending Stories",
+    description: "Discover the most deeply read and wildly shared Gen-Z stories on 3AM SCROLL right now. Join the late-night conversation.",
+    alternates: {
+        canonical: "https://3amscroll.com/trending",
+    },
+    openGraph: {
+        title: "Trending | 3AM SCROLL",
+        description: "Discover the most deeply read and wildly shared Gen-Z stories right now.",
+        url: "https://3amscroll.com/trending",
+    },
+};
 
 export default async function TrendingPage() {
     // Fetch real data from DB

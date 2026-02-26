@@ -9,6 +9,10 @@ import { Bookmark, LayoutGrid, List } from "lucide-react";
 export const metadata = {
     title: "My Library | 3AM SCROLL",
     description: "Your curated collection of stories.",
+    robots: {
+        index: false,
+        follow: false,
+    }
 };
 
 export default async function SavedPage() {

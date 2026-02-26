@@ -7,6 +7,10 @@ import { User } from "@/types";
 export const metadata = {
     title: "Settings | 3AM SCROLL",
     description: "Manage your account settings and preferences.",
+    robots: {
+        index: false,
+        follow: false,
+    }
 };
 
 export default async function SettingsPage() {

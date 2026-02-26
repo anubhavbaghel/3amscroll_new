@@ -4,6 +4,10 @@ import { WorkflowDashboard } from '@/components/workflow/WorkflowDashboard';
 export const metadata: Metadata = {
     title: 'Content Workflow Dashboard - 3AM SCROLL',
     description: 'Internal prompt engine and publishing dashboard.',
+    robots: {
+        index: false,
+        follow: false,
+    }
 };
 
 export default function WorkflowPage() {

@@ -5,6 +5,15 @@ import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import Link from "next/link";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { User, Article } from "@/types";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "My Profile | 3AM SCROLL",
+    robots: {
+        index: false,
+        follow: false,
+    }
+};
 
 export default async function ProfilePage() {
     const supabase = await createClient();

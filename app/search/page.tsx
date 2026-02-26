@@ -2,9 +2,18 @@ import { DynamicSearchPageContent } from "@/components/search/DynamicSearchPageC
 import { getArticles } from "@/lib/data";
 import { Footer } from "@/components/layout/Footer";
 
-export const metadata = {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
     title: "Search | 3AM SCROLL",
     description: "Search for stories, authors, and topics.",
+    alternates: {
+        canonical: "https://3amscroll.com/search",
+    },
+    robots: {
+        index: false,
+        follow: true,
+    }
 };
 
 export default async function SearchPage() {

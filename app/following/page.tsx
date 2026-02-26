@@ -4,6 +4,14 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { routes } from "@/config/routes";
 
+export const metadata = {
+    title: "Following | 3AM SCROLL",
+    robots: {
+        index: false,
+        follow: false,
+    }
+};
+
 export default async function FollowingPage() {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
