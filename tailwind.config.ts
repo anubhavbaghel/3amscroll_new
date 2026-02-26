@@ -11,7 +11,7 @@ export default {
             fontFamily: {
                 sans: ['var(--font-switzer)', 'sans-serif'],
                 display: ['var(--font-switzer)', 'sans-serif'],
-                logo: ['var(--font-clash-display)', 'sans-serif'],
+                logo: ['var(--font-logo)', 'sans-serif'],
             },
             colors: {
                 background: "var(--background)",
