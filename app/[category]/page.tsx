@@ -15,14 +15,17 @@ interface CategoryPageProps {
     }>;
 }
 
-// Function to capitalize category name properly
-const formatCategory = (slug: string) => {
-    return slug.charAt(0).toUpperCase() + slug.slice(1);
+// Helper to get category name from slug or format it
+const getCategoryName = (slug: string) => {
+    const category = siteConfig.categories.find(c => c.slug === slug);
+    if (category) return category.name;
+    // Fallback: capitalize and remove dashes
+    return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
     const { category } = await params;
-    const categoryName = formatCategory(category);
+    const categoryName = getCategoryName(category);
 
     return {
         title: `${categoryName} News & Articles`,
@@ -60,7 +63,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         notFound();
     }
 
-    const categoryName = formatCategory(category);
+    const categoryName = getCategoryName(category);
 
     const breadcrumbItems = [
         { name: categoryName, item: `${baseUrl}/${category}` }

@@ -19,9 +19,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPages = [
         { route: "/about", priority: 0.7, changeFrequency: "monthly" as const },
         { route: "/contact", priority: 0.6, changeFrequency: "monthly" as const },
-        { route: "/trending", priority: 0.9, changeFrequency: "hourly" as const },
-        { route: "/saved", priority: 0.4, changeFrequency: "daily" as const },
-        { route: "/following", priority: 0.5, changeFrequency: "daily" as const },
     ].map((page) => ({
         url: `${baseUrl}${page.route}`,
         lastModified: new Date().toISOString(),
