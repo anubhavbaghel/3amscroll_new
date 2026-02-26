@@ -9,52 +9,40 @@ export const siteConfig = {
     },
     categories: [
         {
-            id: "tech",
-            name: "Tech & Innovation",
-            slug: "tech",
-            description: "Latest in technology, gadgets, and digital trends"
+            id: "culture",
+            name: "Culture",
+            slug: "culture",
+            description: "Trends, entertainment, fashion, music, food, and internet moments."
         },
         {
-            id: "gaming",
-            name: "Gaming & Esports",
-            slug: "gaming",
-            description: "Gaming news, reviews, and esports coverage"
+            id: "real-talk",
+            name: "Real Talk",
+            slug: "real-talk",
+            description: "Mental health, identity, relationships, sex, and the hard conversations."
         },
         {
-            id: "entertainment",
-            name: "Entertainment",
-            slug: "entertainment",
-            description: "Movies, TV shows, music, and pop culture"
+            id: "tech-future",
+            name: "Tech & Future",
+            slug: "tech-future",
+            description: "AI, innovation, social media, gaming, digital life, crypto, and the future of work."
         },
         {
-            id: "career",
-            name: "Career & Money",
-            slug: "career",
-            description: "Career advice, side hustles, and financial tips"
+            id: "planet",
+            name: "Planet",
+            slug: "planet",
+            description: "Climate, sustainability, activism, and social justice."
         },
         {
-            id: "world",
-            name: "World",
-            slug: "world",
-            description: "Global news and current events"
+            id: "hustle",
+            name: "Hustle",
+            slug: "hustle",
+            description: "Careers, money, side hustles, entrepreneurship, and financial literacy."
         },
         {
-            id: "creative",
-            name: "Creatives & Arts",
-            slug: "creative",
-            description: "Art, design, and creative inspiration"
-        },
-        {
-            id: "lifestyle",
-            name: "Lifestyle & Wellness",
-            slug: "lifestyle",
-            description: "Health, fitness, and lifestyle trends"
-        },
-        {
-            id: "quick-reads",
-            name: "Quick Reads",
-            slug: "quick-reads",
-            description: "Stories you can read in under 3 minutes"
+            id: "wellness",
+            name: "Wellness",
+            slug: "wellness",
+            description: "Physical health, fitness, skincare, sleep, and nutrition — kept real, not toxic positivity."
         },
     ],
 } as const;

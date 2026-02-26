@@ -25,11 +25,12 @@ export function CategoryHeader({ category, count, featuredArticle }: CategoryHea
     // Dynamic gradients based on category (fallback)
     const getGradient = (cat: string) => {
         switch (cat.toLowerCase()) {
-            case "tech": return "from-blue-600 via-purple-600 to-indigo-900";
-            case "gaming": return "from-purple-600 via-pink-600 to-rose-900";
-            case "finance": return "from-emerald-600 via-teal-600 to-cyan-900";
-            case "lifestyle": return "from-orange-500 via-amber-500 to-yellow-900";
-            case "creative": return "from-pink-500 via-rose-500 to-red-900";
+            case "culture": return "from-fuchsia-600 via-purple-600 to-indigo-900";
+            case "real talk": return "from-rose-600 via-red-600 to-orange-900";
+            case "tech & future": return "from-blue-600 via-cyan-600 to-teal-900"; // Changed neon
+            case "planet": return "from-emerald-600 via-green-600 to-lime-900";
+            case "hustle": return "from-yellow-500 via-amber-600 to-orange-900";
+            case "wellness": return "from-sky-400 via-blue-500 to-indigo-900";
             default: return "from-gray-700 via-gray-800 to-black";
         }
     };

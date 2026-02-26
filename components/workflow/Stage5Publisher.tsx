@@ -42,7 +42,7 @@ export function Stage5Publisher({ data, updateData }: Props) {
                 excerpt: data.excerpt,
                 content: data.humanizedDraft,
                 coverImage: data.imageUrl,
-                category: data.category || "tech",
+                category: data.category || "culture",
                 status: "published",
                 seo_title: data.seoTitle,
                 seo_description: data.seoDescription,
@@ -141,10 +141,12 @@ export function Stage5Publisher({ data, updateData }: Props) {
                             onChange={(e) => updateData({ category: e.target.value })}
                             className="w-full bg-white dark:bg-dark-background/50 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
                         >
-                            <option value="tech">Tech & AI</option>
-                            <option value="culture">Internet Culture</option>
-                            <option value="lifestyle">Lifestyle & Work</option>
-                            <option value="creative">Creatives & Arts</option>
+                            <option value="culture">Culture</option>
+                            <option value="real-talk">Real Talk</option>
+                            <option value="tech-future">Tech & Future</option>
+                            <option value="planet">Planet</option>
+                            <option value="hustle">Hustle</option>
+                            <option value="wellness">Wellness</option>
                         </select>
                     </div>
                 </div>
