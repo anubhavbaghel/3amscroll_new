@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { routes } from "@/config/routes";
 import { cn } from "@/lib/utils";
-import { Sparkles, TrendingUp } from "lucide-react";
+import { Home } from "lucide-react";
 
 interface CategoryNavProps {
     className?: string;
@@ -34,24 +34,15 @@ export function CategoryNav({ className }: CategoryNavProps) {
     const pathname = usePathname();
 
     const isHome = pathname === routes.home;
-    const isTrending = pathname === routes.trending;
 
     return (
         <div className={cn("flex items-center gap-1 overflow-x-auto scrollbar-hide py-2 px-6 mask-linear-fade", className)}>
             <NavItem
                 href={routes.home}
-                label="For You"
-                icon={Sparkles}
+                label="Home"
+                icon={Home}
                 isActive={isHome}
             />
-            <NavItem
-                href={routes.trending}
-                label="Trending"
-                icon={TrendingUp}
-                isActive={isTrending}
-            />
-
-            <div className="w-px h-5 bg-gray-200 dark:bg-white/10 mx-2 flex-shrink-0" />
 
             {siteConfig.categories.map((category) => {
                 const isActive = pathname === routes.category(category.slug);
