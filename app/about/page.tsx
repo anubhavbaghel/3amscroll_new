@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { Metadata } from "next";
-import { Zap, Rocket, Users, Shield, Eye, Flame, X } from "lucide-react";
+import { Zap, Rocket, Users, Shield, Eye, Flame, X, Moon, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "About Us - Meet the Team",
@@ -65,20 +66,32 @@ export default function AboutPage() {
 
             <main className="relative z-10">
                 {/* Hero Section */}
-                <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
-                    <div className="animate-fade-in-up">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-brand dark:text-blue-400 mb-8">
-                            <span>Our Story</span>
+                <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto flex flex-col items-center">
+                    <div className="animate-fade-in-up flex flex-col items-center space-y-8">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-gray-800 dark:text-gray-200">
+                            <Moon className="w-4 h-4 text-brand" />
+                            <span>Welcome to your new digital sanctuary</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 font-display leading-[1.1]">
-                            We are <br className="hidden md:block" />
+
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[1.1] font-display">
+                            The internet&apos;s noise,<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-purple-600 dark:to-purple-400">
-                                3AM SCROLL.
+                                curated for the night.
                             </span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-                            A digital sanctuary for the sleepless generation. We curate the internet&apos;s noise into signals that matter.
+
+                        <p className="max-w-2xl text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                            3AM SCROLL is a platform built for Gen Z, bringing you the latest in tech, gaming, and internet culture without the corporate fluff.
                         </p>
+
+                        <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+                            <Link
+                                href="/"
+                                className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-lg hover:scale-105 transition-transform gap-2 w-full sm:w-auto hover:shadow-xl hover:shadow-brand/20"
+                            >
+                                Start Scrolling <ArrowRight className="w-5 h-5" />
+                            </Link>
+                        </div>
                     </div>
                 </section>
 

@@ -21,7 +21,6 @@ interface DesktopHeaderProps {
 export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) {
     const pathname = usePathname();
     const isArticlePage = pathname?.startsWith("/article");
-    const isIntroPage = pathname === "/intro";
 
     if (isArticlePage) return null;
 

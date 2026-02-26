@@ -20,7 +20,6 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
     const isProfilePage = pathname?.startsWith("/profile");
     const isSettingsPage = pathname?.startsWith("/settings");
     const isArticlePage = pathname?.startsWith("/article");
-    const isIntroPage = pathname === "/intro";
 
     if (isArticlePage) return null;
 
@@ -63,8 +62,8 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
                 </div>
             </div>
 
-            {/* Category Pills (Horizontal Scroll) - Hide on Profile, Settings & Intro Page */}
-            {!isProfilePage && !isSettingsPage && !isIntroPage && (
+            {/* Category Pills (Horizontal Scroll) - Hide on Profile & Settings Page */}
+            {!isProfilePage && !isSettingsPage && (
                 <div className="pt-2 pb-3">
                     <CategoryNav />
                 </div>

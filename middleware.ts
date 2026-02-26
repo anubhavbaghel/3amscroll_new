@@ -64,16 +64,6 @@ export async function middleware(request: NextRequest) {
         }
     }
 
-    // Intro Page Redirect Logic for First-Time Users
-    // Only apply to the exact homepage ("/")
-    if (pathname === "/") {
-        const hasVisited = request.cookies.get("has_visited_3amscroll");
-        if (!hasVisited?.value) {
-            // Redirect to intro if they haven't visited and don't have the cookie
-            return NextResponse.redirect(new URL("/intro", request.url));
-        }
-    }
-
     return response;
 }
 
