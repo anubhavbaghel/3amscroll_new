@@ -31,7 +31,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
     return (
         <div className="min-h-screen bg-white dark:bg-black">
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-44 lg:pt-8 min-h-screen">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20 lg:pt-8 min-h-screen">
                 <DynamicCategoryHeader
                     category={category}
                     count={stats.articlesCount}

@@ -4,16 +4,13 @@ import Link from "next/link";
 import { routes } from "@/config/routes";
 import { User } from "@supabase/supabase-js";
 import { AuthButton } from "@/components/auth/AuthButton";
-
-import { CategoryNav } from "./CategoryNav";
+import { usePathname } from "next/navigation";
+import { Settings, Bell } from "lucide-react";
 
 interface MobileHeaderProps {
     user?: User | null;
     role?: string | null;
 }
-
-import { usePathname } from "next/navigation";
-import { Settings, Bell } from "lucide-react";
 
 export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
     const pathname = usePathname();
@@ -61,13 +58,6 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
                     )}
                 </div>
             </div>
-
-            {/* Category Pills (Horizontal Scroll) - Hide on Profile & Settings Page */}
-            {!isProfilePage && !isSettingsPage && (
-                <div className="pt-2 pb-3">
-                    <CategoryNav />
-                </div>
-            )}
         </header>
     );
 }
