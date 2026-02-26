@@ -64,4 +64,28 @@ h6 {
         mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
         -webkit-mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
     }
+
+    .animate-genz-text {
+        background: linear-gradient(-45deg, #a855f7, #6366f1, #3b82f6, #a855f7);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: genz-gradient 15s ease infinite;
+        opacity: 0.9;
+    }
+
+    @keyframes genz-gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 }

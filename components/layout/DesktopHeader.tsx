@@ -31,8 +31,9 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
                 <div className="max-w-[1400px] mx-auto px-6">
                     <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
                         {/* Logo */}
-                        <Link href={routes.home} className="shrink-0 font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 drop-shadow-sm">
-                            3AM SCROLL
+                        <Link href={routes.home} className="shrink-0 font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-logo drop-shadow-sm flex items-center gap-1">
+                            <span className="text-gray-900 dark:text-white">3AM</span>
+                            <span className="animate-genz-text">SCROLL</span>
                         </Link>
 
                         {/* Integrated Category Navigation (Replaces previous Home/Trending/Categories links) */}

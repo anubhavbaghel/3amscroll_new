@@ -25,8 +25,9 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
             <div className="flex items-center justify-between h-16 px-4">
                 {!isSettingsPage ? (
                     <div className="flex items-center gap-3 min-w-0">
-                        <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 truncate">
-                            3AM SCROLL
+                        <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo drop-shadow-sm flex items-center gap-1">
+                            <span className="text-gray-900 dark:text-white">3AM</span>
+                            <span className="animate-genz-text">SCROLL</span>
                         </Link>
                     </div>
                 ) : (
