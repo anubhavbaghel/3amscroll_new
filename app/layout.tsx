@@ -64,20 +64,11 @@ export const metadata: Metadata = {
         siteName: '3AM SCROLL',
         title: '3AM SCROLL - Your Late-Night Scroll Companion',
         description: 'News, articles, and stories for Gen Z. Your go-to platform for tech, gaming, entertainment, and more.',
-        images: [
-            {
-                url: '/og-image.png',
-                width: 1200,
-                height: 630,
-                alt: '3AM SCROLL - Gen Z News Platform',
-            },
-        ],
     },
     twitter: {
         card: 'summary_large_image',
         title: '3AM SCROLL - Your Late-Night Scroll Companion',
         description: 'News, articles, and stories for Gen Z. Fresh perspectives on tech, gaming, entertainment, and more.',
-        images: ['/og-image.png'],
         creator: '@3amscroll',
     },
     robots: {
