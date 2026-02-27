@@ -89,6 +89,9 @@ export const metadata: Metadata = {
     manifest: '/manifest.json',
     verification: {
         google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        other: {
+            "p:domain_verify": "333a55daf11e76cc3fc9ed23c6de2a65",
+        },
     },
     alternates: {
         canonical: 'https://3amscroll.com',
