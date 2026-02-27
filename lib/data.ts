@@ -203,15 +203,24 @@ export async function getSavedArticleIds(userId: string): Promise<Set<string>> {
 }
 
 
-const getCachedRelatedArticles = (category: string, excludeId: string) => unstable_cache(
-    async (category: string, excludeId: string) => {
+const getCachedRelatedArticles = (categoryString: string | undefined, excludeId: string) => unstable_cache(
+    async (categoryString: string | undefined, excludeId: string) => {
+        const categories = categoryString ? categoryString.split(',').map(c => c.trim()).filter(Boolean) : [];
+        if (categories.length === 0) return [];
+
         const supabase = createPublicClient();
+
+        // Build an OR query that checks if the article's category column 
+        // contains ANY of the categories from the current article.
+        // e.g., category.ilike.%Tech%,category.ilike.%Gaming%
+        const orConditions = categories.map(cat => `category.ilike.%${cat}%`).join(',');
+
         const { data, error } = await supabase
             .from("articles")
             .select("*")
             .eq("status", "published")
-            .eq("category", category)
             .neq("id", excludeId)
+            .or(orConditions)
             .order("published_at", { ascending: false })
             .limit(3);
 
@@ -226,12 +235,12 @@ const getCachedRelatedArticles = (category: string, excludeId: string) => unstab
         const profileMap = await batchFetchAuthorProfiles(authorUuids);
         return data.map(article => mapDBArticleToAppArticle(article, profileMap));
     },
-    ["related-articles", category, excludeId],
+    ["related-articles", categoryString || "", excludeId],
     { revalidate: 60, tags: ["articles"] }
-)(category, excludeId);
+)(categoryString, excludeId);
 
-export async function getRelatedArticles(category: string, excludeId: string): Promise<Article[]> {
-    return getCachedRelatedArticles(category, excludeId);
+export async function getRelatedArticles(categoryString: string | undefined, excludeId: string): Promise<Article[]> {
+    return getCachedRelatedArticles(categoryString, excludeId);
 }
 
 

@@ -2,7 +2,8 @@ import { getArticles } from "@/lib/data";
 import { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 
-export const baseUrl = "https://3amscroll.com";
+const isDev = process.env.NODE_ENV === 'development';
+export const baseUrl = isDev ? "http://localhost:3000" : (process.env.NEXT_PUBLIC_SITE_URL || "https://3amscroll.com");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const articles = await getArticles();

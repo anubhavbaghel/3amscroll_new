@@ -30,8 +30,11 @@ const clashDisplay = localFont({
     display: "swap",
 });
 
+const isDev = process.env.NODE_ENV === 'development';
+const siteUrl = isDev ? "http://localhost:3000" : (process.env.NEXT_PUBLIC_SITE_URL || "https://3amscroll.com");
+
 export const metadata: Metadata = {
-    metadataBase: new URL('https://3amscroll.com'),
+    metadataBase: new URL(siteUrl),
     title: {
         default: "3AM SCROLL - Your Late-Night Scroll Companion",
         template: "%s | 3AM SCROLL"

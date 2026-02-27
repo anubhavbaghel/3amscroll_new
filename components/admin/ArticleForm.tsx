@@ -12,7 +12,9 @@ import { createArticle, updateArticle } from "@/app/admin/actions";
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Search, Target, CheckCircle2, AlertCircle, Eye, BarChart3, Sparkles, RefreshCcw } from "lucide-react";
+import { Search, Target, CheckCircle2, AlertCircle, Eye, BarChart3, Sparkles, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
+
 interface ArticleData {
     id?: string;
     title: string;
@@ -39,7 +41,13 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
 
     const [title, setTitle] = useState(initialData?.title || "");
     const [slug, setSlug] = useState(initialData?.slug || "");
-    const [category, setCategory] = useState(initialData?.category || "Tech");
+
+    // Handle parsing the initial comma-separated category string into an array
+    const initialCategories = initialData?.category
+        ? initialData.category.split(',').map(c => c.trim()).filter(Boolean)
+        : ["Tech & Future"]; // Default mapped to a real category
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(initialCategories);
+
     const [excerpt, setExcerpt] = useState(initialData?.excerpt || "");
     const [content, setContent] = useState(initialData?.content || "");
     const [coverImage, setCoverImage] = useState(initialData?.cover_image || "");
@@ -63,7 +71,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         const isCurrentlyDirty =
             title !== (initialData?.title || "") ||
             slug !== (initialData?.slug || "") ||
-            category !== (initialData?.category || "Tech") ||
+            selectedCategories.join(', ') !== (initialData?.category || "Tech & Future") ||
             excerpt !== (initialData?.excerpt || "") ||
             content !== (initialData?.content || "") ||
             coverImage !== (initialData?.cover_image || "") ||
@@ -74,7 +82,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
             coverImageAlt !== (initialData?.cover_image_alt || "");
 
         setIsDirty(isCurrentlyDirty);
-    }, [title, slug, category, excerpt, content, coverImage, status, seoTitle, seoDescription, focusKeyword, coverImageAlt, initialData]);
+    }, [title, slug, selectedCategories, excerpt, content, coverImage, status, seoTitle, seoDescription, focusKeyword, coverImageAlt, initialData]);
 
     // Prevent navigation if dirty
     useEffect(() => {
@@ -89,7 +97,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [isDirty]);
 
-    // AI Helper: Suggest SEO content with improved heuristics
+    // AI Helper: Suggest SEO content via reliable server action
     const suggestSEO = async () => {
         if (!title && !content) {
             toast.error("Add a title or content first!");
@@ -98,61 +106,48 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
 
         setIsSeoSuggesting(true);
         try {
-            const stopWords = new Set(['the', 'and', 'for', 'with', 'this', 'that', 'from', 'your', 'will', 'have', 'more', 'about', 'their', 'there', 'what', 'which', 'when', 'article', 'post', 'blog', 'read', 'guide', 'how', 'why', 'can', 'should', 'would', 'could', 'some', 'these', 'those', 'into', 'only', 'than', 'then', 'also', 'just', 'more', 'very', 'been', 'being', 'were', 'have', 'had', 'has', 'any', 'all', 'out', 'up', 'down', 'new', 'old', 'get', 'make', 'may', 'see', 'use', 'one', 'two', 'three', 'best', 'top', 'fast', 'slow', 'big', 'small']);
+            const bodyText = content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+            const response = await fetch("/api/admin/magic-fill", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content: bodyText }),
+            });
 
-            const cleanTitle = title.toLowerCase().replace(/[^a-z0-9\s]/g, "");
-            const cleanContent = content.replace(/<[^>]*>/g, " ").toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+            if (!response.ok) throw new Error("API responded with an error");
 
-            // Extract words and bigrams
-            const titleWords = cleanTitle.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
-            const contentWords = cleanContent.split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
+            const data = await response.json();
 
-            const scores: Record<string, number> = {};
+            if (data.focus_keyword) setFocusKeyword(data.focus_keyword);
 
-            // Score single words
-            contentWords.forEach(w => scores[w] = (scores[w] || 0) + 1);
-            titleWords.forEach(w => scores[w] = (scores[w] || 0) + 5);
-
-            // Simple Bigram logic (e.g., "iphone 16", "artificial intelligence")
-            const allWords = [...titleWords, ...contentWords];
-            for (let i = 0; i < allWords.length - 1; i++) {
-                const bigram = `${allWords[i]} ${allWords[i + 1]}`;
-                scores[bigram] = (scores[bigram] || 0) + 3;
+            if (data.seo_title) {
+                // Ensure it doesn't exceed 60 chars including the brand
+                const brand = " | 3AM SCROLL";
+                const maxTitleLen = 60 - brand.length;
+                let finalTitle = data.seo_title;
+                if (finalTitle.length > maxTitleLen) {
+                    finalTitle = finalTitle.substring(0, maxTitleLen - 3) + "...";
+                }
+                setSeoTitle(finalTitle + brand);
             }
 
-            const sortedSuggestions = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            const bestKeyword = sortedSuggestions[0]?.[0] || title.split(' ')[0] || "";
+            if (data.seo_description) setSeoDescription(data.seo_description);
 
-            setFocusKeyword(bestKeyword);
-
-            // Optimized SEO Title (stricter limit)
-            const brand = " | 3AM SCROLL";
-            const maxTitleLen = 60 - brand.length;
-            const optimizedTitle = title.length > maxTitleLen ? title.substring(0, maxTitleLen - 3) + "..." : title;
-            setSeoTitle(optimizedTitle + brand);
-
-            // Excerpt and Meta Description extraction (target sweet spot)
-            const bodyText = content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-
-            if (!excerpt && bodyText) {
+            // Set excerpt to a safe length if it's currently empty
+            if (!excerpt && data.seo_description) {
+                setExcerpt(data.seo_description.substring(0, 155));
+            } else if (!excerpt && bodyText) {
                 const autoExcerpt = bodyText.substring(0, 155).trim();
                 setExcerpt(autoExcerpt + (bodyText.length > 155 ? "..." : ""));
             }
 
-            // Target exactly 155-157 chars to stay in the 120-160 sweet spot
-            let prospectiveDesc = (excerpt || bodyText).substring(0, 157).trim();
-            if (prospectiveDesc.length > 155) {
-                prospectiveDesc = prospectiveDesc.substring(0, 152) + "...";
-            }
-            setSeoDescription(prospectiveDesc);
-
-            if (!coverImageAlt && title) {
-                setCoverImageAlt(`Article image for: ${title}`);
+            if (data.cover_image_alt && !coverImageAlt) {
+                setCoverImageAlt(data.cover_image_alt);
             }
 
-            toast.success("SEO fields optimized!");
+            toast.success("Magic Fill complete!");
         } catch (error) {
-            toast.error("Failed to generate suggestions");
+            console.error("SEO Suggestion Error:", error);
+            toast.error("Failed to generate suggestions. Try again later.");
         } finally {
             setIsSeoSuggesting(false);
         }
@@ -172,10 +167,12 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
 
         const targetStatus = submitStatus || status;
 
-        if (!title || !slug || !excerpt || !content) {
-            toast.error("Please fill in all required fields (Title, Content, Excerpt)");
+        if (!title || !slug || !excerpt || !content || selectedCategories.length === 0) {
+            toast.error("Please fill in all required fields (Title, Content, Excerpt) and pick at least one Category.");
             return;
         }
+
+        const formattedCategories = selectedCategories.join(', ');
 
         const formData = new FormData();
         if (mode === "edit" && initialData?.id) {
@@ -183,7 +180,7 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
         }
         formData.append("title", title);
         formData.append("slug", slug);
-        formData.append("category", category);
+        formData.append("category", formattedCategories);
         formData.append("excerpt", excerpt);
         formData.append("content", content);
         formData.append("cover_image", coverImage || "");
@@ -459,21 +456,45 @@ export function ArticleForm({ initialData, mode }: ArticleFormProps) {
                         </div>
 
                         <div>
-                            <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Category
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Categories
                             </label>
-                            <select
-                                id="category"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 sm:text-sm px-3 py-2"
-                            >
-                                <option value="Tech">Tech</option>
-                                <option value="Gaming">Gaming</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Lifestyle">Lifestyle</option>
-                                <option value="Travel">Travel</option>
-                            </select>
+
+                            <div className="flex flex-wrap gap-2 mb-3 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[50px] items-center">
+                                {selectedCategories.length === 0 ? (
+                                    <span className="text-gray-400 text-sm">Select categories from below...</span>
+                                ) : (
+                                    selectedCategories.map((cat, index) => (
+                                        <div key={index} className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 rounded-full text-sm font-medium border border-indigo-100 dark:border-indigo-500/20">
+                                            {cat}
+                                            <button
+                                                type="button"
+                                                onClick={() => setSelectedCategories(prev => prev.filter(c => c !== cat))}
+                                                className="hover:bg-indigo-200 dark:hover:bg-indigo-500/30 p-0.5 rounded-full transition-colors"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 pb-2">
+                                {siteConfig.categories.map((c) => {
+                                    const isSelected = selectedCategories.includes(c.name);
+                                    if (isSelected) return null;
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={c.id}
+                                            onClick={() => setSelectedCategories(prev => [...prev, c.name])}
+                                            className="px-3 py-1 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                        >
+                                            + {c.name}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">

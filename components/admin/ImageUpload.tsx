@@ -4,6 +4,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { UploadCloud, X } from "lucide-react";
 import Image from "next/image";
+import { optimizeImage } from "@/lib/image-optimizer";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +16,7 @@ interface ImageUploadProps {
 
 export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
     const [isUploading, setIsUploading] = useState(false);
+    const [status, setStatus] = useState("");
     const supabase = createClient();
 
     const handleUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,14 +24,19 @@ export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
         if (!file) return;
 
         setIsUploading(true);
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        setStatus("Optimizing...");
 
         try {
+            // Optimize image before upload
+            const optimizedFile = await optimizeImage(file, 1600, 0.85);
+
+            setStatus("Uploading...");
+            const fileName = `${Math.random()}-${optimizedFile.name}`;
+            const filePath = `${fileName}`;
+
             const { error: uploadError } = await supabase.storage
                 .from('article-images')
-                .upload(filePath, file);
+                .upload(filePath, optimizedFile);
 
             if (uploadError) {
                 throw uploadError;
@@ -40,12 +47,13 @@ export function ImageUpload({ value, onChange, disabled }: ImageUploadProps) {
                 .getPublicUrl(filePath);
 
             onChange(data.publicUrl);
-            toast.success("Image uploaded successfully");
+            toast.success("Image optimized and uploaded");
         } catch (error) {
             console.error(error);
-            toast.error("Error uploading image");
+            toast.error("Error processing image");
         } finally {
             setIsUploading(false);
+            setStatus("");
         }
     }, [onChange, supabase.storage]);
 

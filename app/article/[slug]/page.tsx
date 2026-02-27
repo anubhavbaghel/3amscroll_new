@@ -11,7 +11,6 @@ import { ArticleNavbar } from "@/components/article/ArticleNavbar";
 import { RelatedArticles } from "@/components/article/RelatedArticles";
 import { FocusModeProvider } from "@/context/FocusModeContext";
 import "../../article-styles.css";
-import dynamic from "next/dynamic";
 
 import { getArticleBySlug, getSavedArticleIds, getRelatedArticles } from "@/lib/data";
 import { createClient } from "@/lib/supabase/server";
@@ -40,7 +39,16 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     ogUrl.searchParams.set('author', article.author.name);
     ogUrl.searchParams.set('date', new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
     ogUrl.searchParams.set('readTime', article.readTime.toString());
-    ogUrl.searchParams.set('cover', article.coverImage);
+
+    // Fix: Ensure cover image is an absolute URL for the OG generator
+    const absoluteCoverImage = article.coverImage
+        ? (article.coverImage.startsWith('http')
+            ? article.coverImage
+            : `${baseUrl}${article.coverImage.startsWith('/') ? '' : '/'}${article.coverImage}`)
+        : '';
+    if (absoluteCoverImage) {
+        ogUrl.searchParams.set('cover', absoluteCoverImage);
+    }
 
     const articleUrl = `${baseUrl}/article/${article.slug}`;
 
@@ -93,7 +101,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
     const isBookmarked = savedArticleIds.has(article.id);
 
-
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
@@ -120,7 +127,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     };
 
     const breadcrumbItems = [
-        { name: "Articles", item: `${baseUrl}/trending` }, // Or appropriate parent
+        { name: "Articles", item: `${baseUrl}/trending` },
         { name: article.category, item: `${baseUrl}/${article.category.toLowerCase()}` },
         { name: article.title, item: `${baseUrl}/article/${article.slug}` }
     ];
@@ -139,77 +146,71 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     initialIsBookmarked={isBookmarked}
                 />
 
-                {/* ─── ARTICLE HEADER ─────────────────────────────────────
-                    Order: category → title → date/readtime → author+follow → excerpt
-                ──────────────────────────────────────────────────────── */}
-                <ArticleHeader article={article} />
+                <main className="pb-32 lg:pb-16">
+                    {/* ─── ARTICLE HEADER ───────────────────────────────────── */}
+                    <ArticleHeader article={article} />
 
-                {/* ─── COVER IMAGE — wider than text column ─────────────── */}
-                {article.coverImage && (
-                    <div className="max-w-[680px] mx-auto px-4 sm:px-6 mt-8 mb-10">
-                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
-                            <Image
-                                src={article.coverImage}
-                                alt={article.title}
-                                fill
-                                className="object-cover"
-                                priority
-                                sizes="(max-width: 768px) 100vw, 860px"
+                    {/* ─── COVER IMAGE ─────────────────────────────────────── */}
+                    {article.coverImage && (
+                        <div className="max-w-[680px] mx-auto px-4 sm:px-6 mt-8 mb-10">
+                            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-lg">
+                                <Image
+                                    src={article.coverImage}
+                                    alt={article.title}
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                    sizes="(max-width: 768px) 100vw, 860px"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="max-w-[680px] mx-auto px-4 sm:px-6">
+                        {/* Breadcrumbs */}
+                        <div className="mb-8">
+                            <Breadcrumbs
+                                items={[
+                                    { label: article.category, href: `/${article.category.toLowerCase()}` },
+                                    { label: article.title, href: `/article/${article.slug}`, active: true }
+                                ]}
                             />
                         </div>
-                    </div>
-                )}
 
-                {/* ─── ARTICLE BODY ─────────────────────────────────────── */}
-                <main className="max-w-[680px] mx-auto px-4 sm:px-6 pb-32 lg:pb-16">
+                        {/* Article Content */}
+                        <ArticleContent article={article} />
 
-                    {/* Breadcrumbs */}
-                    <div className="mb-8">
-                        <Breadcrumbs
-                            items={[
-                                { label: article.category, href: `/${article.category.toLowerCase()}` },
-                                { label: article.title, href: `/article/${article.slug}`, active: true }
-                            ]}
+                        {/* Footer Engagement */}
+                        <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
+                            <div className="flex items-center gap-6"></div>
+                            <div className="flex items-center gap-1">
+                                <BookmarkButton
+                                    articleId={article.id}
+                                    initialIsBookmarked={isBookmarked}
+                                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                />
+                                <ShareButton
+                                    title={article.title}
+                                    excerpt={article.excerpt}
+                                    url={`${baseUrl}/article/${article.slug}`}
+                                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Author Detailed Card */}
+                        <AuthorCardDetailed
+                            author={article.author}
+                            followersCount={0}
                         />
-                    </div>
 
-                    {/* Article text content */}
-                    <ArticleContent article={article} />
-
-                    <div className="hidden lg:flex items-center justify-between py-5 mt-10 border-t border-gray-200 dark:border-gray-800">
-                        <div className="flex items-center gap-6">
+                        {/* Related Articles */}
+                        <div className="mt-12">
+                            <RelatedArticles articles={relatedArticles} />
                         </div>
-                        <div className="flex items-center gap-1">
-                            <BookmarkButton
-                                articleId={article.id}
-                                initialIsBookmarked={isBookmarked}
-                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                            />
-                            <ShareButton
-                                title={article.title}
-                                excerpt={article.excerpt}
-                                url={`${baseUrl}/article/${article.slug}`}
-                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                            />
-                        </div>
-                    </div>
-
-                    {/* ─── DETAILED AUTHOR CARD ─────────────────────────── */}
-                    <AuthorCardDetailed
-                        author={article.author}
-                        followersCount={0}
-                    />
-
-
-                    {/* ─── RELATED ARTICLES ─────────────────────────────── */}
-                    <div className="mt-12">
-                        <RelatedArticles articles={relatedArticles} />
                     </div>
                 </main>
 
-                {/* ─── MOBILE BOTTOM BAR ────────────────────────────────
-                    Applaud · Comment · Bookmark · Share — mobile only
-                ──────────────────────────────────────────────────────── */}
                 <MobileArticleBar
                     articleId={article.id}
                     articleTitle={article.title}
