@@ -3,6 +3,16 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
+function arrayBufferToBase64(buffer: ArrayBuffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
+
 export async function GET(req: NextRequest) {
     try {
         const { searchParams } = new URL(req.url);
@@ -15,9 +25,25 @@ export async function GET(req: NextRequest) {
         let coverImage = searchParams.get('cover') || '';
 
         // Satori (@vercel/og) does not natively support WebP images. 
-        // We use Supabase's built-in image transformations to convert them to JPEG on the fly.
         if (coverImage.includes('supabase.co/storage/v1/object/public/')) {
             coverImage = coverImage.replace('/object/public/', '/render/image/public/') + '?width=1200&quality=80';
+        }
+
+        let coverImageDataUri = '';
+        if (coverImage) {
+            try {
+                const response = await fetch(coverImage);
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const base64 = arrayBufferToBase64(arrayBuffer);
+                    const mimeType = response.headers.get('content-type') || 'image/png';
+                    coverImageDataUri = `data:${mimeType};base64,${base64}`;
+                } else {
+                    console.error("[OG] Failed to fetch cover image:", response.status);
+                }
+            } catch (err) {
+                console.error("[OG] Error fetching cover image:", err);
+            }
         }
 
         return new ImageResponse(
@@ -36,11 +62,11 @@ export async function GET(req: NextRequest) {
                     }}
                 >
                     {/* Background Image with Overlay */}
-                    {coverImage && (
+                    {coverImageDataUri && (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                             alt="Cover"
-                            src={coverImage}
+                            src={coverImageDataUri}
                             style={{
                                 position: 'absolute',
                                 top: 0,
