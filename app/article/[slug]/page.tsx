@@ -26,61 +26,58 @@ interface ArticlePageProps {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-    const { slug } = await params;
-    const article = await getArticleBySlug(slug);
+    try {
+        const { slug } = await params;
+        const article = await getArticleBySlug(slug);
 
-    if (!article) {
-        return { title: "Article Not Found | 3AM SCROLL" };
-    }
+        if (!article) {
+            console.log("[generateMetadata] Article not found for slug:", slug);
+            return { title: "Article Not Found | 3AM SCROLL" };
+        }
 
-    // Ensure OG image URL is absolute and uses the production domain
-    const ogUrl = new URL(`${baseUrl}/api/og`);
-    ogUrl.searchParams.set('title', article.title);
-    ogUrl.searchParams.set('author', article.author.name);
-    ogUrl.searchParams.set('date', new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
-    ogUrl.searchParams.set('readTime', article.readTime.toString());
+        const absoluteCoverImage = article.coverImage
+            ? (article.coverImage.startsWith('http')
+                ? article.coverImage
+                : `${baseUrl}${article.coverImage.startsWith('/') ? '' : '/'}${article.coverImage}`)
+            : `${baseUrl}/icon-512.png`;
 
-    // Fix: Ensure cover image is an absolute URL for the OG generator
-    const absoluteCoverImage = article.coverImage
-        ? (article.coverImage.startsWith('http')
-            ? article.coverImage
-            : `${baseUrl}${article.coverImage.startsWith('/') ? '' : '/'}${article.coverImage}`)
-        : '';
-    if (absoluteCoverImage) {
-        ogUrl.searchParams.set('cover', absoluteCoverImage);
-    }
+        const articleUrl = `${baseUrl}/article/${article.slug}`;
 
-    const articleUrl = `${baseUrl}/article/${article.slug}`;
-
-    return {
-        title: `${article.title} | 3AM SCROLL`,
-        description: article.excerpt,
-        alternates: {
-            canonical: articleUrl,
-        },
-        openGraph: {
-            title: article.title,
+        return {
+            title: `${article.title} | 3AM SCROLL`,
             description: article.excerpt,
-            url: articleUrl,
-            siteName: '3AM SCROLL',
-            images: [
-                {
-                    url: ogUrl.toString(),
-                    width: 1200,
-                    height: 630,
-                    alt: article.title,
-                }
-            ],
-            locale: 'en_US',
-            type: 'article',
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: article.title,
-            description: article.excerpt,
-            images: [ogUrl.toString()],
-        },
-    };
+            alternates: {
+                canonical: articleUrl,
+            },
+            openGraph: {
+                title: article.title,
+                description: article.excerpt,
+                url: articleUrl,
+                siteName: '3AM SCROLL',
+                images: [
+                    {
+                        url: absoluteCoverImage,
+                        width: 1200,
+                        height: 630,
+                        alt: article.title,
+                    }
+                ],
+                locale: 'en_US',
+                type: 'article',
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: article.title,
+                description: article.excerpt,
+                images: [absoluteCoverImage],
+            },
+        };
+    } catch (error) {
+        console.error("[generateMetadata] CRASHED:", error);
+        return {
+            title: "Error loading article metadata"
+        };
+    }
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
