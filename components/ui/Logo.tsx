@@ -9,21 +9,49 @@ interface LogoProps {
 
 export function Logo({ className, variant = "default" }: LogoProps) {
     const sizeClasses = {
-        small: "text-lg",
-        default: "text-2xl",
-        large: "text-4xl md:text-5xl",
+        small: "w-24",
+        default: "w-36",
+        large: "w-56 md:w-64",
     };
 
     return (
         <Link
             href={routes.home}
-            className={cn(
-                "font-logo font-bold tracking-tighter hover:text-brand transition-colors text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400",
-                sizeClasses[variant],
-                className
-            )}
+            className={cn("inline-block transition-transform hover:scale-[1.02]", className)}
         >
-            3AM SCROLL
+            <svg
+                viewBox="0 0 320 120"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className={cn("block", sizeClasses[variant])}
+            >
+                <text
+                    x="115"
+                    y="45"
+                    style={{
+                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        fontWeight: 900,
+                        fontSize: '38px',
+                        letterSpacing: '-0.02em',
+                    }}
+                    className="fill-black dark:fill-transparent dark:stroke-white dark:stroke-[1.5px] transition-colors"
+                >
+                    3AM
+                </text>
+                <text
+                    x="10"
+                    y="110"
+                    style={{
+                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        fontWeight: 900,
+                        fontSize: '85px',
+                        letterSpacing: '-0.04em',
+                    }}
+                    className="fill-[#8E8E8E]"
+                >
+                    Scroll
+                </text>
+            </svg>
         </Link>
     );
 }
