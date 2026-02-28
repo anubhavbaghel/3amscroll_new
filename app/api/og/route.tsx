@@ -1,7 +1,7 @@
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 
-// export const runtime = 'edge'; // Commented out to fix build error on Windows
+export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
     try {
@@ -20,25 +20,6 @@ export async function GET(req: NextRequest) {
             coverImage = coverImage.replace('/object/public/', '/render/image/public/') + '?width=1200&quality=80';
         }
 
-        // To guarantee the image loads perfectly on Vercel without Satori crashing,
-        // we pre-fetch the image buffer and convert it to a base64 data URI.
-        let coverImageDataUri = '';
-        if (coverImage) {
-            try {
-                const response = await fetch(coverImage);
-                if (response.ok) {
-                    const arrayBuffer = await response.arrayBuffer();
-                    const base64 = Buffer.from(arrayBuffer).toString('base64');
-                    const mimeType = response.headers.get('content-type') || 'image/png';
-                    coverImageDataUri = `data:${mimeType};base64,${base64}`;
-                } else {
-                    console.log("[OG] Failed to fetch cover image:", response.status);
-                }
-            } catch (err) {
-                console.log("[OG] Error fetching cover image:", err);
-            }
-        }
-
         return new ImageResponse(
             (
                 <div
@@ -55,11 +36,11 @@ export async function GET(req: NextRequest) {
                     }}
                 >
                     {/* Background Image with Overlay */}
-                    {coverImageDataUri && (
+                    {coverImage && (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                             alt="Cover"
-                            src={coverImageDataUri}
+                            src={coverImage}
                             style={{
                                 position: 'absolute',
                                 top: 0,
