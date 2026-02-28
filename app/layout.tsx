@@ -63,10 +63,18 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://3amscroll.com',
+        url: siteUrl,
         siteName: '3AM SCROLL',
         title: '3AM SCROLL - Your Late-Night Scroll Companion',
         description: 'News, articles, and stories for Gen Z. Your go-to platform for tech, gaming, entertainment, and more.',
+        images: [
+            {
+                url: '/api/og?title=3AM%20SCROLL',
+                width: 1200,
+                height: 630,
+                alt: '3AM SCROLL',
+            }
+        ]
     },
     twitter: {
         card: 'summary_large_image',
