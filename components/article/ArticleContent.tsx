@@ -1,10 +1,25 @@
 import { Article } from "@/types";
 
+import parse, { DOMNode, domToReact } from 'html-react-parser';
+import { Element } from 'domhandler';
+import { MediumImage } from './MediumImage';
+
 interface ArticleContentProps {
     article: Article;
 }
 
 export function ArticleContent({ article }: ArticleContentProps) {
+    const options = {
+        replace: (domNode: DOMNode) => {
+            if (domNode instanceof Element && domNode.name === 'img') {
+                const { src, alt } = domNode.attribs;
+                return (
+                    <MediumImage src={src} alt={alt || 'Article Image'} />
+                );
+            }
+        }
+    };
+
     return (
         <article
             className="
@@ -60,10 +75,9 @@ export function ArticleContent({ article }: ArticleContentProps) {
                 [&>p:first-child]:text-[1.2rem] [&>p:first-child]:leading-[1.8] [&>p:first-child]:text-gray-700 dark:[&>p:first-child]:text-gray-300
             "
         >
-            <div
-                className="article-body"
-                dangerouslySetInnerHTML={{ __html: article.content }}
-            />
+            <div className="article-body">
+                {parse(article.content || '', options)}
+            </div>
         </article>
     );
 }
