@@ -21,10 +21,9 @@ export function ShareButton({ title, url, excerpt, className = "", showLabel = f
     // Use current URL if not provided
     const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
 
-    // Premium formatting: *Bold Title* \n\n Excerpt \n\n Read full story here:
-    const shareText = excerpt
-        ? `*${title}*\n\n${excerpt}\n\nRead the full story here:\n${shareUrl}`
-        : `*${title}*\n\nRead the full story here:\n${shareUrl}`;
+    // The OG Meta tags automatically generate the rich preview box with the title and excerpt.
+    // To prevent duplication, we only include a brief CTA and the link in the actual message body.
+    const shareText = `Read the full story here:\n${shareUrl}`;
 
     // Close dropdown on outside click
     useEffect(() => {
