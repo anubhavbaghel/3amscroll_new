@@ -20,27 +20,24 @@ export async function GET(req: NextRequest) {
             coverImage = coverImage.replace('/object/public/', '/render/image/public/') + '?width=1200&quality=80';
         }
 
-        // Fonts - We need to load them for SVGs
-        // Using standard fetch for Fontshare fonts might be blocked or slow in edge, 
-        // so for stability we often use Google Fonts or a reliably hosted file.
-        // For now, let's try to fetch Switzer and Clash Display, or fallback to system sans.
-
-        // NOTE: In production, it is recommended to host font files in your public folder 
-        // and fetch them using `new URL('../../public/fonts/font.ttf', import.meta.url)`.
-        // Since we are using Fontshare via CDN in the app, we can try fetching the WOFF2/TTF directly if we have the link,
-        // OR use a similar Google Font as a fallback for the OG image to ensure reliability.
-        // Switzer is similar to 'Inter', Clash Display is unique.
-        // Let's settle for fetching Inter (via Google Fonts support built-in) and maybe a display font.
-
-        // Actually, @vercel/og supports standard fetch. Let's try fetching straightforwardly.
-        // If this fails, we will fallback to standard fonts.
-
-        /* 
-        const switzerBold = await fetch(new URL('https://api.fontshare.com/v2/css?f[]=switzer@700&display=swap')).then((res) => res.arrayBuffer());
-        */
-
-        // To be safe and robust for this first pass, we will use standard fonts provided by the library or fetch specific URLs.
-        // Let's use a nice sans-serif available via fetch.
+        // To guarantee the image loads perfectly on Vercel without Satori crashing,
+        // we pre-fetch the image buffer and convert it to a base64 data URI.
+        let coverImageDataUri = '';
+        if (coverImage) {
+            try {
+                const response = await fetch(coverImage);
+                if (response.ok) {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const base64 = Buffer.from(arrayBuffer).toString('base64');
+                    const mimeType = response.headers.get('content-type') || 'image/png';
+                    coverImageDataUri = `data:${mimeType};base64,${base64}`;
+                } else {
+                    console.log("[OG] Failed to fetch cover image:", response.status);
+                }
+            } catch (err) {
+                console.log("[OG] Error fetching cover image:", err);
+            }
+        }
 
         return new ImageResponse(
             (
@@ -54,16 +51,15 @@ export async function GET(req: NextRequest) {
                         justifyContent: 'space-between',
                         backgroundColor: '#050505',
                         color: 'white',
-                        fontFamily: '"DM Sans", sans-serif',
                         position: 'relative',
                     }}
                 >
                     {/* Background Image with Overlay */}
-                    {coverImage && (
+                    {coverImageDataUri && (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                             alt="Cover"
-                            src={coverImage}
+                            src={coverImageDataUri}
                             style={{
                                 position: 'absolute',
                                 top: 0,
@@ -142,7 +138,6 @@ export async function GET(req: NextRequest) {
                                 color: 'white',
                                 letterSpacing: '-0.03em',
                                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-                                // Clamp text roughly
                                 maxHeight: '300px',
                                 overflow: 'hidden',
                             }}
@@ -177,8 +172,8 @@ export async function GET(req: NextRequest) {
         );
     } catch (e: unknown) {
         const errorMessage = e instanceof Error ? e.message : 'Unknown error';
-        console.log(errorMessage);
-        return new Response(`Failed to generate the image`, {
+        console.error("[OG Image Error]", errorMessage, e);
+        return new Response(`Failed to generate the image: ${errorMessage}`, {
             status: 500,
         });
     }
