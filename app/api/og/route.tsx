@@ -12,7 +12,13 @@ export async function GET(req: NextRequest) {
         const author = searchParams.get('author') || '3AM SCROLL';
         const date = searchParams.get('date') || '';
         const readTime = searchParams.get('readTime') || '';
-        const coverImage = searchParams.get('cover') || '';
+        let coverImage = searchParams.get('cover') || '';
+
+        // Satori (@vercel/og) does not natively support WebP images. 
+        // We use Supabase's built-in image transformations to convert them to JPEG on the fly.
+        if (coverImage.includes('supabase.co/storage/v1/object/public/')) {
+            coverImage = coverImage.replace('/object/public/', '/render/image/public/') + '?width=1200&quality=80';
+        }
 
         // Fonts - We need to load them for SVGs
         // Using standard fetch for Fontshare fonts might be blocked or slow in edge, 
