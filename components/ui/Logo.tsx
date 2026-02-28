@@ -26,12 +26,12 @@ export function Logo({ className, variant = "default" }: LogoProps) {
                 className={cn("block", sizeClasses[variant])}
             >
                 <text
-                    x="115"
-                    y="45"
+                    x="95"
+                    y="42"
                     style={{
-                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        fontFamily: '"Arial Black", "Arial Bold", "Inter", sans-serif',
                         fontWeight: 900,
-                        fontSize: '38px',
+                        fontSize: '36px',
                         letterSpacing: '-0.02em',
                     }}
                     className="fill-black dark:fill-transparent dark:stroke-white dark:stroke-[1.5px] transition-colors"
@@ -39,13 +39,13 @@ export function Logo({ className, variant = "default" }: LogoProps) {
                     3AM
                 </text>
                 <text
-                    x="10"
+                    x="5"
                     y="110"
                     style={{
-                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        fontFamily: '"Arial Black", "Arial Bold", "Inter", sans-serif',
                         fontWeight: 900,
-                        fontSize: '85px',
-                        letterSpacing: '-0.04em',
+                        fontSize: '92px',
+                        letterSpacing: '-0.06em',
                     }}
                     className="fill-[#8E8E8E]"
                 >
