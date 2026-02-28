@@ -12,7 +12,6 @@ import { CategoryNav } from "./CategoryNav";
 import { Bookmark } from "lucide-react";
 
 import { usePathname } from "next/navigation";
-import { Logo } from "@/components/ui/Logo";
 
 interface DesktopHeaderProps {
     user?: User | null;
@@ -31,9 +30,11 @@ export function DesktopHeader({ user = null, role = null }: DesktopHeaderProps) 
             <div className="relative z-20">
                 <div className="max-w-[1400px] mx-auto px-6">
                     <div className="flex items-center justify-between h-20 gap-4 lg:gap-8">
-
                         {/* Logo */}
-                        <Logo variant="default" className="shrink-0" />
+                        <Link href={routes.home} className="shrink-0 font-bold text-3xl tracking-tighter hover:text-brand transition-colors font-logo drop-shadow-sm flex items-center gap-1">
+                            <span className="text-gray-900 dark:text-white">3AM</span>
+                            <span className="animate-genz-text">SCROLL</span>
+                        </Link>
 
                         {/* Integrated Category Navigation (Replaces previous Home/Trending/Categories links) */}
                         <div className="flex-1 min-w-0 flex justify-center">

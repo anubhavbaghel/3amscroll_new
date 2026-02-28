@@ -6,7 +6,6 @@ import { User } from "@supabase/supabase-js";
 import { AuthButton } from "@/components/auth/AuthButton";
 import { usePathname } from "next/navigation";
 import { Settings, Bell } from "lucide-react";
-import { Logo } from "@/components/ui/Logo";
 
 interface MobileHeaderProps {
     user?: User | null;
@@ -26,7 +25,10 @@ export function MobileHeader({ user = null, role = null }: MobileHeaderProps) {
             <div className="flex items-center justify-between h-16 px-4">
                 {!isSettingsPage ? (
                     <div className="flex items-center gap-3 min-w-0">
-                        <Logo variant="small" />
+                        <Link href={routes.home} className="font-bold text-2xl tracking-tighter hover:text-brand transition-colors font-logo drop-shadow-sm flex items-center gap-1">
+                            <span className="text-gray-900 dark:text-white">3AM</span>
+                            <span className="animate-genz-text">SCROLL</span>
+                        </Link>
                     </div>
                 ) : (
                     <span className="font-bold text-xl text-gray-900 dark:text-white">
